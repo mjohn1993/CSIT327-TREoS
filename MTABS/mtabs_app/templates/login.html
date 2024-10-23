@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MTabs</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* Prevents overflow from rounding */
+        }
+
+        .left-side {
+            flex: 1;
+            background-color: #1c2c65;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-top-right-radius: 300px; /* Adjust the roundness */
+            border-bottom-right-radius: 300px; /* Adjust the roundness */
+        }
+
+        .left-side img {
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .right-side {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-top-right-radius: 5px; /* Optional: Slight rounding */
+            border-bottom-right-radius: 5px; /* Optional: Slight rounding */
+        }
+
+        .form-container {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .form-container h1 {
+            color: #1c2c65;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-container p {
+            color: #6c6c6c;
+            margin-bottom: 2rem;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-container input:focus {
+            border-color: #1c2c65;
+            outline: none;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #1c2c65;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        .form-container button:hover {
+            background-color: #2b3b82;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .social-login img {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .bottom-text {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #6c6c6c;
+        }
+
+        .bottom-text a {
+            color: #1c2c65;
+            text-decoration: none;
+        }
+
+        .bottom-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left side with the logo -->
+        <div class="left-side">
+            <img src="https://scontent-mnl1-1.xx.fbcdn.net/v/t39.30808-1/462935163_2329797824085360_7644225334493679576_n.jpg?stp=dst-jpg_s200x200&_nc_cat=107&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeHJ7iPmr4NWPojiWPfv255u0vIkd0-guLXS8iR3T6C4td39KzydM7qod9HdZKpXJAFqu_dGUf9tlqBOEGbOA4lE&_nc_ohc=mmCff7X5Ui4Q7kNvgHdvql0&_nc_ht=scontent-mnl1-1.xx&_nc_gid=AgkpBim1S1vQuCHpGIHRjEo&oh=00_AYBqc8-usdKa9KmS9dWfIQfl6vhyIk6W1VT42kFDO6i_OQ&oe=671B6D22" alt="MTabs Logo">
+        </div>
+
+        <!-- Right side with the form -->
+        <div class="right-side">
+            <div class="form-container">
+                <h1>Welcome!</h1>
+                <p>Sign in to continue your progress</p>
+
+                <form>
+                    <input type="text" name="email" placeholder="Email / Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <label style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" name="remember"> Remember me
+                        </label>
+                        <a href="#" style="color: #6c6c6c;">Forgot password?</a>
+                    </div>                                   
+
+                    <button type="submit">Sign in</button>
+                </form>
+
+                <div style="text-align: center; margin: 1.5rem 0;">OR LOGIN WITH</div>
+
+                <div class="social-login">
+                    <img src="https://img.icons8.com/color/48/000000/instagram-new.png" alt="Instagram">
+                    <img src="https://img.icons8.com/color/48/000000/facebook-new.png" alt="Facebook">
+                    <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google">
+                    <img src="https://img.icons8.com/color/48/000000/twitter.png" alt="Twitter">
+                </div>
+
+                <div class="bottom-text">
+                    <p>Don't have an account? <a href="{% url 'register_page' %}">Register Here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
