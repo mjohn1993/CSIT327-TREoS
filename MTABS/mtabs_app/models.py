@@ -31,6 +31,7 @@ class Schedule(models.Model):
         return self.title
     
     #wowwwwww
+    #I'm here
 
 
 class Event(models.Model):
