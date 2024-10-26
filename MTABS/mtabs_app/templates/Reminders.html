@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTabs Reminders</title>
+  <style>
+    /* Basic Reset and Body Style */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar li {
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.3s;
+    }
+
+    .sidebar li:hover {
+      background-color: #444;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 12px;
+      margin-top: auto;
+      border: none;
+      background-color: #4caf50;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-bottom: 10px;
+    }
+
+    .sidebar button:hover {
+      background-color: #45a049;
+    }
+
+    /* Main Dashboard Layout */
+    .dashboard {
+      flex-grow: 1;
+      padding: 20px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h2 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    /* Reminders Section */
+    .reminders {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .reminders button {
+      background-color: #120E34;
+      padding: 12px; /* Increased padding */
+      margin-top: 20px;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px; /* Added margin-bottom */
+      transition: background-color 0.3s;
+      font-weight: bold;
+    }
+
+    .reminders h3 {
+      margin-bottom: 15px;
+      color: #333;
+      font-weight: bolder;
+      font-size: 28px;
+      text-align: center;
+    }
+
+    .reminder-item {
+      background-color: #e0f7fa;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .reminder-item button {
+      background-color: transparent;
+      border: none;
+      color: #f44336;
+      cursor: pointer;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .reminder-item button:hover {
+      color: #d32f2f;
+    }
+
+    /* Reminder Form Styles */
+    .reminder-form {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      width: 300px;
+    }
+
+    .reminder-form input {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #120E34;
+      border-radius: 4px;
+    }
+
+    .reminder-form button {
+      width: 100%;
+      padding: 12px; /* Increased padding */
+      background-color: #120E34;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px; /* Added margin-top */
+      font-weight: bold;
+    }
+
+    .reminder-form button:hover {
+      background-color: #9c9c9c;
+    }
+
+    .reminder-form h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <img src="logo.png" alt="MTabs Logo">
+    <ul>
+      <li><span>🏠</span> Dashboard</li>
+      <li><span>📊</span> Statistics</li>
+      <li><span>📅</span> Schedule Maker</li>
+      <li><span>🔔</span> Reminders</li>
+      <li><span>⚙️</span> Settings</li>
+    </ul>
+    <button>Logout</button>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div class="dashboard">
+    <!-- Header Section -->
+    <div class="header">
+      <h2>Hello Mark! You can manage your reminders here!</h2>
+    </div>
+
+    <!-- Reminders Section -->
+    <div class="reminders">
+      <h3>My Reminders</h3>
+      <div id="remindersList">
+        <!-- Reminder items will go here -->
+      </div>
+      <button onclick="showReminderForm()">Add Reminder</button>
+    </div>
+  </div>
+
+  <!-- Reminder Form -->
+  <div class="overlay" id="reminderOverlay" onclick="closeForm()"></div>
+  <div class="reminder-form" id="reminderForm">
+    <h3>Add Reminder</h3>
+    <input type="text" id="reminderTitle" placeholder="Reminder Title" required>
+    <input type="datetime-local" id="reminderTime" required>
+    <button onclick="submitReminder()">Submit Reminder</button>
+  </div>
+
+  <script>
+    const reminders = []; // Store reminders
+    const remindersList = document.getElementById("remindersList");
+    const reminderOverlay = document.getElementById("reminderOverlay");
+    const reminderForm = document.getElementById("reminderForm");
+
+    // Show the reminder form
+    function showReminderForm() {
+      reminderOverlay.style.display = "block";
+      reminderForm.style.display = "block";
+    }
+
+    // Close the form
+    function closeForm() {
+      reminderOverlay.style.display = "none";
+      reminderForm.style.display = "none";
+      document.getElementById("reminderTitle").value = "";
+      document.getElementById("reminderTime").value = "";
+    }
+
+    // Submit reminder
+    function submitReminder() {
+      const title = document.getElementById("reminderTitle").value;
+      const time = document.getElementById("reminderTime").value;
+      const reminder = { id: Date.now(), title, time };
+      reminders.push(reminder);
+      renderReminders();
+      closeForm();
+    }
+
+    // Render reminders
+    function renderReminders() {
+      remindersList.innerHTML = ""; // Clear previous reminders
+      reminders.forEach(reminder => {
+        const reminderItem = document.createElement("div");
+        reminderItem.className = "reminder-item";
+        reminderItem.innerHTML = `
+          <span>${reminder.title} - ${new Date(reminder.time).toLocaleString()}</span>
+          <button onclick="deleteReminder(${reminder.id})">Delete</button>
+        `;
+        remindersList.appendChild(reminderItem);
+      });
+    }
+
+    // Delete reminder
+    function deleteReminder(id) {
+      const index = reminders.findIndex(reminder => reminder.id === id);
+      if (index > -1) {
+        reminders.splice(index, 1);
+        renderReminders();
+      }
+    }
+  </script>
+</body>
+</html>
