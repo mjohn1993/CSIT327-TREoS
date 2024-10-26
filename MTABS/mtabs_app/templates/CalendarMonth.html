@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTabs Calendar</title>
+  <style>
+    /* Basic Reset and Body Style */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      width: 100%;
+    }
+
+    .sidebar li {
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.3s;
+    }
+
+    .sidebar li:hover {
+      background-color: #444;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 12px; /* Increased padding */
+      margin-top: auto;
+      border: none;
+      background-color: #4caf50;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-bottom: 10px; /* Added margin-bottom */
+    }
+
+    .sidebar button:hover {
+      background-color: #45a049;
+    }
+
+    /* Main Dashboard Layout */
+    .dashboard {
+      flex-grow: 1;
+      padding: 20px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h2 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    /* Calendar Section */
+    .calendar {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .calendar h3 {
+      margin-bottom: 15px;
+      color: #333;
+      font-weight: bolder;
+      font-size: 28px;
+      text-align: center;
+    }
+
+    .months-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      
+    }
+
+    .month {
+      background-color: #120E34;
+      padding: 45px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #ffffff;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .month:hover {
+      background-color: #686868;
+    }
+
+    .back-button {
+      background-color: #120E34;
+      padding: 12px; /* Increased padding */
+      margin-top: 20px;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px; /* Added margin-bottom */
+      transition: background-color 0.3s;
+      font-weight: bold;
+    }
+
+    .back-button:hover {
+      background-color: #727272;
+    }
+
+    .year-label {
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #e0e0e0;
+      color: #333;
+      text-align: center;
+      border-radius: 5px;
+    }
+
+    /* Table Styling for Days */
+    .days-table {
+      width: 100%; /* Full width */
+      border-collapse: collapse;
+    }
+
+    .days-table th,
+    .days-table td {
+      width: 14.28%;
+      padding: 45px; /* Increased padding for more height */
+      text-align: center;
+      border: 2px solid #7a7a7a;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .days-table th {
+      background-color: #120E34;
+      color: #ffffff;
+    }
+
+    .days-table td {
+      height: 70px; /* Increased height for day cells */
+      vertical-align: top;
+      background-color: #fff;
+      color: #333;
+      transition: background-color 0.3s;
+    }
+
+    /* Highlight Today */
+    .today {
+      background-color: red; /* Red background */
+      color: white; /* White font color */
+      font-weight: bold;
+      border-radius: 50%;
+    }
+
+    .today-text {
+      color: red; /* Red font color */
+      font-weight: bolder; /* Bold font */
+    }
+
+    /* Event Container Styles */
+    .event-container {
+      background-color: #e0f7fa; /* Light blue background */
+      padding: 5px;
+      border-radius: 5px;
+      margin-top: 5px;
+      font-size: 14px; /* Slightly smaller font size */
+      text-align: center;
+      color: #006064; /* Darker text color */
+      position: relative; /* Needed for the delete button positioning */
+      cursor: pointer; /* Show pointer on hover */
+    }
+
+    .event-buttons {
+      display: none; /* Hidden by default */
+      margin-top: 10px;
+    }
+
+    .delete-button, .edit-button {
+      background-color: transparent;
+      border: none;
+      color: #f44336; /* Red color */
+      cursor: pointer;
+      font-size: 12px;
+      margin: 0 5px;
+    }
+
+    /* Event Form Styles */
+    .event-form {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      width: 300px;
+    }
+
+    .event-form input, .event-form textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #120E34;
+      border-radius: 4px;
+    }
+
+    .event-form button {
+      width: 100%;
+      padding: 12px; /* Increased padding */
+      background-color: #120E34;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px; /* Added margin-top */
+      font-weight: bold;
+    }
+
+    .event-form button:hover {
+      background-color: #9c9c9c;
+    }
+
+    .event-form h3 {
+       text-align: center;
+       margin-bottom: 10px; 
+    }
+
+    .overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <img src="logo.png" alt="MTabs Logo">
+    <ul>
+      <li><span>🏠</span> Dashboard</li>
+      <li><span>📊</span> Statistics</li>
+      <li><span>📅</span> Schedule Maker</li>
+      <li><span>🔔</span> Reminders</li>
+      <li><span>⚙️</span> Settings</li>
+    </ul>
+    <button>Logout</button>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div class="dashboard">
+    <!-- Header Section -->
+    <div class="header">
+      <h2>Hello Mark! You can plot important events here!</h2>
+    </div>
+
+    <!-- Calendar Section -->
+    <div class="calendar">
+      <h3 id="calendar-title">Yearly Calendar</h3>
+      <div>
+        <select id="yearSelector" class="year-label" onchange="showMonths()"></select>
+      </div>
+      <div id="calendarContent" class="months-grid">
+        <!-- Month buttons will go here -->
+      </div>
+      <button id="backButton" class="back-button" onclick="showMonths()" style="display: none;">Back to Months</button>
+    </div>
+  </div>
+
+  <!-- Event Form -->
+  <div class="overlay" id="overlay"></div>
+  <div class="event-form" id="eventForm">
+    <h3>Add Event</h3>
+    <input type="text" id="eventTitle" placeholder="Event Title" required>
+    <input type="time" id="eventTime" placeholder="Event Time" required>
+    <textarea id="eventDetails" placeholder="Details"></textarea>
+    <input type="text" id="eventLocation" placeholder="Location">
+    <button onclick="submitEvent()">Add Event</button>
+    <button onclick="closeForm()">Close</button>
+  </div>
+
+  <!-- Edit Event Form -->
+  <div class="overlay" id="editOverlay"></div>
+  <div class="event-form" id="editForm">
+    <h3>Edit Event</h3>
+    <input type="text" id="editEventTitle" placeholder="Event Title" required>
+    <input type="text" id="editEventTime" placeholder="Time" required>
+    <textarea id="editEventDetails" placeholder="Details"></textarea>
+    <input type="text" id="editEventLocation" placeholder="Location">
+    <button onclick="updateEvent()">Update Event</button>
+    <button onclick="closeEditForm()">Close</button>
+  </div>
+
+  <script>
+    const calendarTitle = document.getElementById("calendar-title");
+    const yearSelector = document.getElementById("yearSelector");
+    const backButton = document.getElementById("backButton");
+    const calendarContent = document.getElementById("calendarContent");
+    const overlay = document.getElementById("overlay");
+    const eventForm = document.getElementById("eventForm");
+    const editOverlay = document.getElementById("editOverlay");
+    const editForm = document.getElementById("editForm");
+
+    const months = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August", "September", "October", "November", "December"
+    ];
+
+    const currentYear = new Date().getFullYear();
+    const currentDate = new Date();
+
+    // Store events
+    const events = {};
+
+    // Populate year selector with the last 50 years
+    for (let i = currentYear - 50; i <= currentYear + 50; i++) {
+      const option = document.createElement("option");
+      option.value = i;
+      option.textContent = i;
+      if (i === currentYear) option.selected = true;
+      yearSelector.appendChild(option);
+    }
+
+    function showMonths() {
+      const selectedYear = parseInt(yearSelector.value, 10);
+      calendarTitle.textContent = `Yearly Calendar - ${selectedYear}`;
+      backButton.style.display = "none";
+      calendarContent.className = "months-grid";
+      calendarContent.innerHTML = months.map((month, index) => `
+        <div class="month" onclick="showDays(${index}, ${selectedYear})">${month}</div>
+      `).join("");
+    }
+
+    function showDays(monthIndex, year) {
+      const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+      const firstDay = new Date(year, monthIndex, 1).getDay();
+
+      calendarTitle.textContent = `${months[monthIndex]} ${year}`;
+      backButton.style.display = "block";
+      yearSelector.style.display = "none";
+
+      let daysHTML = `
+        <table class="days-table">
+          <thead>
+            <tr>
+              <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+            </tr>
+          </thead>
+          <tbody><tr>`;
+
+      for (let i = 0; i < firstDay; i++) {
+        daysHTML += "<td></td>";
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const isToday = currentDate.getFullYear() === year &&
+                        currentDate.getMonth() === monthIndex &&
+                        currentDate.getDate() === day;
+        const dayClass = isToday ? "today" : "";
+
+        // Get events for this day if they exist
+        const dayEvents = events[`${year}-${monthIndex + 1}-${day}`] || [];
+
+        if ((day + firstDay - 1) % 7 === 0 && day !== 1) daysHTML += "</tr><tr>";
+        daysHTML += `
+          <td class="${dayClass}" onclick="openForm(${day}, ${monthIndex + 1}, ${year})">
+            ${isToday ? `<span class='today-text'>${day}</span>` : day}
+            ${dayEvents.map(event => `
+              <div class="event-container" onclick="toggleEventOptions('${event.id}', event)">
+                ${event.title}
+                <div class="event-buttons" id="buttons-${event.id}">
+                  <button class="edit-button" onclick="openEditForm('${event.id}')">✏️ Edit</button>
+                  <button class="delete-button" onclick="deleteEvent('${event.id}', event)">🗑️ Delete</button>
+                </div>
+              </div>
+            `).join('')}
+          </td>`;
+      }
+
+      daysHTML += "</tr></tbody></table>";
+      calendarContent.className = "";
+      calendarContent.innerHTML = daysHTML;
+    }
+
+    function toggleEventOptions(eventId, eventElement) {
+      const buttons = document.getElementById(`buttons-${eventId}`);
+      buttons.style.display = buttons.style.display === "block" ? "none" : "block"; // Toggle button visibility
+      eventElement.stopPropagation(); // Prevent event propagation
+    }
+
+    function openForm(day, month, year) {
+      overlay.style.display = "block";
+      eventForm.style.display = "block";
+      eventForm.dataset.date = `${year}-${month}-${day}`;
+    }
+
+    function closeForm() {
+      overlay.style.display = "none";
+      eventForm.style.display = "none";
+    }
+
+    function submitEvent() {
+      const eventTitle = document.getElementById("eventTitle").value;
+      const eventTime = document.getElementById("eventTime").value;
+      const eventDetails = document.getElementById("eventDetails").value;
+      const eventLocation = document.getElementById("eventLocation").value;
+      const eventDate = eventForm.dataset.date;
+
+      // Create a unique ID for the event
+      const eventId = new Date().getTime() + Math.random().toString(36).substr(2, 9);
+
+      // Store the event in the events object
+      if (!events[eventDate]) {
+        events[eventDate] = []; // Initialize if not exists
+      }
+      events[eventDate].push({
+        id: eventId,
+        title: eventTitle,
+        time: eventTime,
+        details: eventDetails,
+        location: eventLocation,
+      });
+
+      console.log("Event Submitted:", {
+        title: eventTitle,
+        time: eventTime,
+        details: eventDetails,
+        location: eventLocation,
+        date: eventDate,
+      });
+
+      closeForm(); // Close the form after submitting
+      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
+    }
+
+    function deleteEvent(eventId, eventElement) {
+      const eventDate = eventForm.dataset.date;
+      events[eventDate] = events[eventDate].filter(event => event.id !== eventId);
+
+      console.log("Event Deleted:", eventId);
+      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
+    }
+
+    function openEditForm(eventId) {
+      const eventDate = eventForm.dataset.date;
+      const eventToEdit = events[eventDate].find(event => event.id === eventId);
+
+      document.getElementById("editEventTitle").value = eventToEdit.title;
+      document.getElementById("editEventTime").value = eventToEdit.time;
+      document.getElementById("editEventDetails").value = eventToEdit.details;
+      document.getElementById("editEventLocation").value = eventToEdit.location;
+
+      editOverlay.style.display = "block";
+      editForm.style.display = "block";
+      editForm.dataset.eventId = eventId; // Store the event ID to update
+    }
+
+    function closeEditForm() {
+      editOverlay.style.display = "none";
+      editForm.style.display = "none";
+    }
+
+    function updateEvent() {
+      const eventId = editForm.dataset.eventId;
+      const eventDate = eventForm.dataset.date;
+
+      const updatedEvent = {
+        title: document.getElementById("editEventTitle").value,
+        time: document.getElementById("editEventTime").value,
+        details: document.getElementById("editEventDetails").value,
+        location: document.getElementById("editEventLocation").value,
+      };
+
+      events[eventDate] = events[eventDate].map(event => {
+        if (event.id === eventId) {
+          return { ...event, ...updatedEvent };
+        }
+        return event;
+      });
+
+      console.log("Event Updated:", updatedEvent);
+      closeEditForm();
+      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
+    }
+
+    showMonths();
+  </script>
+
+</body>
+</html>
