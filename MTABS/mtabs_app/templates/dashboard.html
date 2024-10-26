@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTabs Dashboard</title>
+    <style>
+        /* Basic Reset and Body Style */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #ffffff;
+            color: black;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            width: 100%;
+        }
+
+        .sidebar li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #444;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 10px;
+            margin-top: auto;
+            border: none;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar button:hover {
+            background-color: #45a049;
+        }
+
+        /* Main Dashboard Layout */
+        .dashboard {
+            flex-grow: 1;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            color: black;
+        }
+
+        .header .task-btn {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .header .task-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stats div {
+            background-color: #D9D9D9;
+            width: 50px;
+            height: 200px;
+            padding-top: 10px;
+            border-radius: 12px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .stats p {
+            font-size: 22px;
+            color: black;
+        }
+
+        /* Calendar Section */
+        .calendar {
+            background-color: #D9D9D9;
+            width: 100%; /* Make it occupy the full width of its parent */
+            height: 200px; /* Set a fixed height */
+            padding-top: 10px; /* Maintain the padding for visual consistency */
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow-y: auto; /* Allow scrolling only within the calendar container */
+        }
+
+        .calendar h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .calendar p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .task-item {
+            background-color: #E2E2E6;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: black;
+        }
+
+        /* Main Task Section */
+        .main-task {
+            background-color: #D9D9D9;
+            padding: 20px 50px; /* Maintain horizontal padding */
+            width: 100%; /* Set the width to 100% of its container */
+            height: 400px; /* Set a fixed height */
+            border-radius: 12px;
+            flex-grow: 1; /* This will allow the main task to grow if needed */
+            overflow-y: auto; /* Allow scrolling only within the main task container */
+        }
+
+        .main-task h3 {
+            margin-bottom: 15px;
+            color: black;
+            font-size: 20px;
+        }
+
+        /* Task Schedule Section */
+        .schedule {
+            background-color: #D9D9D9;
+            padding: 20px;
+            border-radius: 12px;
+            height: 400px; /* Set a fixed height */
+            overflow-y: auto; /* Allow scrolling only within the schedule container */
+        }
+
+        .schedule h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: black;
+        }
+
+        .schedule-item {
+            background-color: #E2E2E6;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <img src="logo.png" alt="MTabs Logo">
+        <ul>
+            <li><span>🏠</span> Dashboard</li>
+            <li><span>📊</span> Statistics</li>
+            <li><span>📅</span> Schedule Maker</li>
+            <li><span>🔔</span> Reminders</li>
+            <li><span>⚙️</span> Settings</li>
+        </ul>
+        <button>Logout</button>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard">
+        <!-- Header Section -->
+        <div class="header">
+            <h2>Hello Mark! It's good to see you again.</h2>
+            <button class="task-btn">Create Task</button>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats">
+            <div>
+                <p>11</p>
+                <span>Hours Worked</span>
+            </div>
+            <div>
+                <p>$2.4k</p>
+                <span>Money Paid</span>
+            </div>
+            <div>
+                <p>12</p>
+                <span>Tasks Completed</span>
+            </div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div class="calendar">
+            <h3>Calendar</h3>
+            <p>Upcoming Tasks</p>
+            <div class="task-item">
+                <span>Task 1</span>
+                <span>Due: Tomorrow</span>
+            </div>
+            <div class="task-item">
+                <span>Task 2</span>
+                <span>Due: Next Week</span>
+            </div>
+            <div class="task-item">
+                <span>Task 3</span>
+                <span>Due: 20th Oct</span>
+            </div>
+            <div class="task-item">
+                <span>Task 4</span>
+                <span>Due: 25th Oct</span>
+            </div>
+            <div class="task-item">
+                <span>Task 5</span>
+                <span>Due: 1st Nov</span>
+            </div>
+        </div>
+
+        <!-- Main Task Section -->
+        <div class="main-task">
+            <h3>Main Tasks</h3>
+            <div class="task-item">
+                <span>Complete Project</span>
+                <span>Due: 15th Nov</span>
+            </div>
+            <div class="task-item">
+                <span>Send Invoices</span>
+                <span>Due: 1st Dec</span>
+            </div>
+            <div class="task-item">
+                <span>Team Meeting</span>
+                <span>Due: Next Friday</span>
+            </div>
+            <div class="task-item">
+                <span>Finish Reports</span>
+                <span>Due: 5th Nov</span>
+            </div>
+            <div class="task-item">
+                <span>Update Website</span>
+                <span>Due: 10th Nov</span>
+            </div>
+        </div>
+
+        <!-- Schedule Section -->
+        <div class="schedule">
+            <h3>Schedule</h3>
+            <div class="schedule-item">
+                <span>9 AM - 10 AM</span>
+                <span>Meeting with Client</span>
+            </div>
+            <div class="schedule-item">
+                <span>11 AM - 12 PM</span>
+                <span>Team Standup</span>
+            </div>
+            <div class="schedule-item">
+                <span>1 PM - 2 PM</span>
+                <span>Lunch Break</span>
+            </div>
+            <div class="schedule-item">
+                <span>3 PM - 4 PM</span>
+                <span>Project Update</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
