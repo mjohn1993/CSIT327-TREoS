@@ -17,3 +17,6 @@ def register_page(request):
 
 def dashboard_page(request):
     return render(request, 'dashboard.html')
+
+def calendar_page(request):
+    return render(request, 'CalendarMonth.html')
