@@ -29,6 +29,8 @@ class Schedule(models.Model):
 
     def __str__(self):
         return self.title
+    
+    #wowwwwww
 
 
 class Event(models.Model):
