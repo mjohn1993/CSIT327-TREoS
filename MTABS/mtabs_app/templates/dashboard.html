@@ -54,6 +54,16 @@
         .sidebar li:hover {
             background-color: #444;
         }
+        .sidebar a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the inherited color of the parent (sidebar text color) */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
+
+.sidebar a:hover {
+    color: inherit; /* Ensure hover color stays the same */
+}
+
 
         .sidebar button {
             width: 100%;
@@ -189,7 +199,7 @@
             height: 400px; /* Set a fixed height */
             overflow-y: auto; /* Allow scrolling only within the schedule container */
         }
-
+        #pol gwapo
         .schedule h3 {
             margin-bottom: 15px;
             font-size: 18px;
@@ -215,7 +225,7 @@
         <ul>
             <li><span>🏠</span> Dashboard</li>
             <li><span>📊</span> Statistics</li>
-            <li><span>📅</span> Schedule Maker</li>
+            <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
             <li><span>🔔</span> Reminders</li>
             <li><span>⚙️</span> Settings</li>
         </ul>
