@@ -190,6 +190,16 @@
       margin-bottom: 10px;
     }
 
+    .sidebar a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the inherited color of the parent (sidebar text color) */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
+
+.sidebar a:hover {
+    color: inherit; /* Ensure hover color stays the same */
+}
+
     .overlay {
       display: none;
       position: fixed;
@@ -208,9 +218,9 @@
   <div class="sidebar">
     <img src="logo.png" alt="MTabs Logo">
     <ul>
-      <li><span>🏠</span> Dashboard</li>
+      <li><a href="{% url 'dashboard_page' %}"><span>🏠</span> Dashboard</a></li>
       <li><span>📊</span> Statistics</li>
-      <li><span>📅</span> Schedule Maker</li>
+      <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
       <li><span>🔔</span> Reminders</li>
       <li><span>⚙️</span> Settings</li>
     </ul>

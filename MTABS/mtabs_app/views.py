@@ -20,3 +20,6 @@ def dashboard_page(request):
 
 def calendar_page(request):
     return render(request, 'CalendarMonth.html')
+
+def reminder_page(request):
+    return render(request, 'Reminders.html')
