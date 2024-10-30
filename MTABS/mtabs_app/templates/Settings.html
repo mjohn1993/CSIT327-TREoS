@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Pop-Up</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100%;
+            background-color: #D84D4D;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar button {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 18px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            position: relative;
+            top: 20%;
+        }
+
+        .modal-content h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .modal-content ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .modal-content li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .modal-content li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <button onclick="openModal()">Settings</button>
+    </div>
+
+    <!-- Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h3>Settings</h3>
+            <ul>
+                <li>Change Password</li>
+                <li>Notifications</li>
+                <li>Language and Region</li>
+                <li>Activity Log</li>
+                <li>Dark Mode</li>
+                <li>Data Policy</li>
+                <li>Access your data</li>
+                <li>Terms of Service</li>
+                <li>Cookies Policy</li>
+                <li>About</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Function to open the modal
+        function openModal() {
+            document.getElementById('settingsModal').style.display = 'block';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('settingsModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

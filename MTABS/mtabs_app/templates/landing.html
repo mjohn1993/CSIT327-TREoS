@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            color: #333;
         }
 
         header {
@@ -56,7 +57,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 50px;
+            padding: 80px;
             background-color: #e9f0f7;
         }
 
@@ -88,6 +89,147 @@
             max-width: 400px;
             width: 100%;
         }
+
+        /* Section: What We Do */
+        .what-we-do {
+            padding: 100px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .what-we-do h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .feature {
+            max-width: 250px;
+            text-align: center;
+        }
+
+        /* Section: Content Blocks */
+        .content-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 50px;
+            background-color: #f4f4f4;
+        }
+
+        .content-section:nth-child(even) {
+            background-color: #e9f0f7;
+        }
+
+        .content-section img {
+            max-width: 400px;
+            width: 100%;
+            
+            
+        }
+
+        .content-text {
+            max-width: 500px;
+        }
+
+        .content-text h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        footer ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        footer ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+         /* Optimize Your Time Section */
+         .optimize-section {
+            text-align: center;
+            padding: 150px;
+            background-color: #ffffff;
+        }
+
+        .optimize-section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .optimize-cards {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .optimize-card {
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .optimize-card img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        .optimize-card h3 {
+            font-size: 20px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        /* Consistent Image Sizing */
+
+.features-section {
+    display: flex;
+    flex-direction: column; /* Stack the cards vertically */
+    padding: 50px;
+    background-color: #f4f4f4; /* Match background color */
+}
+
+.feature-card {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: space-between; /* Space between the image and text */
+    margin-bottom: 100px; /* Space between cards */
+    align-items: center; /* Center align items */
+}
+
+.content-text {
+    max-width: 500px; /* Match max width of the content section */
+    margin: 0 20px; /* Add margin for spacing */
+}
+
+.large-image {
+    width: 100%; /* Full width to fill container */
+    max-width: 400px; /* Maintain max width to match your design */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+
+
     </style>
 </head>
 <body>
@@ -114,6 +256,113 @@
                 <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="Schedule Image">
             </div>
         </section>
+
+        <!-- What We Do Section -->
+        <section class="what-we-do">
+            <h2>What We Do</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>Streamlined Scheduling</h3>
+                    <p>Our platform simplifies scheduling tasks to help you stay organized effortlessly.</p>
+                </div>
+                <div class="feature">
+                    <h3>Automated Reminders</h3>
+                    <p>Get notified for upcoming events and deadlines, so you never miss a thing.</p>
+                </div>
+                <div class="feature">
+                    <h3>Customizable Events</h3>
+                    <p>Personalize your schedule with custom event categories and reminders.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Block Section 1 -->
+        <!-- Content Block Section 1 -->
+<section class="content-section">
+    <div class="content-text">
+        <h3>Elevate Your Productivity</h3>
+        <p>With MTabs, managing your schedule becomes intuitive and efficient, allowing you to focus on what matters most.</p>
+        <a href="#" class="cta-button">Learn More</a>
+    </div>
+    <div>
+        <img class="large-image" src="https://images.pexels.com/photos/925786/pexels-photo-925786.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Productivity Image">
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="feature-card">
+        <div>
+            <img class="large-image" src="https://images.pexels.com/photos/4064840/pexels-photo-4064840.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feature Image 1">
+        </div>
+        <div class="content-text">
+            <h3>Designed for Individuals</h3>
+            <p>Tailored scheduling tools to help you manage your time effectively, whether you’re handling personal projects or staying on top of your daily tasks.</p>
+            <p>
+                <ul>
+
+                <li>Personalized Task Management: Organize tasks with custom labels.</li>
+                <li> Daily & Weekly Views: Toggle between daily agendas and weekly overviews.</li>
+                    <li> Reminders & Notifications: Receive alerts for tasks and deadlines.</li>
+                        <li> Goal Tracking: Monitor personal goals and habits for productivity.</li></ul></p>
+
+        </div>
+    </div>
+    <div class="feature-card">
+        <div class="content-text">
+            <h3>Designed for Event Organizers</h3>
+            <p>Tailored event planning tools to help you coordinate every detail, ensuring your gatherings are flawlessly executed and memorable.</p>
+            <ul>
+                <li>Timeline: Organize tasks.</li>
+                <li>Budget: Track expenses.</li>
+                <li>Vendors: Manage contracts.</li>
+                <li>Guest List: Track RSVPs.</li>
+                <li>Reminders: Get alerts.</li>
+                <li>Collaboration: Share updates.</li>
+                <li>Follow-Up: Manage thank-yous.</li>
+            </ul>
+        
+        </div>
+        <div>
+            <img class="large-image" src="https://images.pexels.com/photos/8761304/pexels-photo-8761304.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feature Image 2">
+        </div>
+    </div>
+</section>
+
+
+
+
+        <!-- Optimize Your Time Section -->
+        <section class="optimize-section">
+            <h2>Optimize Your Time</h2>
+            <div class="optimize-cards">
+                <div class="optimize-card">
+                    <img src="https://via.placeholder.com/50" alt="Icon 1">
+                    <h3>Maximize Productivity</h3>
+                    <p>Unlock your full potential with our schedule manager, prioritize tasks, and achieve your goals.</p>
+                </div>
+                <div class="optimize-card">
+                    <img src="https://via.placeholder.com/50" alt="Icon 2">
+                    <h3>Boost Your Productivity</h3>
+                    <p>Take control of your day with our efficient time management tools.</p>
+                </div>
+                <div class="optimize-card">
+                    <img src="https://via.placeholder.com/50" alt="Icon 3">
+                    <h3>Enhance Your Efficiency</h3>
+                    <p>Collaborate with your team and streamline your workflow with ease.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+            <p>&copy; 2023 MTabs. All rights reserved.</p>
+        </footer>
     </main>
 </body>
 </html>

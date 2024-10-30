@@ -23,3 +23,6 @@ def calendar_page(request):
 
 def reminder_page(request):
     return render(request, 'Reminders.html')
+
+def settings_page(request):
+    return render(request, 'Settings.html')

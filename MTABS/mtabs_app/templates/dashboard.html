@@ -199,7 +199,7 @@
             height: 400px; /* Set a fixed height */
             overflow-y: auto; /* Allow scrolling only within the schedule container */
         }
-        #pol gwapo
+      
         .schedule h3 {
             margin-bottom: 15px;
             font-size: 18px;
@@ -227,7 +227,7 @@
             <li><span>📊</span> Statistics</li>
             <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
-            <li><span>⚙️</span> Settings</li>
+            <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
         </ul>
         <button>Logout</button>
     </div>
