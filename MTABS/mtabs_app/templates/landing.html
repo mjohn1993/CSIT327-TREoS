@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTabs Schedule Maker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap" rel="stylesheet"> <!-- Link to Urbanist font -->
     <style>
         /* General Styles */
         body {
@@ -15,75 +16,107 @@
         }
 
         header {
-            background-color: #007bff;
-            padding: 20px;
-            color: white;
-        }
+    background-color: transparent; /* Make the header transparent */
+    position: absolute; /* Position the header at the top of the page */
+    top: 0;
+    width: 100%; /* Adjusted to 100% for full-width header */
+    padding-top: 20px;
+    padding-left: 180px; /* Adjust padding if needed */
+    z-index: 10; /* Ensure the header stays on top */
+}
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150%; /* Ensure nav takes full width */
+}
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
-        }
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0 auto; /* Center the navigation */
+    padding: 0;
+    width: 85%; /* Adjust this value to create space in the middle */
+}
 
-        nav ul li {
-            margin-left: 20px;
-        }
+nav ul li {
+    margin-left: 100px;
+}
 
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            transition: color 0.3s;
-        }
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
 
-        nav ul li a:hover {
-            color: #e0e0e0;
-        }
+nav ul li a:hover {
+    color: #e0e0e0;
+}
+
 
         .logo img {
-            width: 150px;
+            width: 60px;
         }
 
-        /* Hero Section */
         .hero {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 80px;
-            background-color: #e9f0f7;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 120px 80px 180px 180px; /* Increase top padding to account for header */
+    background: linear-gradient(135deg, #090446, #000000);
+    color: white;
+}
+
+
 
         .hero-text {
             max-width: 600px;
         }
 
         .hero-text h1 {
-            font-size: 36px;
+            font-size: 60px;
             margin-bottom: 20px;
-            color: #333;
+            color: #ffff;
+            font-family: 'Urbanist';
+            font-weight: 400; 
+        }
+        .hero-text h5 {
+            font-size: 10px;
+            margin-bottom: 20px;
+            color: #ffff;
+            font-family: sans-serif;
+            font-weight: 400; 
         }
 
         .cta-button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+    display: inline-block;
+    padding: 10px 24px;
+    background-color: #000000;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px; /* Rounded edges */
+    transition: background-color 0.3s;
+    border: none; /* Remove border if any */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: add shadow for effect */
+    margin-right: 25px;
+}
 
-        .cta-button:hover {
-            background-color: #0056b3;
-        }
+.cta-button:hover {
+    background-color: #0056b3;
+}
+
+.contact-button{
+    display: inline-block;
+    padding: 10px 24px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: none; /* Remove border if any */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: add shadow for effect */
+}
+
 
         .hero-image img {
             max-width: 400px;
@@ -92,8 +125,15 @@
 
         /* Section: What We Do */
         .what-we-do {
-            padding: 100px;
+            padding: 1px;
             text-align: center;
+            background-color: #ffffff;
+        }
+        .services{
+            padding: 10px;
+            text-align: center;
+            color: #170A5F;
+            stroke: 1100E4;
             background-color: #ffffff;
         }
 
@@ -243,6 +283,7 @@
                 <li><a href="{% url 'login_page' %}">Login</a></li>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">FAQs</a></li>
+                <li><a href="{% url 'login_page' %}" class="cta-button">Get Started</a></li>
             </ul>
         </nav>
     </header>
@@ -250,7 +291,10 @@
         <section class="hero">
             <div class="hero-text">
                 <h1>Organize your schedule effortlessly and stay on top of your tasks.</h1>
-                <a href="{% url 'login_page' %}" class="cta-button">Get Started</a>
+                <h5>Powered by MTabs, delivering innovative scheduling solutions for seamless 
+                    productivity.</h5>
+                <a href="{% url 'login_page' %}" class="cta-button">Learn More</a>
+                <a href="{% url 'login_page' %}" class="contact-button">Contact Us</a>
             </div>
             <div class="hero-image">
                 <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="Schedule Image">
@@ -258,7 +302,10 @@
         </section>
 
         <!-- What We Do Section -->
-        <section class="what-we-do">
+            <section class="services">
+                <h2>Services</h2>
+            </section>
+            <section class="what-we-do">
             <h2>What We Do</h2>
             <div class="features">
                 <div class="feature">
