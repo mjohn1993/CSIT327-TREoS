@@ -42,14 +42,20 @@ def get_tasks(request):
         tasks = list(Task.objects.values('id', 'title', 'completed'))  # Fetch all tasks
         return JsonResponse({'tasks': tasks})
 
+@csrf_exempt  # Remove this if you're using CSRF protection properly
 def create_task(request):
     if request.method == 'POST':
-        title = request.POST.get('title')  # Change to get title
-        if title:  # Ensure a title is provided
-            task = Task(title=title)  # Create a task with the title
-            task.save()
-            return JsonResponse({'success': True, 'task': {'title': task.title}})
-    return JsonResponse({'success': False})
+        try:
+            data = json.loads(request.body)
+            title = data.get('title')
+
+            # Create a new task
+            task = Task.objects.create(title=title)
+            return JsonResponse({'success': True, 'task': {'id': task.id, 'title': task.title, 'completed': task.completed}})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
 
 @csrf_exempt
 @require_http_methods(["PUT"])
