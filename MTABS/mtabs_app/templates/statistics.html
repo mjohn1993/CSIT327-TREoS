@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+    <style>
+        /* Basic Reset and Body Style */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #ffffff;
+            color: black;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            width: 100%;
+        }
+
+        .sidebar li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #444;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover {
+            color: inherit;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 10px;
+            margin-top: auto;
+            border: none;
+            background-color: #4caf50;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar button:hover {
+            background-color: #45a049;
+        }
+
+     /* Main Dashboard Layout */
+.dashboard {
+    flex-grow: 1;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto; /* Adjusted rows */
+    gap: 20px;
+}
+
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            color: black;
+        }
+
+        /* Stats Section */
+        .stats {
+    grid-column: 1 / -1; /* Span across both columns */
+    display: flex;
+    justify-content: center; /* Center the content */
+    align-items: flex-start;
+    margin-bottom: 20px; /* Space between stats and the next section */
+}
+
+        /* Merged Statistics Card */
+        .stats-card {
+    background-color: #D9D9D9;
+    border-radius: 12px;
+    padding: 20px;
+    width: 40%; /* Adjusted width for better responsiveness */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+        .stats-card canvas {
+            width: 400px !important; /* Fixed width */
+            height: 250px !important; /* Fixed height */
+          
+        }
+
+        .stats-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .stats-card p {
+            margin: 5px 0;
+        }
+
+        /* Working Hours and Daily Goal Section */
+        .working-goal-container {
+            display: flex;
+            gap: 20px;
+            grid-column: 1 / -1; /* Span across both columns */
+        }
+
+        .working-hours, .goal {
+            background-color: #D9D9D9;
+            border-radius: 12px;
+            padding: 20px;
+            width: 60%; /* Make full width within container */
+            position: relative;
+        }
+
+        .working-hours {
+            height: 300px;
+        }
+
+        .chart {
+            width: 100%; /* Set to 100% to fill container */
+            height: 100%; /* Fill the height of the working hours container */
+        }
+
+        .goal {
+            display: flex;
+            width: 500px;
+            flex-direction: column;
+            align-items: center;
+            height: 300px;
+            justify-content: space-between;
+        }
+
+        .goal h3 {
+            text-align: center;
+        }
+
+        /* Vertical Progress Bars */
+        .progress-bars {
+            display: flex;
+            justify-content: space-around;
+            width: 70%; /* Reduce width */
+            margin: 0 auto; /* Center align */
+        }
+
+        .progress-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30px; /* Make bars narrower */
+        }
+
+        .progress-bar .bar {
+            width: 20px;
+            height: 150px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar .bar .progress {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70%; /* Adjust height based on the goal progress (e.g., 70%) */
+            background-color: #4caf50;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .progress-bar span {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="MTabs Logo">
+        <ul>
+            <li><span>🏠</span> Dashboard</li>
+            <li><a href="{% url 'statistics_page' %}"><span>📊</span> Statistics</a></li>
+            <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
+            <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
+            <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
+        </ul>
+        <button>Logout</button>
+    </div>
+
+    <!-- Main Content -->
+  <!-- Main Content -->
+<div class="dashboard">
+    <div class="header">
+        <h2>Statistics</h2>
+    </div>
+
+    <!-- Merged Statistics Card with Donut Chart -->
+    <div class="stats">
+        <div class="stats-card">
+            <h3>Your Statistics</h3>
+            <div style="display: flex; align-items: center;">
+                <canvas id="donutChart" height="150" width="150"></canvas>
+                <div style="margin-left: -70px; text-align: left;">
+                    <p>Done: 55%</p>
+                    <p>In Progress: 25%</p>
+                    <p>Draft: 20%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Working Hours and Daily Goal Section -->
+    <div class="working-goal-container">
+        <div class="working-hours">
+            <h3>Working Hours</h3>
+            <div class="chart">
+                <!-- Placeholder for working hours chart -->
+                <canvas id="workingHoursChart"></canvas>
+            </div>
+        </div>
+
+        <div class="goal">
+            <h3>Daily Goal</h3>
+            <div class="progress-bars">
+                <div class="progress-bar">
+                    <div class="bar">
+                        <div class="progress" style="height: 70%;"></div>
+                    </div>
+                    <span>Mon</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="bar">
+                        <div class="progress" style="height: 50%;"></div>
+                    </div>
+                    <span>Tue</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="bar">
+                        <div class="progress" style="height: 80%;"></div>
+                    </div>
+                    <span>Wed</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="bar">
+                        <div class="progress" style="height: 60%;"></div>
+                    </div>
+                    <span>Thu</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="bar">
+                        <div class="progress" style="height: 90%;"></div>
+                    </div>
+                    <span>Fri</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="bar">
+                        <div class="progress" style="height: 40%;"></div>
+                    </div>
+                    <span>Sat</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="bar">
+                        <div class="progress" style="height: 30%;"></div>
+                    </div>
+                    <span>Sun</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Donut Chart
+        const ctx = document.getElementById('donutChart').getContext('2d');
+        const donutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Done', 'In Progress', 'Draft'],
+                datasets: [{
+                    data: [55, 25, 20],
+                    backgroundColor: ['#4caf50', '#ffeb3b', '#f44336'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows the chart to fit within its container
+            }
+        });
+
+        // Working Hours Chart (Statistical Representation)
+        const workingHoursCtx = document.getElementById('workingHoursChart').getContext('2d');
+        const workingHoursChart = new Chart(workingHoursCtx, {
+            type: 'line', // Change to line chart for statistical representation
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Hours Worked',
+                    data: [8, 6, 9, 7, 5, 4, 3],
+                    borderColor: 'rgba(76, 175, 80, 0.7)',
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    fill: true, // Fill the area under the line
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows the chart to fit within its container
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            }
+        });
+    </script>
+</body>
+</html>

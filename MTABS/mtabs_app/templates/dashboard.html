@@ -54,16 +54,12 @@
         .sidebar li:hover {
             background-color: #444;
         }
+
         .sidebar a {
-    text-decoration: none; /* Remove underline */
-    color: inherit; /* Use the inherited color of the parent (sidebar text color) */
-    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-}
-
-.sidebar a:hover {
-    color: inherit; /* Ensure hover color stays the same */
-}
-
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
 
         .sidebar button {
             width: 100%;
@@ -142,15 +138,15 @@
         /* Calendar Section */
         .calendar {
             background-color: #D9D9D9;
-            width: 100%; /* Make it occupy the full width of its parent */
-            height: 200px; /* Set a fixed height */
-            padding-top: 10px; /* Maintain the padding for visual consistency */
+            width: 100%;
+            height: 200px;
+            padding-top: 10px;
             border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            overflow-y: auto; /* Allow scrolling only within the calendar container */
+            overflow-y: auto;
         }
 
         .calendar h3 {
@@ -177,12 +173,12 @@
         /* Main Task Section */
         .main-task {
             background-color: #D9D9D9;
-            padding: 20px 50px; /* Maintain horizontal padding */
-            width: 100%; /* Set the width to 100% of its container */
-            height: 400px; /* Set a fixed height */
+            padding: 20px 50px;
+            width: 100%;
+            height: 400px;
             border-radius: 12px;
-            flex-grow: 1; /* This will allow the main task to grow if needed */
-            overflow-y: auto; /* Allow scrolling only within the main task container */
+            flex-grow: 1;
+            overflow-y: auto;
         }
 
         .main-task h3 {
@@ -191,15 +187,15 @@
             font-size: 20px;
         }
 
-        /* Task Schedule Section */
+        /* Schedule Section */
         .schedule {
             background-color: #D9D9D9;
             padding: 20px;
             border-radius: 12px;
-            height: 400px; /* Set a fixed height */
-            overflow-y: auto; /* Allow scrolling only within the schedule container */
+            height: 400px;
+            overflow-y: auto;
         }
-      
+
         .schedule h3 {
             margin-bottom: 15px;
             font-size: 18px;
@@ -215,6 +211,21 @@
             justify-content: space-between;
             align-items: center;
         }
+
+        /* New Task Input */
+        .task-input {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .task-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -223,8 +234,8 @@
     <div class="sidebar">
         <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="MTabs Logo">
         <ul>
-            <li><span>🏠</span> Dashboard</li>
-            <li><span>📊</span> Statistics</li>
+            <li><a href="{% url 'dashboard_page' %}"><span>🏠</span> Dashboard</a></li>
+            <li><a href="{% url 'statistics_page' %}"><span>📊</span> Statistics</a></li>
             <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
             <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
@@ -237,97 +248,230 @@
         <!-- Header Section -->
         <div class="header">
             <h2>Hello Mark! It's good to see you again.</h2>
-            <button class="task-btn">Create Task</button>
+            <button class="task-btn" id="createTaskBtn">Create Task</button>
         </div>
 
         <!-- Stats Section -->
         <div class="stats">
             <div>
-                <p>11</p>
-                <span>Hours Worked</span>
+                <p id="taskCount">0</p>
+                <span>Tasks</span>
             </div>
             <div>
-                <p>$2.4k</p>
-                <span>Money Paid</span>
+                <p id="completedCount">0</p>
+                <span>Completed</span>
             </div>
             <div>
-                <p>12</p>
-                <span>Tasks Completed</span>
+                <p id="pendingCount">0</p>
+                <span>Pending</span>
             </div>
         </div>
 
+    
+
         <!-- Calendar Section -->
         <div class="calendar">
-            <h3>Calendar</h3>
-            <p>Upcoming Tasks</p>
-            <div class="task-item">
-                <span>Task 1</span>
-                <span>Due: Tomorrow</span>
-            </div>
-            <div class="task-item">
-                <span>Task 2</span>
-                <span>Due: Next Week</span>
-            </div>
-            <div class="task-item">
-                <span>Task 3</span>
-                <span>Due: 20th Oct</span>
-            </div>
-            <div class="task-item">
-                <span>Task 4</span>
-                <span>Due: 25th Oct</span>
-            </div>
-            <div class="task-item">
-                <span>Task 5</span>
-                <span>Due: 1st Nov</span>
-            </div>
+            <h3>Upcoming Events</h3>
+            <p>No events scheduled.</p>
         </div>
 
         <!-- Main Task Section -->
         <div class="main-task">
-            <h3>Main Tasks</h3>
-            <div class="task-item">
-                <span>Complete Project</span>
-                <span>Due: 15th Nov</span>
-            </div>
-            <div class="task-item">
-                <span>Send Invoices</span>
-                <span>Due: 1st Dec</span>
-            </div>
-            <div class="task-item">
-                <span>Team Meeting</span>
-                <span>Due: Next Friday</span>
-            </div>
-            <div class="task-item">
-                <span>Finish Reports</span>
-                <span>Due: 5th Nov</span>
-            </div>
-            <div class="task-item">
-                <span>Update Website</span>
-                <span>Due: 10th Nov</span>
-            </div>
+            <h3>Your Tasks</h3>
+            <div id="taskList"></div>
         </div>
 
         <!-- Schedule Section -->
         <div class="schedule">
-            <h3>Schedule</h3>
-            <div class="schedule-item">
-                <span>9 AM - 10 AM</span>
-                <span>Meeting with Client</span>
-            </div>
-            <div class="schedule-item">
-                <span>11 AM - 12 PM</span>
-                <span>Team Standup</span>
-            </div>
-            <div class="schedule-item">
-                <span>1 PM - 2 PM</span>
-                <span>Lunch Break</span>
-            </div>
-            <div class="schedule-item">
-                <span>3 PM - 4 PM</span>
-                <span>Project Update</span>
-            </div>
+            <h3>Task Schedule</h3>
+            <div id="scheduleList"></div>
         </div>
     </div>
 
+    <!-- JavaScript for Task Management -->
+    // JavaScript for Task Management
+    <script>
+        // Initialize an empty array to hold tasks
+        let tasks = [];
+    
+        // Function to render tasks
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            const completedCountElement = document.getElementById('completedCount');
+            const taskCountElement = document.getElementById('taskCount');
+            const pendingCountElement = document.getElementById('pendingCount');
+    
+            taskList.innerHTML = ''; // Clear the current list
+    
+            let completedCount = 0; // Initialize completed count
+    
+            tasks.forEach((task) => {
+                const taskItem = document.createElement('div');
+                taskItem.classList.add('task-item');
+                taskItem.innerHTML = `
+                    <span style="text-decoration: ${task.completed ? 'line-through' : 'none'};">${task.title}</span>
+                    <div>
+                        <button onclick="completeTask(${task.id})">✅ Complete</button>
+                        <button onclick="editTask(${task.id})">✏️ Edit</button>
+                        <button onclick="deleteTask(${task.id})">🗑️ Delete</button>
+                    </div>
+                `;
+    
+                // Append the task to the list
+                taskList.appendChild(taskItem); // Add all tasks to the main task list
+    
+                // Count completed tasks
+                if (task.completed) {
+                    completedCount++; // Increment completed count
+                }
+            });
+    
+            // Update the counts
+            completedCountElement.textContent = completedCount; // Update completed count
+            taskCountElement.textContent = tasks.length; // Update total task count
+            pendingCountElement.textContent = tasks.length - completedCount; // Update pending count
+        }
+    
+        // Function to create a new task
+        function createTask() {
+            const taskTitle = prompt("Enter the task title:");
+            if (taskTitle) {
+                fetch('/create-task/', { // Adjust the endpoint as necessary
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                    },
+                    body: JSON.stringify({ title: taskTitle }), // Send the new task title as JSON
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Add the new task to the local tasks array
+                        tasks.push({ id: data.task.id, title: taskTitle, completed: false }); // Assuming the server returns the new task
+                        renderTasks(); // Re-render task list
+                    } else {
+                        alert("Failed to create task: " + data.message); // Show error message from server
+                    }
+                })
+                .catch(error => {
+                    console.error('Error creating task:', error);
+                    alert("An error occurred while creating the task.");
+                });
+            }
+        }
+    
+        // Add event listener to the "Create Task" button
+        document.getElementById('createTaskBtn').addEventListener('click', createTask);
+    
+        // Fetch tasks when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/get-tasks/')
+                .then(response => response.json())
+                .then(data => {
+                    tasks = data.tasks; // Assuming your API returns a list of tasks
+                    renderTasks(); // Call renderTasks to display them
+                })
+                .catch(error => console.error('Error fetching tasks:', error));
+        });
+    
+        // Function to mark a task as completed
+        function completeTask(taskId) {
+            fetch(`/complete-task/${taskId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the task's completed status in the local array
+                    const task = tasks.find(t => t.id === taskId);
+                    if (task) {
+                        task.completed = !task.completed; // Toggle the completed status
+                        renderTasks(); // Re-render task list
+                    }
+                } else {
+                    alert("Failed to complete task.");
+                }
+            });
+        }
+    
+        // Function to edit a task
+        function editTask(taskId) {
+            const newTitle = prompt("Edit task title:", tasks.find(t => t.id === taskId).title);
+            if (newTitle) {
+                fetch(`/edit-task/${taskId}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                    },
+                    body: JSON.stringify({ title: newTitle }), // Send the new title as JSON
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the task's title in the local array
+                        const task = tasks.find(t => t.id === taskId);
+                        if (task) {
+                            task.title = newTitle; // Update the task title
+                            renderTasks(); // Re-render task list
+                        }
+                    } else {
+                        alert("Failed to edit task.");
+                    }
+                });
+            }
+        }
+    
+        // Function to delete a task
+        function deleteTask(taskId) {
+            fetch(`/delete-task/${taskId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Remove the task from the local array
+                    tasks = tasks.filter(t => t.id !== taskId);
+                    renderTasks(); // Re-render task list
+                } else {
+                    alert("Failed to delete task: " + data.message); // Show error message from server
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting task:', error);
+                alert("An error occurred while deleting the task.");
+            });
+        }
+    
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
 </body>
 </html>
