@@ -52,7 +52,9 @@
         }
 
         .sidebar li:hover {
-            background-color: #444;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding-left: 10px;
         }
 
         .sidebar a {
@@ -222,7 +224,7 @@
     <div class="sidebar">
         <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="MTabs Logo">
         <ul>
-            <li><span>🏠</span> Dashboard</li>
+            <li><a href="{% url 'dashboard_page' %}"><span>🏠</span> Dashboard</a></li>
             <li><a href="{% url 'statistics_page' %}"><span>📊</span> Statistics</a></li>
             <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
