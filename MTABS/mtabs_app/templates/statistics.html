@@ -16,7 +16,7 @@
             font-family: Arial, sans-serif;
             display: flex;
             height: 100vh;
-            background-color: #ffffff;
+            background-color: #f5f6fa;
             color: black;
         }
 
@@ -63,10 +63,6 @@
             cursor: pointer;
         }
 
-        .sidebar a:hover {
-            color: inherit;
-        }
-
         .sidebar button {
             width: 100%;
             padding: 10px;
@@ -83,18 +79,18 @@
             background-color: #45a049;
         }
 
-     /* Main Dashboard Layout */
-.dashboard {
-    flex-grow: 1;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto; /* Adjusted rows */
-    gap: 20px;
-}
+        /* Main Dashboard Layout */
+        .dashboard {
+            flex-grow: 1;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            grid-template-rows: auto auto; /* Two rows */
+            gap: 20px;
+        }
 
         .header {
-            grid-column: 1 / -1;
+            grid-column: 1 / -1; /* Span across both columns */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -107,30 +103,31 @@
 
         /* Stats Section */
         .stats {
-    grid-column: 1 / -1; /* Span across both columns */
-    display: flex;
-    justify-content: center; /* Center the content */
-    align-items: flex-start;
-    margin-bottom: 20px; /* Space between stats and the next section */
-}
+            grid-column: 2 / 3; /* Place in the second column */
+            display: flex;
+            justify-content: center; /* Center the content */
+            align-items: flex-start;
+            margin-bottom: 20px; /* Space between stats and the next section */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+        }
 
         /* Merged Statistics Card */
         .stats-card {
-    background-color: #D9D9D9;
-    border-radius: 12px;
-    padding: 20px;
-    width: 40%; /* Adjusted width for better responsiveness */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%; /* Full width of the column */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
 
         .stats-card canvas {
             width: 400px !important; /* Fixed width */
             height: 250px !important; /* Fixed height */
-          
         }
 
         .stats-card h3 {
@@ -141,19 +138,60 @@
             margin: 5px 0;
         }
 
+        /* Recent Activity Section */
+        .recent-activity {
+            grid-column: 1 / 2; /* Place in the first column */
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            height: 320px; /* Set a fixed height */
+            overflow-y: auto; /* Allow scrolling if content overflows */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+        }
+
+        .recent-activity h3 {
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 20px; /* Increase font size */
+            color: #333; /* Darker color for better contrast */
+        }
+
+        .activity-item {
+            border-bottom: 1px solid #D9D9D9;
+            padding: 10px 0; /* Increased padding for better spacing */
+            font-size: 16px; /* Slightly larger font size */
+            color: #555; /* Darker text color for better readability */
+            transition: background 0.3s, transform 0.3s; /* Smooth transition for hover effects */
+        }
+
+        .activity-item:hover {
+            background-color: rgba(76, 175, 80, 0.1); /* Light green background on hover */
+            transform: translateY(-2px); /* Slight lift effect on hover */
+        }
+
+        .activity-item:last-child {
+            border-bottom: none; /* Remove border from the last item */
+        }
+
         /* Working Hours and Daily Goal Section */
         .working-goal-container {
             display: flex;
             gap: 20px;
             grid-column: 1 / -1; /* Span across both columns */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
         .working-hours, .goal {
-            background-color: #D9D9D9;
+            background-color: #ffffff;
             border-radius: 12px;
             padding: 20px;
-            width: 60%; /* Make full width within container */
+            width: 100%; /* Make full width within the container */
             position: relative;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
         .working-hours {
@@ -167,7 +205,6 @@
 
         .goal {
             display: flex;
-            width: 500px;
             flex-direction: column;
             align-items: center;
             height: 300px;
@@ -216,6 +253,9 @@
             font-size: 14px;
         }
 
+        .hidden {
+    display: none;
+}
     </style>
 </head>
 <body>
@@ -234,87 +274,89 @@
     </div>
 
     <!-- Main Content -->
-  <!-- Main Content -->
-<div class="dashboard">
-    <div class="header">
-        <h2>Statistics</h2>
-    </div>
+    <div class="dashboard">
+        <div class="header">
+            <h2>Statistics</h2>
+        </div>
 
-    <!-- Merged Statistics Card with Donut Chart -->
-    <div class="stats">
-        <div class="stats-card">
-            <h3>Your Statistics</h3>
-            <div style="display: flex; align-items: center;">
-                <canvas id="donutChart" height="150" width="150"></canvas>
-                <div style="margin-left: -70px; text-align: left;">
-                    <p>Done: 55%</p>
-                    <p>In Progress: 25%</p>
-                    <p>Draft: 20%</p>
+        <!-- Recent Activity Section -->
+        <div class="recent-activity">
+            <h3> Recent Activity</h3>
+        </div>
+
+        <!-- Merged Statistics Card with Donut Chart -->
+        <div class="stats">
+            <div class="stats-card">
+                <h3>Your Statistics</h3>
+                <div style="display: flex; align-items: center;">
+                    <canvas id="donutChart" height="150" width="150"></canvas>
+                    <div style="margin-left: -70px; text-align: left;">
+                        <p>Completed: 0%</p>
+                        <p class="pending-statistic hidden">Pending: 0%</p>
+                        <p>Pending: 0%</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Working Hours and Daily Goal Section -->
-    <div class="working-goal-container">
-        <div class="working-hours">
-            <h3>Working Hours</h3>
-            <div class="chart">
-                <!-- Placeholder for working hours chart -->
-                <canvas id="workingHoursChart"></canvas>
-            </div>
-        </div>
-
-        <div class="goal">
-            <h3>Daily Goal</h3>
-            <div class="progress-bars">
-                <div class="progress-bar">
-                    <div class="bar">
-                        <div class="progress" style="height: 70%;"></div>
-                    </div>
-                    <span>Mon</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="bar">
-                        <div class="progress" style="height: 50%;"></div>
-                    </div>
-                    <span>Tue</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="bar">
-                        <div class="progress" style="height: 80%;"></div>
-                    </div>
-                    <span>Wed</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="bar">
-                        <div class="progress" style="height: 60%;"></div>
-                    </div>
-                    <span>Thu</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="bar">
-                        <div class="progress" style="height: 90%;"></div>
-                    </div>
-                    <span>Fri</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="bar">
-                        <div class="progress" style="height: 40%;"></div>
-                    </div>
-                    <span>Sat</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="bar">
-                        <div class="progress" style="height: 30%;"></div>
-                    </div>
-                    <span>Sun</span>
+        <!-- Working Hours and Daily Goal Section -->
+       
+            <div class="working-hours">
+                <h3>Working Hours</h3>
+                <div class="chart">
+                    <canvas id="workingHoursChart"></canvas>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
+            <div class="goal">
+                <h3>Daily Goal</h3>
+                <div class="progress-bars">
+                    <div class="progress-bar">
+                        <div class="bar">
+                            <div class="progress" style="height: 70%;"></div>
+                        </div>
+                        <span>Mon</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="bar">
+                            <div class="progress" style="height: 50%;"></div>
+                        </div>
+                        <span>Tue</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="bar">
+                            <div class="progress" style="height: 80%;"></div>
+                        </div>
+                        <span>Wed</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="bar">
+                            <div class="progress" style="height: 60%;"></div>
+                        </div>
+                        <span>Thu</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="bar">
+                            <div class="progress" style="height: 90%;"></div>
+                        </div>
+                        <span>Fri</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="bar">
+                            <div class="progress" style="height: 40%;"></div>
+                        </div>
+                        <span>Sat</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="bar">
+                            <div class="progress" style="height: 30%;"></div>
+                        </div>
+                        <span>Sun</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
 
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -324,10 +366,10 @@
         const donutChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Done', 'In Progress', 'Draft'],
+                labels: ['Completed', 'Pending'],
                 datasets: [{
-                    data: [55, 25, 20],
-                    backgroundColor: ['#4caf50', '#ffeb3b', '#f44336'],
+                    data: [0, 0], // Initialize with zero values
+                    backgroundColor: ['#4caf50', '#ffeb3b'],
                 }]
             },
             options: {
@@ -336,15 +378,15 @@
             }
         });
 
-        // Working Hours Chart (Statistical Representation)
+        // Working Hours Chart
         const workingHoursCtx = document.getElementById('workingHoursChart').getContext('2d');
         const workingHoursChart = new Chart(workingHoursCtx, {
-            type: 'line', // Change to line chart for statistical representation
+            type: 'line', // Change this to the desired chart type (e.g., 'bar', 'line', etc.)
             data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // Days of the week
                 datasets: [{
                     label: 'Hours Worked',
-                    data: [8, 6, 9, 7, 5, 4, 3],
+                    data: [8, 6, 9, 7, 5, 4, 3], // Example data for hours worked each day
                     borderColor: 'rgba(76, 175, 80, 0.7)',
                     backgroundColor: 'rgba(76, 175, 80, 0.2)',
                     fill: true, // Fill the area under the line
@@ -359,6 +401,57 @@
                     },
                 },
             }
+        });
+
+        // Fetch tasks and update Recent Activity and Donut Chart
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/get-tasks/')  // Adjust the URL to match your endpoint
+                .then(response => response.json())
+                .then(data => {
+                    const recentActivityDiv = document.querySelector('.recent-activity');
+                    const activityContainer = document.createElement('div'); // Create a new container for activities
+
+                    // Clear existing activities
+                    activityContainer.innerHTML = '';  
+
+                    // Initialize counters
+                    let completedCount = 0;
+                    let pendingCount = 0;
+
+                    // Loop through the fetched tasks and create activity items
+                    data.tasks.forEach(task => {
+                        const activityItem = document.createElement('div');
+                        activityItem.classList.add('activity-item');
+                        if (task.completed) {
+                            activityItem.textContent = `Task "${task.title}" completed`;
+                            completedCount++;
+                        } else {
+                            activityItem.textContent = `Task "${task.title}" pending`;
+                            pendingCount++;
+                        }
+                        activityContainer.appendChild(activityItem);
+                    });
+
+                    // Append the activity items to the recent activity div
+                    recentActivityDiv.appendChild(activityContainer);
+
+                    // Calculate total tasks
+                    const totalTasks = completedCount + pendingCount;
+
+                    // Update the donut chart with fetched data
+                    donutChart.data.datasets[0].data = [
+                        (completedCount / totalTasks) * 100 || 0,
+                        (pendingCount / totalTasks) * 100 || 0
+                    ];
+                    donutChart.update(); // Update the chart
+
+                    // Update the statistics text
+                    document.querySelector('.stats-card p:nth-child(1)').textContent = `Completed: ${((completedCount / totalTasks) * 100).toFixed(2)}%`;
+                    document.querySelector('.stats-card p:nth-child(3)').textContent = `Pending: ${((pendingCount / totalTasks) * 100).toFixed(2)}%`;
+
+                    
+                })
+                .catch(error => console.error('Error fetching tasks:', error));
         });
     </script>
 </body>
