@@ -53,9 +53,7 @@
     }
 
     .sidebar li:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding-left: 10px;
+      background-color: #444;
     }
 
     .sidebar button {
@@ -115,6 +113,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
+      
     }
 
     .month {
@@ -253,14 +252,15 @@
     }
 
     .sidebar a {
-      text-decoration: none; /* Remove underline */
-      color: inherit; /* Use the inherited color of the parent (sidebar text color) */
-      cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-    }
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the inherited color of the parent (sidebar text color) */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
 
-    .sidebar a:hover {
-      color: inherit; /* Ensure hover color stays the same */
-    }
+.sidebar a:hover {
+    color: inherit; /* Ensure hover color stays the same */
+}
+
 
     .event-form button {
       width: 100%;
@@ -279,9 +279,10 @@
     }
 
     .event-form h3 {
-      text-align: center;
-      margin-bottom: 10px; 
+       text-align: center;
+       margin-bottom: 10px; 
     }
+    
 
     .overlay {
       display: none; /* Hidden by default */
@@ -314,191 +315,246 @@
   <div class="dashboard">
     <!-- Header Section -->
     <div class="header">
-      <h2>Hello Mark! You can plot your schedule here!</h2>
+      <h2>Hello Mark! You can plot important events here!</h2>
     </div>
 
     <!-- Calendar Section -->
     <div class="calendar">
-      <h3>Select a Month</h3>
-      <div class="months-grid">
-        <div class="month" onclick="showDays(0, new Date().getFullYear())">January</div>
-        <div class="month" onclick="showDays(1, new Date().getFullYear())">February</div>
-        <div class="month" onclick="showDays(2, new Date().getFullYear())">March</div>
-        <div class="month" onclick="showDays(3, new Date().getFullYear())">April</div>
-        <div class="month" onclick="showDays(4, new Date().getFullYear())">May</div>
-        <div class="month" onclick="showDays(5, new Date().getFullYear())">June</div>
-        <div class="month" onclick="showDays(6, new Date().getFullYear())">July</div>
-        <div class="month" onclick="showDays(7, new Date().getFullYear())">August</div>
-        <div class="month" onclick="showDays(8, new Date().getFullYear())">September</div>
-        <div class="month" onclick="showDays(9, new Date().getFullYear())">October</div>
-        <div class="month" onclick="showDays(10, new Date().getFullYear())">November</div>
-        <div class="month" onclick="showDays(11, new Date().getFullYear())">December</div>
+      <h3 id="calendar-title">Yearly Calendar</h3>
+      <div>
+        <select id="yearSelector" class="year-label" onchange="showMonths()"></select>
       </div>
-
-      <div class="year-label" id="yearLabel"></div>
-      <button class="back-button" onclick="showMonths()">Back to Months</button>
-
-      <div class="days-table" id="daysTable"></div>
+      <div id="calendarContent" class="months-grid">
+        <!-- Month buttons will go here -->
+      </div>
+      <button id="backButton" class="back-button" onclick="showMonths()" style="display: none;">Back to Months</button>
     </div>
   </div>
 
   <!-- Event Form -->
+  <div class="overlay" id="overlay"></div>
   <div class="event-form" id="eventForm">
     <h3>Add Event</h3>
     <input type="text" id="eventTitle" placeholder="Event Title" required>
     <input type="time" id="eventTime" placeholder="Event Time" required>
-    <textarea id="eventDetails" placeholder="Event Details" rows="3"></textarea>
-    <input type="text" id="eventLocation" placeholder="Event Location">
-    <button id="saveEventBtn" onclick="submitEvent()">Save Event</button>
+    <textarea id="eventDetails" placeholder="Details"></textarea>
+    <input type="text" id="eventLocation" placeholder="Location">
+    <button onclick="submitEvent()">Add Event</button>
+    <button onclick="closeForm()">Close</button>
   </div>
 
-  <!-- Overlay for Event Form -->
-  <div class="overlay" id="overlay" onclick="closeForm()"></div>
+  <!-- Edit Event Form -->
+  <div class="overlay" id="editOverlay"></div>
+  <div class="event-form" id="editForm">
+    <h3>Edit Event</h3>
+    <input type="text" id="editEventTitle" placeholder="Event Title" required>
+    <input type="text" id="editEventTime" placeholder="Time" required>
+    <textarea id="editEventDetails" placeholder="Details"></textarea>
+    <input type="text" id="editEventLocation" placeholder="Location">
+    <button onclick="updateEvent()">Update Event</button>
+    <button onclick="closeEditForm()">Close</button>
+  </div>
 
   <script>
-    const events = {}; // Store events
+    const calendarTitle = document.getElementById("calendar-title");
+    const yearSelector = document.getElementById("yearSelector");
+    const backButton = document.getElementById("backButton");
+    const calendarContent = document.getElementById("calendarContent");
+    const overlay = document.getElementById("overlay");
+    const eventForm = document.getElementById("eventForm");
+    const editOverlay = document.getElementById("editOverlay");
+    const editForm = document.getElementById("editForm");
 
-    // Show months when the page loads
-    window.onload = function() {
-      showMonths();
-    };
+    const months = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August", "September", "October", "November", "December"
+    ];
 
-    // Function to show the months grid
+    const currentYear = new Date().getFullYear();
+    const currentDate = new Date();
+
+    // Store events
+    const events = {};
+
+    // Populate year selector with the last 50 years
+    for (let i = currentYear - 50; i <= currentYear + 50; i++) {
+      const option = document.createElement("option");
+      option.value = i;
+      option.textContent = i;
+      if (i === currentYear) option.selected = true;
+      yearSelector.appendChild(option);
+    }
+
     function showMonths() {
-      document.getElementById("daysTable").style.display = "none";
-      document.getElementById("yearLabel").innerText = "";
-      document.querySelectorAll('.month').forEach(month => {
-        month.style.display = 'block'; // Show months
-      });
-      document.querySelector(".back-button").style.display = "none"; // Hide back button
-    }
+  const selectedYear = parseInt(yearSelector.value, 10);
+  calendarTitle.textContent = `Yearly Calendar - ${selectedYear}`;
+  backButton.style.display = "none";
+  calendarContent.className = "months-grid";
+  calendarContent.innerHTML = months.map((month, index) => `
+    <div class="month" onclick="showDays(${index}, ${selectedYear})">${month}</div>
+  `).join("");
+}
 
-    // Function to show days of the selected month
-    function showDays(month, year) {
-      document.getElementById("daysTable").innerHTML = ""; // Clear the table
-      const date = new Date(year, month);
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const firstDay = new Date(year, month, 1).getDay();
+function showDays(monthIndex, year) {
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  const firstDay = new Date(year, monthIndex, 1).getDay();
 
-      // Display the year label
-      document.getElementById("yearLabel").innerText = `${year}`;
+  calendarTitle.textContent = `${months[monthIndex]} ${year}`;
+  backButton.style.display = "block";
+  yearSelector.style.display = "none";
 
-      // Create the table header for days
-      const header = `<tr>
-                        <th>Sun</th>
-                        <th>Mon</th>
-                        <th>Tue</th>
-                        <th>Wed</th>
-                        <th>Thu</th>
-                        <th>Fri</th>
-                        <th>Sat</th>
-                      </tr>`;
-      document.getElementById("daysTable").innerHTML += header;
+  let daysHTML = `
+    <table class="days-table">
+      <thead>
+        <tr>
+          <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+        </tr>
+      </thead>
+      <tbody><tr>`;
 
-      // Fill in the days
-      let row = `<tr>`;
-      for (let i = 0; i < firstDay; i++) {
-        row += `<td></td>`; // Empty cells before the first day
-      }
-      for (let day = 1; day <= daysInMonth; day++) {
-        if ((day + firstDay - 1) % 7 === 0 && day !== 1) {
-          row += `</tr><tr>`; // New row every week
-        }
-        const eventKey = `${year}-${month + 1}-${day}`; // Event key for lookup
-        const eventContent = events[eventKey] ? events[eventKey].map(event => 
-          `<div class="event-container" onclick="toggleEventButtons(event)">
-             ${event.title} - ${event.time}
-             <div class="event-buttons">
-               <button class="edit-button" onclick="editEvent('${event.id}')">Edit</button>
-               <button class="delete-button" onclick="deleteEvent('${event.id}', '${eventKey}')">Delete</button>
-             </div>
-           </div>`).join('') : ''; // Display events for that day
-        row += `<td class="${(new Date()).getDate() === day && (new Date()).getMonth() === month ? 'today' : ''}" onclick="showEventForm('${eventKey}', '${day}')">${day}${eventContent}</td>`;
-      }
-      while (row.split('</tr>').length - 1 < 6) {
-        row += `<td></td>`; // Fill in remaining cells
-      }
-      row += `</tr>`;
-      document.getElementById("daysTable").innerHTML += row;
-      document.getElementById("daysTable").style.display = "table"; // Show the days table
-      document.querySelector(".back-button").style.display = "block"; // Show back button
-    }
+  for (let i = 0; i < firstDay; i++) {
+    daysHTML += "<td></td>";
+  }
 
-    // Function to show the event form
-    function showEventForm(date, day) {
-      document.getElementById("eventForm").style.display = "block";
-      document.getElementById("overlay").style.display = "block";
-      document.getElementById("eventForm").dataset.date = date; // Store date in the form
-      document.getElementById("eventTitle").focus();
-    }
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isToday = currentDate.getFullYear() === year &&
+                    currentDate.getMonth() === monthIndex &&
+                    currentDate.getDate() === day;
+    const dayClass = isToday ? "today" : "";
 
-    // Function to close the event form
-    function closeForm() {
-      document.getElementById("eventForm").style.display = "none";
-      document.getElementById("overlay").style.display = "none";
-    }
+    const dayEvents = events[`${year}-${monthIndex + 1}-${day}`] || [];
 
-    // Function to submit an event
+    if ((day + firstDay - 1) % 7 === 0 && day !== 1) daysHTML += "</tr><tr>";
+    daysHTML += `
+      <td class="${dayClass}" onclick="openForm(${day}, ${monthIndex + 1}, ${year})">
+        ${isToday ? `<span class='today-text'>${day}</span>` : day}
+        ${dayEvents.map(event => `
+          <div class="event-container" onclick="toggleEventOptions('${event.id}', event)">
+            ${event.title}
+            <div class="event-buttons" id="buttons-${event.id}">
+              <button class=" edit-button" onclick="openEditForm('${event.id}')">✏️ Edit</button>
+              <button class="delete-button" onclick="deleteEvent('${event.id}', event)">🗑️ Delete</button>
+            </div>
+          </div>
+        `).join('')}
+      </td>`;
+  }
+
+  daysHTML += "</tr></tbody></table>";
+  calendarContent.className = "";
+  calendarContent.innerHTML = daysHTML;
+}
+function toggleEventOptions(eventId, eventElement) {
+  const buttons = document.getElementById(`buttons-${eventId}`);
+  buttons.style.display = buttons.style.display === "block" ? "none" : "block"; // Toggle button visibility
+  eventElement.stopPropagation(); // Prevent event propagation
+}
+
+function openForm(day, month, year) {
+  overlay.style.display = "block";
+  eventForm.style.display = "block";
+  eventForm.dataset.date = `${year}-${month}-${day}`;
+}
+
+function closeForm() {
+  overlay.style.display = "none";
+  eventForm.style.display = "none";
+  document.getElementById("eventTitle").value = '';
+  document.getElementById("eventTime").value = '';
+  document.getElementById("eventDetails").value = '';
+  document.getElementById("eventLocation").value = '';
+}
+
     function submitEvent() {
       const eventTitle = document.getElementById("eventTitle").value;
       const eventTime = document.getElementById("eventTime").value;
       const eventDetails = document.getElementById("eventDetails").value;
       const eventLocation = document.getElementById("eventLocation").value;
-      const eventDate = document.getElementById("eventForm").dataset.date;
+      const eventDate = eventForm.dataset.date;
 
       // Create a unique ID for the event
-      const eventId = `${eventDate}-${eventTitle}`;
-      
-      // Check if an event with the same ID already exists
-      if (events[eventDate]) {
-        const existingEventIndex = events[eventDate].findIndex(event => event.id === eventId);
-        if (existingEventIndex > -1) {
-          alert("An event with this title already exists on the selected date.");
-          return;
-        }
-      } else {
-        events[eventDate] = []; // Initialize if no events exist
-      }
+      const eventId = new Date().getTime() + Math.random().toString(36).substr(2, 9);
 
-      // Create the new event
-      const newEvent = {
+      // Store the event in the events object
+      if (!events[eventDate]) {
+        events[eventDate] = []; // Initialize if not exists
+      }
+      events[eventDate].push({
         id: eventId,
         title: eventTitle,
         time: eventTime,
         details: eventDetails,
         location: eventLocation,
+      });
+
+      console.log("Event Submitted:", {
+        title: eventTitle,
+        time: eventTime,
+        details: eventDetails,
+        location: eventLocation,
+        date: eventDate,
+      });
+
+      closeForm(); // Close the form after submitting
+      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
+    }
+
+    function deleteEvent(eventId, eventElement) {
+      const eventDate = eventForm.dataset.date;
+      events[eventDate] = events[eventDate].filter(event => event.id !== eventId);
+
+      console.log("Event Deleted:", eventId);
+      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
+    }
+
+    function openEditForm(eventId) {
+      const eventDate = eventForm.dataset.date;
+      const eventToEdit = events[eventDate].find(event => event.id === eventId);
+
+      document.getElementById("editEventTitle").value = eventToEdit.title;
+      document.getElementById("editEventTime").value = eventToEdit.time;
+      document.getElementById("editEventDetails").value = eventToEdit.details;
+      document.getElementById("editEventLocation").value = eventToEdit.location;
+
+      editOverlay.style.display = "block";
+      editForm.style.display = "block";
+      editForm.dataset.eventId = eventId; // Store the event ID to update
+    }
+
+    function closeEditForm() {
+  editOverlay.style.display = "none";
+  editForm.style.display = "none";
+  document.getElementById("editEventTitle").value = '';
+  document.getElementById("editEventTime").value = '';
+  document.getElementById("editEventDetails").value = '';
+  document.getElementById("editEventLocation").value = '';
+}
+
+    function updateEvent() {
+      const eventId = editForm.dataset.eventId;
+      const eventDate = eventForm.dataset.date;
+
+      const updatedEvent = {
+        title: document.getElementById("editEventTitle").value,
+        time: document.getElementById("editEventTime").value,
+        details: document.getElementById("editEventDetails").value,
+        location: document.getElementById("editEventLocation").value,
       };
 
-      // Add the event to the store
-      events[eventDate].push(newEvent);
+      events[eventDate] = events[eventDate].map(event => {
+        if (event.id === eventId) {
+          return { ...event, ...updatedEvent };
+        }
+        return event;
+      });
 
-      // Clear the form and close it
-      document.getElementById("eventTitle").value = "";
-      document.getElementById("eventTime").value = "";
-      document.getElementById("eventDetails").value = "";
-      document.getElementById("eventLocation").value = "";
-      closeForm();
-
-      // Refresh the calendar to show the new event
-      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear());
+      console.log("Event Updated:", updatedEvent);
+      closeEditForm();
+      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
     }
 
-    // Function to delete an event
-    function deleteEvent(eventId, eventDate) {
-      events[eventDate] = events[eventDate].filter(event => event.id !== eventId);
-      showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the display
-    }
-
-    // Function to edit an event (placeholder)
-    function editEvent(eventId) {
-      alert("Editing event: " + eventId); // Implement edit functionality here
-    }
-
-    // Toggle visibility of event buttons
-    function toggleEventButtons(event) {
-      const buttons = event.querySelector('.event-buttons');
-      buttons.style.display = buttons.style.display === 'block' ? 'none' : 'block'; // Show or hide buttons
-    }
+    showMonths();
   </script>
+
 </body>
 </html>
