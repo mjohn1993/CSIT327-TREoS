@@ -153,19 +153,22 @@
             color: #0984e3;
         }
 
-        /* Calendar Section */
         .calendar {
             background-color: #ffffff;
-            width: 100%;
-            height: 200px; /* Adjust height for better fit */
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    width: 100%;
+    height: 200px; /* Adjust height for better fit */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow-y: scroll; /* Allow vertical scrolling */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: transparent transparent; /* Firefox */
+}
+
 
         .calendar h3 {
             font-size: 20px;
@@ -177,20 +180,22 @@
             color: #636e72;
         }
 
-        /* Main Task Section */
       /* Main Task Section */
-.main-task {
-    background-color: #ffffff;
-    padding: 20px;
-    width: 100%;
-    flex-grow: 1; /* Allow this section to grow */
-    border-radius: 12px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-y: hidden; /* Prevent scrolling */
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+        .main-task {
+            background-color: #ffffff;
+            padding: 20px;
+            width: 100%;
+            flex-grow: 1; /* Allow this section to grow */
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: hidden; /* Prevent scrolling */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto; 
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: transparent transparent; /* Firefox */
+        }
 
         .main-task h3 {
             color: #2d3436;
@@ -236,6 +241,14 @@
             align-items: center;
             color: #2d3436;
         }
+
+        .event-item {
+    background-color: #e0f7fa; /* Light blue background */
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    color: #006064; /* Darker text color */
+}
     </style>
 </head>
 <body>
@@ -340,6 +353,36 @@
             taskCountElement.textContent = tasks.length; // Update total task count
             pendingCountElement.textContent = tasks.length - completedCount; // Update pending count
         }
+
+        // Initialize an empty array to hold upcoming events
+let upcomingEvents = [];
+
+// Function to render upcoming events
+// Function to render upcoming events
+function renderUpcomingEvents() {
+    const calendarSection = document.querySelector('.calendar');
+    const eventsHTML = upcomingEvents.length > 0
+        ? upcomingEvents.map(event => `
+            <div class="event-item">
+                <h4>${event.event_name}</h4>
+                <p>${event.date}</p>
+                <p>${event.location}</p>
+            </div>
+        `).join('')
+        : '<p>No events scheduled.</p>';
+    
+    calendarSection.innerHTML = `<h3>Upcoming Events</h3>${eventsHTML}`;
+}
+
+// Listen for messages from the calendar page
+window.addEventListener('message', (event) => {
+    if (event.data.type === 'NEW_EVENT') {
+        upcomingEvents.push(event.data.event); // Add the new event to the upcoming events
+        console.log("New event received:", event.data.event); // Log the received event
+        console.log("Upcoming Events:", upcomingEvents); // Log the current state of upcoming events
+        renderUpcomingEvents(); // Render the updated events list
+    }
+});
     
         // Function to create a new task
         function createTask() {
@@ -374,15 +417,26 @@
         document.getElementById('createTaskBtn').addEventListener('click', createTask);
     
         // Fetch tasks when the DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/get-tasks/')
-                .then(response => response.json ())
-                .then(data => {
-                    tasks = data.tasks; // Assuming your API returns a list of tasks
-                    renderTasks(); // Call renderTasks to display them
-                })
-                .catch(error => console.error('Error fetching tasks:', error));
-        });
+       // Function to fetch events when the DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch tasks
+    fetch('/get-tasks/')
+        .then(response => response.json())
+        .then(data => {
+            tasks = data.tasks; // Assuming your API returns a list of tasks
+            renderTasks(); // Call renderTasks to display them
+        })
+        .catch(error => console.error('Error fetching tasks:', error));
+
+    // Fetch events
+    fetch('/get-events/')  // Adjust the endpoint as necessary
+        .then(response => response.json())
+        .then(data => {
+            upcomingEvents = data.events; // Assuming your API returns a list of events
+            renderUpcomingEvents(); // Call renderUpcomingEvents to display them
+        })
+        .catch(error => console.error('Error fetching events:', error));
+});
     
         // Function to mark a task as completed
         function completeTask(taskId) {

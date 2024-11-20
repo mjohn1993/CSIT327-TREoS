@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import landing_page, login_page, register_page, dashboard_page, calendar_page,get_tasks, reminder_page, settings_page,statistics_page,create_task,edit_task, delete_task, complete_task
+from .views import landing_page, login_page, register_page, dashboard_page, calendar_page,get_tasks, reminder_page, settings_page,statistics_page,create_task,edit_task, delete_task, complete_task,event_list,create_event,update_event,delete_event,get_events
 
 
 urlpatterns = [
@@ -16,5 +16,11 @@ urlpatterns = [
     path('edit-task/<int:task_id>/', edit_task, name='edit_task'),
     path('delete-task/<int:task_id>/', delete_task, name='delete_task'),
     path('complete-task/<int:task_id>/', complete_task, name='complete_task'),
+    path('events/', event_list, name='event_list'),
+    path('create-event/', create_event, name='create_event'),
+    path('update-event/<str:event_id>/', update_event, name='update_event'),
+    path('delete-event/<str:event_id>/', delete_event, name='delete_event'),
+    path('get-events/', get_events, name='get_events'),  # Add this line
+
 
 ]

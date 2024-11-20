@@ -37,8 +37,7 @@ class Schedule(models.Model):
 
 
 class Event(models.Model):
-    event_id = models.CharField(max_length=15, primary_key=True)
-    calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE)
+    event_id = models.AutoField(primary_key=True)  # AutoField will auto-increment
     event_name = models.CharField(max_length=30)
     location = models.CharField(max_length=50)
     date = models.DateField()
@@ -77,3 +76,5 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+    
+

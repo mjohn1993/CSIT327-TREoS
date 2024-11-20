@@ -465,39 +465,87 @@ function closeForm() {
   document.getElementById("eventLocation").value = '';
 }
 
-    function submitEvent() {
-      const eventTitle = document.getElementById("eventTitle").value;
-      const eventTime = document.getElementById("eventTime").value;
-      const eventDetails = document.getElementById("eventDetails").value;
-      const eventLocation = document.getElementById("eventLocation").value;
-      const eventDate = eventForm.dataset.date;
+function submitEvent() {
+  const eventTitle = document.getElementById("eventTitle").value;
+  const eventTime = document.getElementById("eventTime").value;
+  const eventDetails = document.getElementById("eventDetails").value;
+  const eventLocation = document.getElementById("eventLocation").value;
+  const eventDate = eventForm.dataset.date;
 
-      // Create a unique ID for the event
-      const eventId = new Date().getTime() + Math.random().toString(36).substr(2, 9);
+  const data = {
+    title: eventTitle,
+    location: eventLocation,
+    date: eventDate // Send the date in 'YYYY-MM-DD' format
+  };
 
-      // Store the event in the events object
-      if (!events[eventDate]) {
-        events[eventDate] = []; // Initialize if not exists
-      }
-      events[eventDate].push({
-        id: eventId,
-        title: eventTitle,
-        time: eventTime,
-        details: eventDetails,
-        location: eventLocation,
-      });
-
-      console.log("Event Submitted:", {
-        title: eventTitle,
-        time: eventTime,
-        details: eventDetails,
-        location: eventLocation,
-        date: eventDate,
-      });
-
+  fetch('/create-event/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if CSRF protection is enabled
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if (result.success) {
+      console.log("Event Submitted:", result);
       closeForm(); // Close the form after submitting
       showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
+    } else {
+      console.error("Error submitting event:", result.error);
     }
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+}
+
+function fetchEvents() {
+  fetch('/get-events/')
+    .then(response => response.json())
+    .then(data => {
+      if (data.events) {
+        renderEvents(data.events);
+      } else {
+        console.error("No events found.");
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching events:", error);
+    });
+}
+
+function renderEvents(events) {
+  events.forEach(event => {
+    // Assuming you have a function to display events in your calendar
+    // You can customize this part based on how your calendar is implemented
+    const eventElement = document.createElement('div');
+    eventElement.innerText = `${event.event_name} at ${event.location} on ${event.date}`;
+    
+    // Append the event to your calendar (assuming you have a calendar element)
+    document.getElementById('calendar').appendChild(eventElement);
+  });
+}
+
+// Call fetchEvents when the page loads or when you want to refresh the calendar
+window.onload = fetchEvents;
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Check if this cookie string begins with the name we want
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
 
     function deleteEvent(eventId, eventElement) {
       const eventDate = eventForm.dataset.date;

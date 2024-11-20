@@ -6,6 +6,7 @@ from .models import Task
 import json
 from .forms import TaskForm
 from django.views.decorators.http import require_POST
+from .models import Event
 
 
 def landing_page(request):
@@ -91,3 +92,60 @@ def complete_task(request, task_id):
         return JsonResponse({'success': True, 'completed': task.completed})
     except Task.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Task not found.'})
+    
+def event_list(request):
+    events = Event.objects.all()  # Fetch all events
+    return render(request, 'event_list.html', {'events': events})
+
+
+@csrf_exempt
+def create_event(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            event_name = data.get('title')
+            event_location = data.get('location')
+            event_date = data.get('date')  # Expecting 'YYYY-MM-DD'
+
+            # Create and save the event without specifying event_id
+            event = Event.objects.create(
+                event_name=event_name,
+                location=event_location,
+                date=event_date
+            )
+            return JsonResponse({'success': True, 'event_id': event.event_id})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+
+@csrf_exempt
+def get_events(request):
+    if request.method == 'GET':
+        events = Event.objects.all().values('event_id', 'event_name', 'location', 'date')
+        event_list = list(events)  # Convert QuerySet to list
+        return JsonResponse({'events': event_list})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+
+@csrf_exempt
+def update_event(request, event_id):
+    if request.method == 'PUT':
+        data = json.loads(request.body)
+        try:
+            event = Event.objects.get(event_id=event_id)
+            event.event_name = data.get('title', event.event_name)
+            event.location = data.get('location', event.location)
+            event.date = data.get('date', event.date)  # Assuming date is also updated
+            event.save()
+            return JsonResponse({'success': True})
+        except Event.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Event not found.'})
+
+@csrf_exempt
+def delete_event(request, event_id):
+    if request.method == 'DELETE':
+        try:
+            event = Event.objects.get(event_id=event_id)
+            event.delete()
+            return JsonResponse({'success': True})
+        except Event.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Event not found.'})
