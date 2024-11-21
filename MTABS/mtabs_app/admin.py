@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import Task
 from .models import Event
+from .models import User
+
+admin.site.register(User)
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):

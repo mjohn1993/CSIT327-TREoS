@@ -6,81 +6,84 @@
   <title>MTabs Calendar</title>
   <style>
     /* Basic Reset and Body Style */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+   /* Basic Reset and Body Style */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
-      background-color: #f0f2f5;
-      color: #333;
-    }
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  background-color: #f0f2f5;
+  color: #333;
+  overflow: hidden; /* Prevent body scroll */
+}
 
-    /* Sidebar Styling */
-    .sidebar {
-      width: 250px;
-      background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
-      color: #fff;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+/* Sidebar Styling */
+.sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-    .sidebar img {
-      width: 80px;
-      height: auto;
-      margin-bottom: 20px;
-    }
+.sidebar img {
+  width: 80px;
+  height: auto;
+  margin-bottom: 20px;
+}
 
-    .sidebar ul {
-      list-style: none;
-      width: 100%;
-    }
+.sidebar ul {
+  list-style: none;
+  width: 100%;
+}
 
-    .sidebar li {
-      padding: 10px 0;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      cursor: pointer;
-      color: #fff;
-      transition: background 0.3s;
-    }
+.sidebar li {
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.3s;
+}
 
-    .sidebar li:hover {
-      background-color: #444;
-    }
+.sidebar li:hover {
+  background-color: #444;
+}
 
-    .sidebar button {
-      width: 100%;
-      padding: 12px; /* Increased padding */
-      margin-top: auto;
-      border: none;
-      background-color: #4caf50;
-      color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      margin-bottom: 10px; /* Added margin-bottom */
-    }
+.sidebar button {
+  width: 100%;
+  padding: 12px;
+  margin-top: auto;
+  border: none;
+  background-color: #4caf50;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 10px;
+}
 
-    .sidebar button:hover {
-      background-color: #45a049;
-    }
+.sidebar button:hover {
+  background-color: #45a049;
+}
 
-    /* Main Dashboard Layout */
-    .dashboard {
-      flex-grow: 1;
-      padding: 20px;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 20px;
-    }
+/* Main Dashboard Layout */
+.dashboard {
+  flex-grow: 1;
+  padding: 10px 20px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 10px; /* Reduce gap for compactness */
+  overflow: hidden; /* Prevent scrolling */
+}
 
     .header {
       display: flex;

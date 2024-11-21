@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Account</title>
+    <style>
+        /* Basic Reset and Body Style */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #191970; /* Light Blue Background */
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container label {
+            margin: 10px 0 5px;
+            font-size: 16px;
+        }
+
+        .container input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .container .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .container .update-button {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        .container .update-button:hover {
+            background-color: #45a049;
+        }
+
+        .container .cancel-button {
+            background-color: #f44336;
+            color: #fff;
+        }
+
+        .container .cancel-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Update Your Account</h2>
+        <form method="POST" action="{% url 'update_page' %}">
+            {% csrf_token %}
+            <label for="new_username">New Username:</label>
+            <input type="text" id="new_username" name="new_username">
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password">
+            <div class="button-group">
+                <button type="submit" class="update-button">Update</button>
+                <button type="button" class="cancel-button" onclick="window.location.href='{% url 'dashboard_page' %}'">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

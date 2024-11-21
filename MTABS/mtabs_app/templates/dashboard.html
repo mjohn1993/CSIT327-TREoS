@@ -42,6 +42,7 @@
     .sidebar ul {
       list-style: none;
       width: 100%;
+      margin-bottom: auto;
     }
 
     .sidebar li {
@@ -76,9 +77,9 @@
       margin-bottom: 10px;
     }
 
-    .sidebar button:hover {
-      background-color: #45a049;
-    }
+    .sidebar a:hover {
+            color: inherit; /* Ensure hover color stays the same */
+        }
 
 
         /* Main Dashboard Layout */
@@ -119,6 +120,36 @@
             transition: background-color 0.3s;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
+        /* Style the task container to align checkbox and task title */
+/* Style the task container to align checkbox and task title */
+.task-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Green checkbox style */
+.task-container input[type="checkbox"] {
+    margin-right: 10px; /* Space between checkbox and task title */
+    width: 15px; /* Adjust width */
+    height: 15px; /* Adjust height */
+    accent-color: #4caf50; /* Modern way to color checkboxes in browsers that support it */
+}
+
+/* Optional: Change checkbox border and background when not checked */
+.task-container input[type="checkbox"]:not(:checked) {
+    border: 2px solid #4caf50; /* Green border when not checked */
+    background-color: white; /* White background when not checked */
+    
+}
+
+/* Optional: Add green color when checked */
+.task-container input[type="checkbox"]:checked {
+    background-color: #4caf50; /* Green background when checked */
+    color: white; /* Make the checkmark white */
+}
+
+
 
         .header .task-btn:hover {
             background-color: #74b9ff;
@@ -263,14 +294,16 @@
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
             <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
         </ul>
-        <button>Logout</button>
+        <button onclick="location.href='{% url 'update_page' %}'">Update</button>
+        <button onclick="location.href='{% url 'delete_account' %}'">Delete Account</button>
+        <button onclick="location.href='{% url 'logout_page' %}'">Logout</button>
     </div>
 
     <!-- Main Dashboard -->
     <div class="dashboard">
         <!-- Header Section -->
         <div class="header">
-            <h2>Hello Mark! It's good to see you again.</h2>
+            <h2>Hello {{ user }}! It's good to see you again.</h2>
             <button class="task-btn" id="createTaskBtn">Create Task</button>
         </div>
 
@@ -317,42 +350,96 @@
         let tasks = [];
     
         // Function to render tasks
-        function renderTasks() {
-            const taskList = document.getElementById('taskList');
-            const completedCountElement = document.getElementById('completedCount');
-            const taskCountElement = document.getElementById('taskCount');
-            const pendingCountElement = document.getElementById('pendingCount');
+        // Function to render tasks
+// Function to render tasks
+function renderTasks() {
+    const taskList = document.getElementById('taskList');
+    const completedCountElement = document.getElementById('completedCount');
+    const taskCountElement = document.getElementById('taskCount');
+    const pendingCountElement = document.getElementById('pendingCount');
 
-            taskList.innerHTML = ''; // Clear the current list
+    taskList.innerHTML = ''; // Clear the current list
 
-            let completedCount = 0; // Initialize completed count
+    let completedCount = 0; // Initialize completed count
 
-            tasks.forEach((task) => {
-                const taskItem = document.createElement('div');
-                taskItem.classList.add('task-item');
-                taskItem.innerHTML = `
-                    <span style="text-decoration: ${task.completed ? 'line-through' : 'none'};">${task.title}</span>
-                    <div>
-                        <button onclick="completeTask(${task.id})" style="background-color: #4caf50; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Complete</button>
-                        <button onclick="editTask(${task.id})" style="background-color: #f0c14b; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Edit</button>
-                        <button onclick="deleteTask(${task.id})" style="background-color: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Delete</button>
-                    </div>
-                `;
+    tasks.forEach((task) => {
+        const taskItem = document.createElement('div');
+        taskItem.classList.add('task-item');
+        taskItem.innerHTML = `
+            <div class="task-container">
+                <input type="checkbox" id="completeCheckbox-${task.id}" ${task.completed ? 'checked' : ''} onclick="toggleComplete(${task.id})">
+                <span style="text-decoration: ${task.completed ? 'line-through' : 'none'};">${task.title}</span>
+            </div>
+            <div>
+                <button onclick="editTask(${task.id})" style="background-color: #f0c14b; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Edit</button>
+                <button onclick="deleteTask(${task.id})" style="background-color: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Delete</button>
+            </div>
+        `;
 
-                // Append the task to the list
-                taskList.appendChild(taskItem); // Add all tasks to the main task list
+        // Append the task to the list
+        taskList.appendChild(taskItem); // Add all tasks to the main task list
 
-                // Count completed tasks
-                if (task.completed) {
-                    completedCount++; // Increment completed count
-                }
-            });
-
-            // Update the counts
-            completedCountElement.textContent = completedCount; // Update completed count
-            taskCountElement.textContent = tasks.length; // Update total task count
-            pendingCountElement.textContent = tasks.length - completedCount; // Update pending count
+        // Count completed tasks
+        if (task.completed) {
+            completedCount++; // Increment completed count
         }
+    });
+
+    // Update the counts
+    completedCountElement.textContent = completedCount; // Update completed count
+    taskCountElement.textContent = tasks.length; // Update total task count
+    pendingCountElement.textContent = tasks.length - completedCount; // Update pending count
+}
+
+// Function to toggle task completion (using the checkbox)
+function toggleComplete(taskId) {
+    fetch(`/complete-task/${taskId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the task's completed status in the local array
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed; // Toggle the completed status
+                renderTasks(); // Re-render task list
+            }
+        } else {
+            alert("Failed to complete task.");
+        }
+    });
+}
+
+
+// Function to toggle task completion (using the checkbox)
+function toggleComplete(taskId) {
+    fetch(`/complete-task/${taskId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the task's completed status in the local array
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed; // Toggle the completed status
+                renderTasks(); // Re-render task list
+            }
+        } else {
+            alert("Failed to complete task.");
+        }
+    });
+}
+
 
         // Initialize an empty array to hold upcoming events
 let upcomingEvents = [];
@@ -384,37 +471,120 @@ window.addEventListener('message', (event) => {
     }
 });
     
-        // Function to create a new task
-        function createTask() {
-            const taskTitle = prompt("Enter the task title:");
-            if (taskTitle) {
-                fetch('/create-task/', { // Adjust the endpoint as necessary
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
-                    },
-                    body: JSON.stringify({ title: taskTitle }), // Send the new task title as JSON
-                })
+        // Function to create a new task with a form
+        function createTaskForm() {
+    const taskList = document.getElementById('taskList');
+
+    // Check if a form already exists to avoid multiple forms
+    if (document.getElementById('taskForm')) {
+        return;
+    }
+
+    // Create a form element
+    const form = document.createElement('form');
+    form.id = 'taskForm';
+    form.style.marginTop = '20px';
+    form.style.display = 'flex';
+    form.style.justifyContent = 'space-between';
+    form.style.alignItems = 'center';
+    form.style.padding = '15px';
+    form.style.borderRadius = '12px';
+    form.style.backgroundColor = '#f9f9f9';
+    form.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.1)';
+
+    // Add an input for the task title
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'What needs to be done?';
+    input.required = true;
+    input.style.flex = '1';
+    input.style.padding = '12px';
+    input.style.borderRadius = '8px';
+    input.style.border = '1px solid #ddd';
+    input.style.fontSize = '16px';
+    input.style.transition = 'border-color 0.3s, box-shadow 0.3s';
+
+    input.addEventListener('focus', () => {
+        input.style.borderColor = '#6c5ce7';
+        input.style.boxShadow = '0px 0px 6px rgba(108, 92, 231, 0.4)';
+    });
+
+    input.addEventListener('blur', () => {
+        input.style.borderColor = '#ddd';
+        input.style.boxShadow = 'none';
+    });
+
+    // Add a submit button
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Add Task';
+    submitButton.style.marginLeft = '10px';
+    submitButton.style.padding = '12px 20px';
+    submitButton.style.border = 'none';
+    submitButton.style.borderRadius = '8px';
+    submitButton.style.background = '#0984e3';
+    submitButton.style.color = '#fff';
+    submitButton.style.fontWeight = 'bold';
+    submitButton.style.cursor = 'pointer';
+    submitButton.style.boxShadow = '0px 4px 6px rgba(108, 92, 231, 0.3)';
+    submitButton.style.transition = 'all 0.3s ease';
+
+    submitButton.addEventListener('mouseover', () => {
+        submitButton.style.transform = 'translateY(-2px)';
+        submitButton.style.boxShadow = '0px 6px 10px rgba(108, 92, 231, 0.5)';
+    });
+
+    submitButton.addEventListener('mouseout', () => {
+        submitButton.style.transform = 'translateY(0)';
+        submitButton.style.boxShadow = '0px 4px 6px rgba(108, 92, 231, 0.3)';
+    });
+
+    // Append input and button to the form
+    form.appendChild(input);
+    form.appendChild(submitButton);
+
+    // Handle form submission
+    form.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent default form submission
+
+        const taskTitle = input.value.trim();
+        if (taskTitle) {
+            fetch('/create-task/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                },
+                body: JSON.stringify({ title: taskTitle }),
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         // Add the new task to the local tasks array
-                        tasks.push({ id: data.task.id, title: taskTitle, completed: false }); // Assuming the server returns the new task
+                        tasks.push({ id: data.task.id, title: taskTitle, completed: false });
                         renderTasks(); // Re-render task list
+                        form.remove(); // Remove the form after successful submission
                     } else {
-                        alert("Failed to create task: " + data.message); // Show error message from server
+                        alert("Failed to create task: " + data.message);
                     }
                 })
                 .catch(error => {
                     console.error('Error creating task:', error);
                     alert("An error occurred while creating the task.");
                 });
-            }
         }
-    
-        // Add event listener to the "Create Task" button
-        document.getElementById('createTaskBtn').addEventListener('click', createTask);
+    });
+
+    // Append the form to the task list
+    taskList.appendChild(form);
+
+    // Autofocus the input field
+    input.focus();
+}
+
+// Update event listener to use createTaskForm
+document.getElementById('createTaskBtn').addEventListener('click', createTaskForm);
+
     
         // Fetch tasks when the DOM is loaded
        // Function to fetch events when the DOM is loaded

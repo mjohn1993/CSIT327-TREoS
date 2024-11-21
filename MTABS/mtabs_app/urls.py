@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import landing_page, login_page, register_page, dashboard_page, calendar_page,get_tasks, reminder_page, settings_page,statistics_page,create_task,edit_task, delete_task, complete_task,event_list,create_event,update_event,delete_event,get_events
+from .views import landing_page, login_page, register_page, dashboard_page, calendar_page,get_tasks, reminder_page, settings_page,statistics_page,create_task,edit_task, delete_task, complete_task,event_list,create_event,update_event,delete_event,get_events,update_page ,delete_account, logout_view
 
 
 urlpatterns = [
@@ -21,6 +21,8 @@ urlpatterns = [
     path('update-event/<str:event_id>/', update_event, name='update_event'),
     path('delete-event/<str:event_id>/', delete_event, name='delete_event'),
     path('get-events/', get_events, name='get_events'),  # Add this line
-
+    path('update/', update_page, name='update_page'),
+    path('delete/', delete_account, name='delete_account'),
+    path('logout/', logout_view, name='logout_page'),
 
 ]

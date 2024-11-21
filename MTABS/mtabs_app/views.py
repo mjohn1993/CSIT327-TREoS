@@ -7,24 +7,73 @@ import json
 from .forms import TaskForm
 from django.views.decorators.http import require_POST
 from .models import Event
-
+from .models import User
+from django.contrib.auth import logout
+from django.contrib import messages
 
 def landing_page(request):
     return render(request, 'landing.html')
 
 def login_page(request):
+    # Check if user is already logged in
+    if 'username' in request.session:
+        return redirect('dashboard_page')  # Redirect if user is already logged in
+
     if request.method == 'POST':
-        user_id = request.POST.get('user_id')
+        username = request.POST.get('username')
         password = request.POST.get('password')
-        # Authentication logic goes here
-        return HttpResponse(f'Logged in as: {user_id}')
-    return render(request, 'login.html')
+
+        try:
+            user = User.objects.get(username=username)
+            if user.password == password:
+                request.session['username'] = user.username
+                return redirect('dashboard_page')  # Redirect to dashboard
+            else:
+                messages.error(request, 'Incorrect password')
+                return render(request, 'login.html')  # Show error
+        except User.DoesNotExist:
+            messages.error(request, 'Username does not exist')
+            return render(request, 'login.html')  # Show error
+
+    return render(request, 'login.html')  # For GET request, render login page
+
+def logout_view(request):
+    logout(request)  # Logs out the user and clears the session
+    return redirect('login_page')  # Redirects to the login page
+
 
 def register_page(request):
-    return render(request, 'register.html') 
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Basic validation
+        if not username or not password:
+            messages.error(request, 'Please fill in all fields.')
+            return render(request, 'register.html')
+
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists. Please choose a different one.')
+            return render(request, 'register.html')
+
+        # Create a new user
+        new_user = User(username=username, password=password)
+        new_user.save()
+
+        messages.success(request, 'Registration successful! You can now log in.')
+        return redirect('login_page')  # Redirect to the login page after successful registration
+
+    return render(request, 'register.html')
 
 def dashboard_page(request):
-    return render(request, 'dashboard.html')
+    if 'username' not in request.session:
+        return redirect('login_page')
+
+    username = request.session.get('username')
+    user = User.objects.get(username=username)
+    
+    return render(request, 'dashboard.html', {'user': user})
 
 def calendar_page(request):
     return render(request, 'CalendarMonth.html')
@@ -149,3 +198,35 @@ def delete_event(request, event_id):
             return JsonResponse({'success': True})
         except Event.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Event not found.'})
+
+def update_page(request):
+    if request.method == 'POST':
+        username = request.session.get('username')
+        if username:
+            user = User.objects.get(username=username)
+            new_username = request.POST.get('new_username')
+            new_password = request.POST.get('new_password')
+
+            if new_username:
+                request.session['username'] = new_username  # Update session
+                user.username = new_username
+            if new_password:
+                user.password = new_password
+            user.save()
+            return redirect('dashboard_page')
+        else:
+            return redirect('login_page')
+    
+    return render(request, 'update_page.html')
+
+def delete_account(request):
+    if request.method == 'POST':
+        username = request.session.get('username')
+        if username:
+            User.objects.filter(username=username).delete()
+            request.session.flush()  # Clear the session after deleting the account
+            return redirect('login_page')
+        else:
+            return redirect('login_page')
+    
+    return render(request, 'delete_page.html')
