@@ -349,8 +349,7 @@
         // Initialize an empty array to hold tasks
         let tasks = [];
     
-        // Function to render tasks
-        // Function to render tasks
+       
 // Function to render tasks
 function renderTasks() {
     const taskList = document.getElementById('taskList');
@@ -381,14 +380,14 @@ function renderTasks() {
 
         // Count completed tasks
         if (task.completed) {
-            completedCount++; // Increment completed count
+            completedCount++; 
         }
     });
 
     // Update the counts
-    completedCountElement.textContent = completedCount; // Update completed count
-    taskCountElement.textContent = tasks.length; // Update total task count
-    pendingCountElement.textContent = tasks.length - completedCount; // Update pending count
+    completedCountElement.textContent = completedCount; 
+    taskCountElement.textContent = tasks.length; 
+    pendingCountElement.textContent = tasks.length - completedCount; 
 }
 
 // Function to toggle task completion (using the checkbox)
@@ -397,17 +396,16 @@ function toggleComplete(taskId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+            'X-CSRFToken': getCookie('csrftoken'), 
         },
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Update the task's completed status in the local array
             const task = tasks.find(t => t.id === taskId);
             if (task) {
-                task.completed = !task.completed; // Toggle the completed status
-                renderTasks(); // Re-render task list
+                task.completed = !task.completed; 
+                renderTasks(); 
             }
         } else {
             alert("Failed to complete task.");
@@ -415,36 +413,9 @@ function toggleComplete(taskId) {
     });
 }
 
-
-// Function to toggle task completion (using the checkbox)
-function toggleComplete(taskId) {
-    fetch(`/complete-task/${taskId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update the task's completed status in the local array
-            const task = tasks.find(t => t.id === taskId);
-            if (task) {
-                task.completed = !task.completed; // Toggle the completed status
-                renderTasks(); // Re-render task list
-            }
-        } else {
-            alert("Failed to complete task.");
-        }
-    });
-}
-
-
-        // Initialize an empty array to hold upcoming events
+// Initialize an empty array to hold upcoming events
 let upcomingEvents = [];
 
-// Function to render upcoming events
 // Function to render upcoming events
 function renderUpcomingEvents() {
     const calendarSection = document.querySelector('.calendar');
@@ -464,10 +435,10 @@ function renderUpcomingEvents() {
 // Listen for messages from the calendar page
 window.addEventListener('message', (event) => {
     if (event.data.type === 'NEW_EVENT') {
-        upcomingEvents.push(event.data.event); // Add the new event to the upcoming events
-        console.log("New event received:", event.data.event); // Log the received event
-        console.log("Upcoming Events:", upcomingEvents); // Log the current state of upcoming events
-        renderUpcomingEvents(); // Render the updated events list
+        upcomingEvents.push(event.data.event); 
+        console.log("New event received:", event.data.event); 
+        console.log("Upcoming Events:", upcomingEvents); 
+        renderUpcomingEvents(); 
     }
 });
     
@@ -545,7 +516,7 @@ window.addEventListener('message', (event) => {
 
     // Handle form submission
     form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
 
         const taskTitle = input.value.trim();
         if (taskTitle) {
@@ -560,10 +531,9 @@ window.addEventListener('message', (event) => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Add the new task to the local tasks array
                         tasks.push({ id: data.task.id, title: taskTitle, completed: false });
-                        renderTasks(); // Re-render task list
-                        form.remove(); // Remove the form after successful submission
+                        renderTasks(); 
+                        form.remove(); 
                     } else {
                         alert("Failed to create task: " + data.message);
                     }
@@ -593,17 +563,17 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch('/get-tasks/')
         .then(response => response.json())
         .then(data => {
-            tasks = data.tasks; // Assuming your API returns a list of tasks
-            renderTasks(); // Call renderTasks to display them
+            tasks = data.tasks; 
+            renderTasks(); 
         })
         .catch(error => console.error('Error fetching tasks:', error));
 
     // Fetch events
-    fetch('/get-events/')  // Adjust the endpoint as necessary
+    fetch('/get-events/')  
         .then(response => response.json())
         .then(data => {
-            upcomingEvents = data.events; // Assuming your API returns a list of events
-            renderUpcomingEvents(); // Call renderUpcomingEvents to display them
+            upcomingEvents = data.events; 
+            renderUpcomingEvents(); 
         })
         .catch(error => console.error('Error fetching events:', error));
 });
@@ -614,17 +584,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                    'X-CSRFToken': getCookie('csrftoken'), 
                 },
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update the task's completed status in the local array
+                   
                     const task = tasks.find(t => t.id === taskId);
                     if (task) {
-                        task.completed = !task.completed; // Toggle the completed status
-                        renderTasks(); // Re-render task list
+                        task.completed = !task.completed; 
+                        renderTasks(); 
                     }
                 } else {
                     alert("Failed to complete task.");
@@ -640,18 +610,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                        'X-CSRFToken': getCookie('csrftoken'), 
                     },
-                    body: JSON.stringify({ title: newTitle }), // Send the new title as JSON
+                    body: JSON.stringify({ title: newTitle }), 
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Update the task's title in the local array
                         const task = tasks.find(t => t.id === taskId);
                         if (task) {
-                            task.title = newTitle; // Update the task title
-                            renderTasks(); // Re-render task list
+                            task.title = newTitle; 
+                            renderTasks(); 
                         }
                     } else {
                         alert("Failed to edit task.");
@@ -666,7 +635,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                    'X-CSRFToken': getCookie('csrftoken'), 
                 },
             })
             .then(response => {
@@ -677,11 +646,9 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 if (data.success) {
-                    // Remove the task from the local array
                     tasks = tasks.filter(t => t.id !== taskId);
-                    renderTasks(); // Re-render task list
-                } else {
-                    alert("Failed to delete task: " + data.message); // Show error message from server
+                    renderTasks(); 
+                    alert("Failed to delete task: " + data.message); 
                 }
             })
             .catch(error => {

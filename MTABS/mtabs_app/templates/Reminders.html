@@ -12,16 +12,25 @@
       box-sizing: border-box;
     }
 
+
     body {
       font-family: Arial, sans-serif;
       display: flex;
       height: 100vh;
       background-color: #f0f2f5;
       color: #333;
+      transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
+    
     }
 
-    /* Sidebar Styling */
-    .sidebar {
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #181818; /* Dark background */
+      color: #ffffff; /* White text color for body in dark mode */
+    }
+
+      /* Sidebar Styling */
+      .sidebar {
       width: 250px;
       background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
       color: #fff;
@@ -35,11 +44,13 @@
       width: 80px;
       height: auto;
       margin-bottom: 20px;
+      border-radius: 50%;
     }
 
     .sidebar ul {
       list-style: none;
       width: 100%;
+      margin-bottom: auto;
     }
 
     .sidebar li {
@@ -51,14 +62,17 @@
       color: #fff;
       transition: background 0.3s;
     }
-
-    .sidebar li:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+        .sidebar li:hover {
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding-left: 10px;
-    }
+        }
 
-    .sidebar button {
+        .sidebar a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .sidebar button {
       width: 100%;
       padding: 12px;
       margin-top: auto;
@@ -71,9 +85,9 @@
       margin-bottom: 10px;
     }
 
-    .sidebar button:hover {
-      background-color: #45a049;
-    }
+    .sidebar a:hover {
+            color: inherit; /* Ensure hover color stays the same */
+        }
 
     /* Main Dashboard Layout */
     .dashboard {
@@ -102,17 +116,23 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       position: relative;
+      transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
+    }
+
+    .reminders.dark-mode {
+      background-color: #242424; /* Darker background for reminders */
+      color: #ffffff; /* White text color for reminders in dark mode */
     }
 
     .reminders button {
       background-color: #120E34;
-      padding: 12px; /* Increased padding */
+      padding: 12px;
       margin-top: 20px;
       border: none;
       color: #fff;
       border-radius: 5px;
       cursor: pointer;
-      margin-bottom: 10px; /* Added margin-bottom */
+      margin-bottom: 10px;
       transition: background-color 0.3s;
       font-weight: bold;
     }
@@ -138,7 +158,7 @@
     .reminder-item button {
       background-color: transparent;
       border: none;
-      color: #f44336;
+ color: #f44336;
       cursor: pointer;
       font-size: 14px;
       transition: color 0.3s;
@@ -173,13 +193,13 @@
 
     .reminder-form button {
       width: 100%;
-      padding: 12px; /* Increased padding */
+      padding: 12px;
       background-color: #120E34;
       color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 10px; /* Added margin-top */
+      margin-top: 10px;
       font-weight: bold;
     }
 
@@ -191,16 +211,6 @@
       text-align: center;
       margin-bottom: 10px;
     }
-
-    .sidebar a {
-    text-decoration: none; /* Remove underline */
-    color: inherit; /* Use the inherited color of the parent (sidebar text color) */
-    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
-}
-
-.sidebar a:hover {
-    color: inherit; /* Ensure hover color stays the same */
-}
 
     .overlay {
       display: none;
@@ -260,6 +270,22 @@
     const remindersList = document.getElementById("remindersList");
     const reminderOverlay = document.getElementById("reminderOverlay");
     const reminderForm = document.getElementById("reminderForm");
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    const remindersSection = document.querySelector('.reminders');
+
+    // Check localStorage for dark mode preference
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+      body.classList .add('dark-mode');
+      remindersSection.classList.add('dark-mode');
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+      const isDarkMode = body.classList.toggle('dark-mode');
+      remindersSection.classList.toggle('dark-mode', isDarkMode);
+      localStorage.setItem('darkMode', isDarkMode);
+    });
 
     // Show the reminder form
     function showReminderForm() {
