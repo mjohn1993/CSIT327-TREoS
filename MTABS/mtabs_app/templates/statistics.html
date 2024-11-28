@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Statistics</title>
     <style>
         /* Basic Reset and Body Style */
@@ -60,7 +61,6 @@
         .sidebar a {
             text-decoration: none;
             color: inherit;
-            cursor: pointer;
         }
 
         .sidebar button {
@@ -114,20 +114,18 @@
 
         /* Merged Statistics Card */
         .stats-card {
+            grid-column: 1 / 2; /* Place in the first column */
             background-color: #ffffff;
             border-radius: 12px;
             padding: 20px;
-            width: 100%; /* Full width of the column */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            height: 320px; /* Set a fixed height */
+            overflow-y: auto; /* Allow scrolling if content overflows */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
         .stats-card canvas {
-            width: 400px !important; /* Fixed width */
-            height: 250px !important; /* Fixed height */
+            width: 500px !important; /* Fixed width */
+            height: 150px !important; /* Fixed height */
         }
 
         .stats-card h3 {
@@ -146,7 +144,7 @@
             padding: 20px;
             height: 320px; /* Set a fixed height */
             overflow-y: auto; /* Allow scrolling if content overflows */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+            box-shadow:  0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
         .recent-activity h3 {
@@ -179,9 +177,6 @@
             gap: 20px;
             grid-column: 1 / -1; /* Span across both columns */
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
         .working-hours, .goal {
@@ -189,8 +184,6 @@
             border-radius: 12px;
             padding: 20px;
             width: 100%; /* Make full width within the container */
-            position: relative;
-            border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
@@ -245,8 +238,7 @@
             width: 100%;
             height: 70%; /* Adjust height based on the goal progress (e.g., 70%) */
             background-color: #4caf50;
-            border-radius: 5px 5px 0 0;
-        }
+            border-radius: 5px 5px 0 0 }
 
         .progress-bar span {
             margin-top: 10px;
@@ -254,8 +246,8 @@
         }
 
         .hidden {
-    display: none;
-}
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -270,7 +262,7 @@
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
             <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
         </ul>
-        <button>Logout</button>
+        <button id="logoutButton">Logout</button>
     </div>
 
     <!-- Main Content -->
@@ -281,7 +273,11 @@
 
         <!-- Recent Activity Section -->
         <div class="recent-activity">
-            <h3> Recent Activity</h3>
+            <h3>Recent Activity</h3>
+            <div class="activity-item">User  logged in</div>
+            <div class="activity-item">Updated settings</div>
+            <div class="activity-item">Created a new reminder</div>
+            <div class="activity-item">Logged out</div>
         </div>
 
         <!-- Merged Statistics Card with Donut Chart -->
@@ -300,12 +296,12 @@
         </div>
 
         <!-- Working Hours and Daily Goal Section -->
-       
+        <div class="working-goal-container">
+            <!-- Working Hours Section -->
             <div class="working-hours">
                 <h3>Working Hours</h3>
-                <div class="chart">
-                    <canvas id="workingHoursChart"></canvas>
-                </div>
+                <p id="working-hours-display">Working Hours: 0 hours</p>
+                <canvas id="workingHoursChart"></canvas>
             </div>
 
             <div class="goal">
@@ -356,13 +352,12 @@
                 </div>
             </div>
         </div>
-   
+    </div>
 
     <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Donut Chart
-        const ctx = document.getElementById('donutChart').getContext('2d');
+ const ctx = document.getElementById('donutChart').getContext('2d');
         const donutChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -378,31 +373,6 @@
             }
         });
 
-        // Working Hours Chart
-        const workingHoursCtx = document.getElementById('workingHoursChart').getContext('2d');
-        const workingHoursChart = new Chart(workingHoursCtx, {
-            type: 'line', // Change this to the desired chart type (e.g., 'bar', 'line', etc.)
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // Days of the week
-                datasets: [{
-                    label: 'Hours Worked',
-                    data: [8, 6, 9, 7, 5, 4, 3], // Example data for hours worked each day
-                    borderColor: 'rgba(76, 175, 80, 0.7)',
-                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                    fill: true, // Fill the area under the line
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // Allows the chart to fit within its container
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                    },
-                },
-            }
-        });
-
         // Fetch tasks and update Recent Activity and Donut Chart
         document.addEventListener('DOMContentLoaded', function() {
             fetch('/get-tasks/')  // Adjust the URL to match your endpoint
@@ -412,25 +382,27 @@
                     const activityContainer = document.createElement('div'); // Create a new container for activities
 
                     // Clear existing activities
-                    activityContainer.innerHTML = '';  
+                    activityContainer.innerHTML = '';
 
                     // Initialize counters
                     let completedCount = 0;
                     let pendingCount = 0;
 
                     // Loop through the fetched tasks and create activity items
-                    data.tasks.forEach(task => {
-                        const activityItem = document.createElement('div');
-                        activityItem.classList.add('activity-item');
-                        if (task.completed) {
-                            activityItem.textContent = `Task "${task.title}" completed`;
-                            completedCount++;
-                        } else {
-                            activityItem.textContent = `Task "${task.title}" pending`;
-                            pendingCount++;
-                        }
-                        activityContainer.appendChild(activityItem);
-                    });
+                    if (Array.isArray(data.tasks)) {
+                        data.tasks.forEach(task => {
+                            const activityItem = document.createElement('div');
+                            activityItem.classList.add('activity-item');
+                            if (task.completed) {
+                                activityItem.textContent = `Task "${task.title}" completed`;
+                                completedCount++;
+                            } else {
+                                activityItem.textContent = `Task "${task.title}" pending`;
+                                pendingCount++;
+                            }
+                            activityContainer.appendChild(activityItem);
+                        });
+                    }
 
                     // Append the activity items to the recent activity div
                     recentActivityDiv.appendChild(activityContainer);
@@ -448,11 +420,143 @@
                     // Update the statistics text
                     document.querySelector('.stats-card p:nth-child(1)').textContent = `Completed: ${((completedCount / totalTasks) * 100).toFixed(2)}%`;
                     document.querySelector('.stats-card p:nth-child(3)').textContent = `Pending: ${((pendingCount / totalTasks) * 100).toFixed(2)}%`;
-
-                    
                 })
                 .catch(error => console.error('Error fetching tasks:', error));
         });
+
+        // Initialize variables for tracking working hours
+    // Initialize variables for tracking working hours
+let workingHoursData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // Days of the week
+    datasets: [{
+        label: 'Working Hours',
+        data: JSON.parse(localStorage.getItem('workingHoursData')) || [0, 0, 0, 0, 0, 0, 0], // Retrieve from localStorage or initialize with zeros
+        backgroundColor: '#4caf50', // Bar color
+    }]
+};
+
+const workingHoursCtx = document.getElementById('workingHoursChart').getContext('2d');
+const workingHoursChart = new Chart(workingHoursCtx, {
+    type: 'bar', // Change to bar chart
+    data: workingHoursData,
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                title: { display: true, text: 'Days' },
+                grid: {
+                    display: false // Optional: Hide grid lines for x-axis
+                }
+            },
+            y: {
+                title: { display: true, text: 'Hours Worked' },
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1, // Set the y-axis to have a step size of 1 hour
+                    max: 24 // Optional: Set maximum to 24 hours
+                }
+            }
+        }
+    }
+});
+
+let startTime = localStorage.getItem('startTime') ? new Date(localStorage.getItem('startTime')) : null; // Retrieve start time from local storage
+let trackingInterval = null; // Interval for updating working hours
+
+// Function to update working hours for the current day
+function updateWorkingHoursForToday() {
+    if (startTime) {
+        const now = new Date();
+        const dayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1; // Sunday = 6, Monday = 0, ..., Saturday = 5
+
+        // Calculate elapsed time in minutes since start time
+        const elapsedMinutes = Math.floor((now - startTime) / (1000 * 60)); // Convert milliseconds to minutes
+
+        // Update the working hours for the current day
+        workingHoursData.datasets[0].data[dayIndex] = Math.min(24, (workingHoursData.datasets[0].data[dayIndex] + elapsedMinutes / 60)); // Update hours worked today
+
+        // Save updated working hours to localStorage
+        localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
+
+        workingHoursChart.update(); // Update the chart
+
+        // Update display for working hours
+        document.getElementById('working-hours-display').textContent = `Working Hours: ${Math.floor(elapsedMinutes / 60)} hours and ${elapsedMinutes % 60} minutes`;
+    }
+}
+
+// Start tracking when the user logs in
+function startTracking() {
+    if (!trackingInterval) {
+        trackingInterval = setInterval(() => {
+            updateWorkingHoursForToday(); // Update working hours
+        }, 60000); // Update every minute
+    }
+}
+
+// Stop tracking working hours
+function stopTracking() {
+    if (trackingInterval) {
+        clearInterval(trackingInterval); // Stop the interval
+        trackingInterval = null; // Set interval to null
+    }
+}
+
+// Event listener for logout button
+document.getElementById('logoutButton').addEventListener('click', () => {
+    stopTracking(); // Stop tracking when logging out
+    // Save the current working hours to localStorage
+    localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
+    
+    // Send a POST request to the logout endpoint
+    fetch('/logout/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token if needed
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            // Clear start time from local storage
+            localStorage.removeItem('startTime');
+            // Redirect to the login page after successful logout
+            window.location.href = "{% url 'login _page' %}"; // Replace with the actual URL for the login page
+        } else {
+            alert('Logout failed. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error during logout:', error);
+        alert('An error occurred while logging out.');
+    });
+});
+
+// Start tracking if there is a valid start time
+if (startTime) {
+    startTracking(); // This should be called when the user logs in
+    updateWorkingHoursForToday(); // Initial call to update working hours display
+} else {
+    // If no start time, set it now
+    startTime = new Date();
+    localStorage.setItem('startTime', startTime); // Save start time to local storage
+    startTracking(); // Start tracking
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
     </script>
 </body>
 </html>
