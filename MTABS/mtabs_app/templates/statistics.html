@@ -14,11 +14,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             display: flex;
             height: 100vh;
             background-color: #f5f6fa;
-            color: #333;
+            color: black;
         }
 
         /* Sidebar Styling */
@@ -30,7 +30,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar img {
@@ -74,7 +73,6 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            font-weight: bold;
         }
 
         .sidebar button:hover {
@@ -100,7 +98,7 @@
 
         .header h2 {
             font-size: 24px;
-            color: #120E34;
+            color: black;
         }
 
         /* Stats Section */
@@ -116,23 +114,22 @@
 
         /* Merged Statistics Card */
         .stats-card {
+            grid-column: 1 / 2; /* Place in the first column */
             background-color: #ffffff;
             border-radius: 12px;
             padding: 20px;
             height: 320px; /* Set a fixed height */
             overflow-y: auto; /* Allow scrolling if content overflows */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
-            width: 100%; /* Make full width within the container */
         }
 
         .stats-card canvas {
-            width: 100% !important; /* Fixed width */
+            width: 500px !important; /* Fixed width */
             height: 150px !important; /* Fixed height */
         }
 
         .stats-card h3 {
             margin-bottom: 10px;
-            color: #120E34;
         }
 
         .stats-card p {
@@ -141,20 +138,20 @@
 
         /* Recent Activity Section */
         .recent-activity {
+            grid-column: 1 / 2; /* Place in the first column */
             background-color: #ffffff;
             border-radius: 12px;
             padding: 20px;
             height: 320px; /* Set a fixed height */
             overflow-y: auto; /* Allow scrolling if content overflows */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
-            width: 100%; /* Make full width within the container */
+            box-shadow:  0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
         .recent-activity h3 {
             margin-bottom: 10px;
             text-align: center;
             font-size: 20px; /* Increase font size */
-            color: #120E34; /* Darker color for better contrast */
+            color: #333; /* Darker color for better contrast */
         }
 
         .activity-item {
@@ -194,6 +191,11 @@
             height: 300px;
         }
 
+        .chart {
+            width: 100%; /* Set to 100% to fill container */
+            height: 100%; /* Fill the height of the working hours container */
+        }
+
         .goal {
             display: flex;
             flex-direction: column;
@@ -204,7 +206,6 @@
 
         .goal h3 {
             text-align: center;
-            color: #120E34;
         }
 
         /* Vertical Progress Bars */
@@ -216,44 +217,32 @@
         }
 
         .progress-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 30px; /* Make bars narrower */
-    position: relative; /* Position relative for the handle */
-}
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30px; /* Make bars narrower */
+        }
 
-.progress-bar .bar {
-    width: 20px;
-    height: 150px; /* Total height of the bar */
-    background-color: #e0e0e0;
-    border-radius: 5px;
-    position: relative;
-    overflow: hidden;
-}
+        .progress-bar .bar {
+            width: 20px;
+            height: 150px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
 
-.progress-bar .bar .progress {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: #4caf50; /* Default color */
-    border-radius: 5px 5px 0 0;
-}
-
-.progress-bar .handle {
-    width: 20px; /* Width of the handle */
-    height: 10px; /* Height of the handle */
-    background-color: yellow; /* Color of the handle */
-    position: absolute;
-    left: 0; /* Center the handle */
-    cursor: pointer;
-    border-radius: 5px; /* Rounded corners */
-}
+        .progress-bar .bar .progress {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70%; /* Adjust height based on the goal progress (e.g., 70%) */
+            background-color: #4caf50;
+            border-radius: 5px 5px 0 0 }
 
         .progress-bar span {
             margin-top: 10px;
             font-size: 14px;
-            color: #120E34; /* Consistent color for text */
         }
 
         .hidden {
@@ -278,7 +267,7 @@
 
     <!-- Main Content -->
     <div class="dashboard">
- <div class="header">
+        <div class="header">
             <h2>Statistics</h2>
         </div>
 
@@ -311,13 +300,8 @@
             <!-- Working Hours Section -->
             <div class="working-hours">
                 <h3>Working Hours</h3>
-                <p id="working-hours-display">Working Hours: 0 minutes total, 0 minutes today</p>
-                <div>
-                    <button id="start-button">Start Tracking</button>
-                    <button id="stop-button">Stop Tracking</button>
-                    <p id="tracking-status">Tracking status: Not tracking</p>
-                </div>
-                <canvas id="workingHoursChart" style="width: 100%; height: 150px;"></canvas>
+                <p id="working-hours-display">Working Hours: 0 hours</p>
+                <canvas id="workingHoursChart"></canvas>
             </div>
 
             <div class="goal">
@@ -325,50 +309,43 @@
                 <div class="progress-bars">
                     <div class="progress-bar">
                         <div class="bar">
-                            <div class="progress" style="height: 0%;"></div>
-                            <div class="handle" style="bottom: 0;"></div>
+                            <div class="progress" style="height: 70%;"></div>
                         </div>
                         <span>Mon</span>
                     </div>
                     <div class="progress-bar">
                         <div class="bar">
-                            <div class="progress" style="height: 0%;"></div>
-                            <div class="handle" style="bottom: 0;"></div>
+                            <div class="progress" style="height: 50%;"></div>
                         </div>
                         <span>Tue</span>
                     </div>
                     <div class="progress-bar">
                         <div class="bar">
-                            <div class="progress" style="height: 0%;"></div>
-                            <div class="handle" style="bottom: 0;"></div>
+                            <div class="progress" style="height: 80%;"></div>
                         </div>
                         <span>Wed</span>
                     </div>
                     <div class="progress-bar">
                         <div class="bar">
-                            <div class="progress" style="height: 0%;"></div>
-                            <div class="handle" style="bottom: 0;"></div>
+                            <div class="progress" style="height: 60%;"></div>
                         </div>
                         <span>Thu</span>
                     </div>
                     <div class="progress-bar">
                         <div class="bar">
-                            <div class="progress" style="height: 0%;"></div>
-                            <div class="handle" style="bottom: 0;"></div>
+                            <div class="progress" style="height: 90%;"></div>
                         </div>
                         <span>Fri</span>
                     </div>
                     <div class="progress-bar">
                         <div class="bar">
-                            <div class="progress" style="height: 0%;"></div>
-                            <div class="handle" style="bottom: 0;"></div>
+                            <div class="progress" style="height: 40%;"></div>
                         </div>
                         <span>Sat</span>
                     </div>
                     <div class="progress-bar">
                         <div class="bar">
-                            <div class="progress" style="height: 0%;"></div>
-                            <div class="handle" style="bottom: 0;"></div>
+                            <div class="progress" style="height: 30%;"></div>
                         </div>
                         <span>Sun</span>
                     </div>
@@ -380,7 +357,7 @@
     <!-- Chart.js Library -->
     <script>
         // Donut Chart
-        const ctx = document.getElementById('donutChart').getContext('2d');
+ const ctx = document.getElementById('donutChart').getContext('2d');
         const donutChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -448,7 +425,8 @@
         });
 
         // Initialize variables for tracking working hours
-        let workingHoursData = {
+    // Initialize variables for tracking working hours
+let workingHoursData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // Days of the week
     datasets: [{
         label: 'Working Hours',
@@ -463,7 +441,6 @@ const workingHoursChart = new Chart(workingHoursCtx, {
     data: workingHoursData,
     options: {
         responsive: true,
-        maintainAspectRatio: true, // Maintain aspect ratio
         scales: {
             x: {
                 title: { display: true, text: 'Days' },
@@ -483,14 +460,12 @@ const workingHoursChart = new Chart(workingHoursCtx, {
     }
 });
 
-let startTime = null; // Initialize startTime as null
+let startTime = localStorage.getItem('startTime') ? new Date(localStorage.getItem('startTime')) : null; // Retrieve start time from local storage
 let trackingInterval = null; // Interval for updating working hours
-let isTracking = false; // Flag to indicate if tracking is active
 
-
-        // Function to update working hours for the current day
-        function updateWorkingHoursForToday() {
-    if (isTracking && startTime) { // Only update if tracking is active
+// Function to update working hours for the current day
+function updateWorkingHoursForToday() {
+    if (startTime) {
         const now = new Date();
         const dayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1; // Sunday = 6, Monday = 0, ..., Saturday = 5
 
@@ -498,9 +473,7 @@ let isTracking = false; // Flag to indicate if tracking is active
         const elapsedMinutes = Math.floor((now - startTime) / (1000 * 60)); // Convert milliseconds to minutes
 
         // Update the working hours for the current day
-        const currentDayHours = workingHoursData.datasets[0].data[dayIndex];
-        const newHours = Math.min(currentDayHours + (elapsedMinutes / 60), 24); // Limit to 24 hours
-        workingHoursData.datasets[0].data[dayIndex] = newHours;
+        workingHoursData.datasets[0].data[dayIndex] = Math.min(24, (workingHoursData.datasets[0].data[dayIndex] + elapsedMinutes / 60)); // Update hours worked today
 
         // Save updated working hours to localStorage
         localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
@@ -508,128 +481,35 @@ let isTracking = false; // Flag to indicate if tracking is active
         workingHoursChart.update(); // Update the chart
 
         // Update display for working hours
-        updateDisplay();
+        document.getElementById('working-hours-display').textContent = `Working Hours: ${Math.floor(elapsedMinutes / 60)} hours and ${elapsedMinutes % 60} minutes`;
     }
 }
-        // Function to update the display text for working hours
-       // Function to update the display text for working hours
-       function updateDisplay() {
-    const totalHours = workingHoursData.datasets[0].data.reduce((acc, hours) => acc + hours, 0);
-    const totalMinutes = Math.round(totalHours * 60); // Convert total hours to minutes
 
-    // Update the display for each day
-    const dayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1; // Get today's index
-    const todayHours = workingHoursData.datasets[0].data[dayIndex];
-    const todayMinutes = Math.round(todayHours * 60); // Convert today's hours to minutes
-
-    document.getElementById('working-hours-display').textContent = `Working Hours: ${totalMinutes} minutes total, ${todayMinutes} minutes today`;
-}
-
-
-        // Function to start tracking time
-        function startTracking() {
-    if (!isTracking) {
-        startTime = new Date();
-        localStorage.setItem('startTime', startTime);
-        isTracking = true;
-        localStorage.setItem('isTracking', 'true'); // Save tracking state to localStorage
-
-        // Update the tracking status immediately when tracking starts
-        updateTrackingStatus('Tracking');
-
-        // Start the interval to update working hours every minute
+// Start tracking when the user logs in
+function startTracking() {
+    if (!trackingInterval) {
         trackingInterval = setInterval(() => {
-            updateWorkingHoursForToday();
-            updateDisplay(); // Update display every minute
+            updateWorkingHoursForToday(); // Update working hours
         }, 60000); // Update every minute
     }
 }
+
+// Stop tracking working hours
 function stopTracking() {
-    if (isTracking) {
-        clearInterval(trackingInterval);
-        isTracking = false;
-        startTime = null; // Clear start time
-        localStorage.removeItem('startTime'); // Clear start time from local storage
-        localStorage.setItem('isTracking', 'false'); // Save tracking state to localStorage
-        updateTrackingStatus('Not tracking'); // Update status when tracking stops
-    }
-}
-        // Function to update the tracking status
-        function updateTrackingStatus(status) {
-    document.getElementById('tracking-status').textContent = `Tracking status: ${status}`;
-}
-
-        // Function to reset working hours at midnight
-        function resetDailyHours() {
-    const now = new Date();
-    const lastResetDate = localStorage.getItem('lastResetDate');
-
-    if (!lastResetDate || new Date(lastResetDate).getDate() !== now.getDate()) {
-        workingHoursData.datasets[0].data.fill(0); // Reset all hours to 0
-        localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
-        localStorage.setItem('lastResetDate', now); // Update last reset date
-        workingHoursChart.update(); // Update the chart
+    if (trackingInterval) {
+        clearInterval(trackingInterval); // Stop the interval
+        trackingInterval = null; // Set interval to null
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const trackingState = localStorage.getItem('isTracking');
-    if (trackingState === 'true') {
-        startTime = new Date(localStorage.getItem('startTime')); // Restore start time
-        isTracking = true; // Set tracking state to true
-        updateTrackingStatus('Tracking'); // Update the status display
-
-        // Calculate elapsed time since tracking started
-        const now = new Date();
-        const elapsedMinutes = Math.floor((now - startTime) / (1000 * 60)); // Convert milliseconds to minutes
-
-        // Update the working hours for the current day
-        const dayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1; // Sunday = 6, Monday = 0, ..., Saturday = 5
-        workingHoursData.datasets[0].data[dayIndex] += elapsedMinutes / 60; // Add elapsed hours
-
-        // Save updated working hours to localStorage
-        localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
-
-        // Start the interval to update working hours every minute
-        trackingInterval = setInterval(() => {
-            updateWorkingHoursForToday();
-            updateDisplay(); // Update display every minute
-        }, 60000); // Update every minute
-    }
-
-    // Initial display update
-    updateDisplay();
-});
-
-
-
-        // Check for midnight reset every minute
-        setInterval(() => {
-    const now = new Date();
-    if (now.getHours() === 0 && now.getMinutes() === 0) {
-        resetDailyHours(); // Reset working hours at midnight
-    }
-}, 60000); // Check every minute
-
-        // Call resetDailyHours function at the start of the application
-        resetDailyHours(); 
-
-        // Event listeners for start and stop buttons
-        document.getElementById('start-button').addEventListener('click', startTracking);
-        document.getElementById('stop-button').addEventListener('click', stopTracking);
-
-        // Initial display update
-        updateDisplay();
-
-        // Event listener for logout button
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            stopTracking(); // Stop tracking when logging out
-
-            // Save the current working hours to localStorage
-            localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
-            
-            // Send a POST request to the logout endpoint
-            fetch('/logout/', {
+// Event listener for logout button
+document.getElementById('logoutButton').addEventListener('click', () => {
+    stopTracking(); // Stop tracking when logging out
+    // Save the current working hours to localStorage
+    localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
+    
+    // Send a POST request to the logout endpoint
+    fetch('/logout/', {
         method: 'POST',
         headers: {
             'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token if needed
@@ -652,72 +532,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-        // If there is a valid start time, start tracking
-        if (startTime) {
-    // Do not start tracking automatically; only set the display
-    updateDisplay(); // Initial display update
+// Start tracking if there is a valid start time
+if (startTime) {
+    startTracking(); // This should be called when the user logs in
+    updateWorkingHoursForToday(); // Initial call to update working hours display
 } else {
     // If no start time, set it now
     startTime = new Date();
     localStorage.setItem('startTime', startTime); // Save start time to local storage
+    startTracking(); // Start tracking
 }
-
-        // Ensure the display is updated after starting tracking
-        updateDisplay(); // Initial display update
-        const currentDayIndex = new Date().getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
-const adjustedDayIndex = (currentDayIndex + 6) % 7; // Adjusted index: Sunday = 1, Monday = 2, ..., Saturday = 0
-
-const handles = document.querySelectorAll('.handle'); // Select all handles
-const progressBars = document.querySelectorAll('.progress-bar .progress'); // Select all progress bars
-
-handles.forEach((handle, index) => {
-    let isDragging = false; // Flag to indicate if dragging is active
-
-    // Only add event listeners for the adjusted current day
-    if (index === adjustedDayIndex) {
-        // Mouse down event to start dragging
-        handle.addEventListener('mousedown', (e) => {
-            isDragging = true; // Set dragging flag to true
-            document.body.style.userSelect = 'none'; // Prevent text selection
-            progressBars[index].style.backgroundColor = 'green'; // Change progress bar color to yellow
-        });
-
-        // Mouse move event to update position
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const bar = handle.parentElement;
-                const barHeight = bar.offsetHeight;
-                const maxHeight = barHeight - handle.offsetHeight; // Maximum position for the handle
-
-                // Calculate new Y position based on mouse position
-                let newY = Math.max(0, Math.min(maxHeight, barHeight - e.clientY + bar.getBoundingClientRect().top));
-
-                handle.style.bottom = `${newY}px`; // Move the handle
-
-                // Calculate the progress percentage based on handle position
-                const progressPercentage = (newY / maxHeight) * 100;
-                progressBars[index].style.height = `${progressPercentage}%`; // Update progress bar height
-            }
-        });
-
-        // Mouse up event to stop dragging
-        document.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false; // Reset dragging flag
-                document.body.style.userSelect = ''; // Restore text selection
-                const progressPercentage = parseFloat(handle.style.bottom) / (150 - handle.offsetHeight) * 100; // Calculate final percentage
-                console.log(`Daily goal set for day ${index}: ${progressPercentage.toFixed(2)}%`); // Log the daily goal percentage
-                // No need to revert color; keep it yellow
-            }
-        });
-    } else {
-        // Disable dragging for other days
-        handle.style.cursor = 'not-allowed'; // Change cursor to indicate it's not draggable
-        handle.removeEventListener('mousedown', () => {}); // Remove any mouse down event listeners
-    }
-});
-
-
 
 function getCookie(name) {
     let cookieValue = null;
