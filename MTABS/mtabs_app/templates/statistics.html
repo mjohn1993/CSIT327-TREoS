@@ -521,7 +521,7 @@ document.getElementById('logoutButton').addEventListener('click', () => {
             // Clear start time from local storage
             localStorage.removeItem('startTime');
             // Redirect to the login page after successful logout
-            window.location.href = "{% url 'login _page' %}"; // Replace with the actual URL for the login page
+            window.location.href = "{% url 'login_page' %}"; // Replace with the actual URL for the login page
         } else {
             alert('Logout failed. Please try again.');
         }
