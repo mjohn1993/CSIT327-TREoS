@@ -1,6 +1,31 @@
 from django.urls import path
-from .views import landing_page, login_page, register_page, dashboard_page, calendar_page,get_tasks, reminder_page, settings_page,statistics_page,create_task,edit_task, delete_task, complete_task,event_list,create_event,update_event,delete_event,get_events,update_page ,delete_account, logout_view
-
+from .views import (
+    create_reminder,
+    delete_reminder,
+    edit_reminder,
+    landing_page,
+    login_page,
+    get_reminders,
+    register_page,
+    dashboard_page,
+    calendar_page,
+    get_tasks,
+    reminder_page,
+    settings_page,
+    statistics_page,
+    create_task,
+    edit_task,
+    delete_task,
+    complete_task,
+    event_list,
+    create_event,
+    update_event,
+    delete_event,
+    get_events,
+    update_page,
+    delete_account,
+    logout_view,
+)
 
 urlpatterns = [
     path('', landing_page, name='landing_page'),  # Example for landing page
@@ -24,5 +49,8 @@ urlpatterns = [
     path('update/', update_page, name='update_page'),
     path('delete/', delete_account, name='delete_account'),
     path('logout/', logout_view, name='logout_page'),
-
+    path('reminders/create/', create_reminder, name='create_reminder'),
+    path('reminders/get/', get_reminders, name='get_reminders'),
+    path('reminders/edit/<int:id>/', edit_reminder, name='edit_reminder'),
+    path('reminders/delete/<int:id>/', delete_reminder, name='delete_reminder'),
 ]

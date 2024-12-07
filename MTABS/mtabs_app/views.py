@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from .models import Task
+from .models import Reminder, Task
 import json
 from .forms import TaskForm
 from django.views.decorators.http import require_POST
@@ -77,9 +77,6 @@ def dashboard_page(request):
 
 def calendar_page(request):
     return render(request, 'CalendarMonth.html')
-
-def reminder_page(request):
-    return render(request, 'Reminders.html')
 
 def settings_page(request):
     return render(request, 'Settings.html')
@@ -230,3 +227,57 @@ def delete_account(request):
             return redirect('login_page')
     
     return render(request, 'delete_page.html')
+
+# Reminder page view
+def reminder_page(request):
+    return render(request, 'reminders.html')
+
+# Create reminder
+@csrf_exempt
+def create_reminder(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        title = data.get('title')
+        time = data.get('time')
+        if title and time:
+            new_reminder = Reminder.objects.create(title=title, time=time)
+            return JsonResponse({"id": new_reminder.id, "status": "success"})
+        return JsonResponse({"error": "Invalid data"}, status=400)
+    return JsonResponse({"error": "Invalid request"}, status=405)
+
+# Fetch reminders
+def get_reminders(request):
+    reminders = Reminder.objects.all().order_by('time')
+    data = {"reminders": list(reminders.values('id', 'title', 'time'))}
+    return JsonResponse(data)
+
+# Edit reminder
+@csrf_exempt
+def edit_reminder(request, id):
+    if request.method == "PUT":
+        try:
+            reminder = Reminder.objects.get(id=id)
+            data = json.loads(request.body)
+            title = data.get('title')
+            time = data.get('time')
+            if title and time:
+                reminder.title = title
+                reminder.time = time
+                reminder.save()
+                return JsonResponse({"status": "success"})
+            return JsonResponse({"error": "Invalid data"}, status=400)
+        except Reminder.DoesNotExist:
+            return JsonResponse({"error": "Reminder not found"}, status=404)
+    return JsonResponse({"error": "Invalid request"}, status=405)
+
+# Delete reminder
+@csrf_exempt
+def delete_reminder(request, id):
+    if request.method == "DELETE":
+        try:
+            reminder = Reminder.objects.get(id=id)
+            reminder.delete()
+            return JsonResponse({"status": "success"})
+        except Reminder.DoesNotExist:
+            return JsonResponse({"error": "Reminder not found"}, status=404)
+    return JsonResponse({"error": "Invalid request"}, status=405)

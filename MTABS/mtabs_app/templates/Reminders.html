@@ -7,220 +7,401 @@
   <style>
     /* Basic Reset and Body Style */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
 
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
-      background-color: #f0f2f5;
-      color: #333;
-      transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
-    
-    }
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        height: 100vh;
+        background-color: #f0f2f5;
+        color: #333;
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
+      
+      }
 
-    /* Dark Mode Styles */
-    body.dark-mode {
-      background-color: #181818; /* Dark background */
-      color: #ffffff; /* White text color for body in dark mode */
-    }
+      /* Dark Mode Styles */
+      body.dark-mode {
+        background-color: #181818; /* Dark background */
+        color: #ffffff; /* White text color for body in dark mode */
+      }
 
-      /* Sidebar Styling */
-      .sidebar {
-      width: 250px;
-      background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
-      color: #fff;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+        /* Sidebar Styling */
+        .sidebar {
+        width: 250px;
+        background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
+        color: #fff;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
 
-    .sidebar img {
-      width: 80px;
-      height: auto;
-      margin-bottom: 20px;
-      border-radius: 50%;
-    }
+      .sidebar img {
+        width: 80px;
+        height: auto;
+        margin-bottom: 20px;
+        border-radius: 50%;
+      }
 
-    .sidebar ul {
-      list-style: none;
-      width: 100%;
-      margin-bottom: auto;
-    }
+      .sidebar ul {
+        list-style: none;
+        width: 100%;
+        margin-bottom: auto;
+      }
 
-    .sidebar li {
-      padding: 10px 0;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      cursor: pointer;
-      color: #fff;
-      transition: background 0.3s;
-    }
-        .sidebar li:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding-left: 10px;
-        }
+      .sidebar li {
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+        color: #fff;
+        transition: background 0.3s;
+      }
+          .sidebar li:hover {
+              background-color: rgba(255, 255, 255, 0.1);
+              border-radius: 8px;
+              padding-left: 10px;
+          }
 
-        .sidebar a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .sidebar button {
-      width: 100%;
-      padding: 12px;
-      margin-top: auto;
-      border: none;
-      background-color: #4caf50;
-      color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      margin-bottom: 10px;
-    }
+          .sidebar a {
+              text-decoration: none;
+              color: inherit;
+          }
+          .sidebar button {
+        width: 100%;
+        padding: 12px;
+        margin-top: auto;
+        border: none;
+        background-color: #4caf50;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-bottom: 10px;
+      }
 
-    .sidebar a:hover {
-            color: inherit; /* Ensure hover color stays the same */
-        }
+      .sidebar a:hover {
+              color: inherit; /* Ensure hover color stays the same */
+          }
 
-    /* Main Dashboard Layout */
-    .dashboard {
-      flex-grow: 1;
-      padding: 20px;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 20px;
-    }
+      /* Main Dashboard Layout */
+      .dashboard {
+        flex-grow: 1;
+        padding: 20px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 20px;
+      }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    .header h2 {
-      font-size: 24px;
-      color: #333;
-    }
+      .header h2 {
+        font-size: 24px;
+        color: #333;
+      }
 
-    /* Reminders Section */
-    .reminders {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      position: relative;
-      transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
-    }
+      /* Reminders Section */
+      .reminders {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
+      }
 
-    .reminders.dark-mode {
-      background-color: #242424; /* Darker background for reminders */
-      color: #ffffff; /* White text color for reminders in dark mode */
-    }
+      .reminders.dark-mode {
+        background-color: #242424; /* Darker background for reminders */
+        color: #ffffff; /* White text color for reminders in dark mode */
+      }
 
-    .reminders button {
-      background-color: #120E34;
-      padding: 12px;
-      margin-top: 20px;
-      border: none;
-      color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-bottom: 10px;
-      transition: background-color 0.3s;
-      font-weight: bold;
-    }
+      .reminders button {
+        background-color: #120E34;
+        padding: 12px;
+        margin-top: 20px;
+        border: none;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: background-color 0.3s;
+        font-weight: bold;
+      }
 
-    .reminders h3 {
-      margin-bottom: 15px;
-      color: #333;
-      font-weight: bolder;
-      font-size: 28px;
-      text-align: center;
-    }
+      .reminders h3 {
+        margin-bottom: 15px;
+        color: #333;
+        font-weight: bolder;
+        font-size: 28px;
+        text-align: center;
+      }
 
-    .reminder-item {
-      background-color: #e0f7fa;
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .reminder-item {
+        background-color: #e0f7fa;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    .reminder-item button {
-      background-color: transparent;
-      border: none;
- color: #f44336;
-      cursor: pointer;
-      font-size: 14px;
-      transition: color 0.3s;
-    }
+      .reminder-item button {
+        background-color: transparent;
+        border: none;
+        color: #f44336;
+        cursor: pointer;
+        font-size: 14px;
+        transition: color 0.3s;
+      }
 
-    .reminder-item button:hover {
-      color: #d32f2f;
-    }
+      .reminder-item button:hover {
+        color: #d32f2f;
+      }
 
-    /* Reminder Form Styles */
-    .reminder-form {
+      /* Reminder Form Styles */
+      .reminder-form {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        width: 300px;
+      }
+
+      .reminder-form input {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #120E34;
+        border-radius: 4px;
+      }
+
+      .reminder-form button {
+        width: 100%;
+        padding: 12px;
+        background-color: #120E34;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+
+      .reminder-form button:hover {
+        background-color: #9c9c9c;
+      }
+
+      .reminder-form h3 {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 5;
+      }
+
+
+    /* Modal Styles */
+    #modal {
       display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 25px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+    }
+
+    #modalTitle {
+      color: #34495e;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .modal-content p {
+      font-size: 14px;
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: space-evenly;
+      gap: 10px;
+    }
+
+    .modal-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .cancel-button {
+      background-color: #bdc3c7;
+      color: white;
+    }
+
+    .cancel-button:hover {
+      background-color: #95a5a6;
+    }
+
+    .delete-button {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .delete-button:hover {
+      background-color: #c0392b;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+     /* Reminder form styles */
+     .reminder-form {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       background-color: white;
-      padding: 40px;
-      border-radius: 8px;
+      padding: 20px;
+      border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      z-index: 10;
       width: 300px;
-    }
-
-    .reminder-form input {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      border: 1px solid #120E34;
-      border-radius: 4px;
-    }
-
-    .reminder-form button {
-      width: 100%;
-      padding: 12px;
-      background-color: #120E34;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .reminder-form button:hover {
-      background-color: #9c9c9c;
-    }
-
-    .reminder-form h3 {
-      text-align: center;
-      margin-bottom: 10px;
+      display: none;
+      z-index: 2;
     }
 
     .overlay {
-      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 5;
+      display: none;
+      z-index: 1;
+    }
+
+    .reminder-form input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .reminder-form button {
+      padding: 10px 20px;
+      background-color: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .reminder-form button:hover {
+      background-color: #34495e;
+    }
+
+    /* Reminder item styling */
+    .reminder-item {
+      background-color: #ecf0f1;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .reminder-item button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .reminder-item button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Edit and Delete button alignment */
+    .reminder-item button:first-child {
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -241,7 +422,6 @@
 
   <!-- Main Dashboard -->
   <div class="dashboard">
-    <!-- Header Section -->
     <div class="header">
       <h2>Hello Mark! You can manage your reminders here!</h2>
     </div>
@@ -259,80 +439,174 @@
   <!-- Reminder Form -->
   <div class="overlay" id="reminderOverlay" onclick="closeForm()"></div>
   <div class="reminder-form" id="reminderForm">
-    <h3>Add Reminder</h3>
+    <h3 id="formTitle">Add Reminder</h3>
+    <input type="hidden" id="reminderId">
     <input type="text" id="reminderTitle" placeholder="Reminder Title" required>
     <input type="datetime-local" id="reminderTime" required>
     <button onclick="submitReminder()">Submit Reminder</button>
   </div>
 
+  <!-- Delete Modal -->
+  <div id="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3 id="modalTitle">Are you sure you want to delete this reminder?</h3>
+      <p style="color: #e74c3c; font-weight: bold;">This action cannot be undone.</p>
+      <div class="modal-buttons">
+        <button class="cancel-button" onclick="closeModal()">Cancel</button>
+        <button class="delete-button" onclick="confirmAction()">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const reminders = []; // Store reminders
     const remindersList = document.getElementById("remindersList");
     const reminderOverlay = document.getElementById("reminderOverlay");
     const reminderForm = document.getElementById("reminderForm");
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-    const remindersSection = document.querySelector('.reminders');
-
-    // Check localStorage for dark mode preference
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    if (isDarkMode) {
-      body.classList .add('dark-mode');
-      remindersSection.classList.add('dark-mode');
-    }
-
-    darkModeToggle.addEventListener('click', () => {
-      const isDarkMode = body.classList.toggle('dark-mode');
-      remindersSection.classList.toggle('dark-mode', isDarkMode);
-      localStorage.setItem('darkMode', isDarkMode);
-    });
-
+    const formTitle = document.getElementById("formTitle");
+    const modal = document.getElementById("modal");
+    let isEditing = false;
+    let currentReminderId = null;
+    let currentAction = null;
+  
     // Show the reminder form
     function showReminderForm() {
+      isEditing = false;
+      formTitle.textContent = "Add Reminder";
       reminderOverlay.style.display = "block";
       reminderForm.style.display = "block";
+      document.getElementById("reminderId").value = "";
+      document.getElementById("reminderTitle").value = "";
+      document.getElementById("reminderTime").value = "";
     }
-
+  
     // Close the form
     function closeForm() {
       reminderOverlay.style.display = "none";
       reminderForm.style.display = "none";
-      document.getElementById("reminderTitle").value = "";
-      document.getElementById("reminderTime").value = "";
     }
-
-    // Submit reminder
-    function submitReminder() {
+  
+    async function submitReminder() {
+      const id = document.getElementById("reminderId").value;
       const title = document.getElementById("reminderTitle").value;
       const time = document.getElementById("reminderTime").value;
-      const reminder = { id: Date.now(), title, time };
-      reminders.push(reminder);
-      renderReminders();
+  
+      if (!title || !time) {
+        alert("Please provide both a title and time for the reminder.");
+        return;
+      }
+  
+      const url = isEditing ? `/reminders/edit/${id}/` : "{% url 'create_reminder' %}";
+      const method = isEditing ? "PUT" : "POST";
+  
+      try {
+        const response = await fetch(url, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+          },
+          body: JSON.stringify({ title, time })
+        });
+  
+        if (response.ok) {
+          fetchReminders();
+        } else {
+          alert(`Failed to ${isEditing ? "edit" : "create"} reminder.`);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+  
       closeForm();
     }
-
-    // Render reminders
-    function renderReminders() {
-      remindersList.innerHTML = ""; // Clear previous reminders
-      reminders.forEach(reminder => {
+  
+    async function fetchReminders() {
+      try {
+        const response = await fetch("{% url 'get_reminders' %}");
+        if (response.ok) {
+          const data = await response.json();
+          renderReminders(data.reminders);
+        } else {
+          console.error("Failed to fetch reminders");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  
+    function renderReminders(reminders) {
+      remindersList.innerHTML = "";
+      reminders.forEach((reminder) => {
         const reminderItem = document.createElement("div");
         reminderItem.className = "reminder-item";
+        reminderItem.id = reminder.id; // Ensure the reminder item has an ID
         reminderItem.innerHTML = `
           <span>${reminder.title} - ${new Date(reminder.time).toLocaleString()}</span>
-          <button onclick="deleteReminder(${reminder.id})">Delete</button>
+          <div class="reminder-buttons">
+            <button class="edit" onclick="editReminder(${reminder.id}, '${reminder.title}', '${reminder.time}')">Edit</button>
+            <button class="delete" onclick="confirmDeleteReminder(${reminder.id})">Delete</button>
+          </div>
         `;
         remindersList.appendChild(reminderItem);
       });
     }
-
-    // Delete reminder
-    function deleteReminder(id) {
-      const index = reminders.findIndex(reminder => reminder.id === id);
-      if (index > -1) {
-        reminders.splice(index, 1);
-        renderReminders();
+  
+    function editReminder(id, title, time) {
+      isEditing = true;
+      formTitle.textContent = "Edit Reminder";
+      document.getElementById("reminderId").value = id;
+      document.getElementById("reminderTitle").value = title;
+      document.getElementById("reminderTime").value = new Date(time).toISOString().slice(0, 16);
+      reminderOverlay.style.display = "block";
+      reminderForm.style.display = "block";
+    }
+  
+    // Show the delete confirmation modal
+    function confirmDeleteReminder(id) {
+      currentReminderId = id; // Set the current reminder ID to delete
+      currentAction = 'delete'; // Indicate the action type
+      document.getElementById("modalTitle").textContent = "Are you sure you want to delete this reminder?";
+      modal.style.display = "block"; // Show the modal
+    }
+  
+    // Confirm delete action
+    function confirmAction() {
+      if (currentAction === 'delete') {
+        deleteReminder(currentReminderId); // Perform the delete
+      }
+      closeModal(); // Close the modal
+    }
+  
+    // Delete the reminder
+    async function deleteReminder(id) {
+      try {
+        const response = await fetch(`/reminders/delete/${id}/`, {
+          method: "DELETE",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+          }
+        });
+  
+        if (response.ok) {
+          fetchReminders(); // Reload the reminders
+        } else {
+          alert("Failed to delete reminder.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
       }
     }
+  
+    // Close modal
+    function closeModal() {
+      modal.style.display = "none"; // Hide the modal
+      currentAction = null; // Reset the current action
+      currentReminderId = null; // Reset the current reminder ID
+    }
+  
+    // Fetch reminders on page load
+    document.addEventListener("DOMContentLoaded", fetchReminders);
   </script>
 </body>
 </html>

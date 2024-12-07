@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Task
+from .models import Reminder, Task
 from .models import Event
 from .models import User
 
@@ -15,3 +15,9 @@ class TaskAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ('event_name', 'date')  # Changed 'event_date' to 'date'
     search_fields = ('event_name',)  # Enable search by event name
+
+@admin.register(Reminder)
+class ReminderAdmin(admin.ModelAdmin):
+    list_display = ('title', 'time')  # Display title and time in the list view
+    fields = ('title', 'time')  # Fields displayed in the admin form
+    search_fields = ('title',)  # Enable search by title

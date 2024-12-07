@@ -54,18 +54,12 @@ class ToDoList(models.Model):
     def __str__(self):
         return self.title
 
-
 class Reminder(models.Model):
-    reminder_id = models.CharField(max_length=15, primary_key=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, null=True, blank=True)
-    to_do_list = models.ForeignKey(ToDoList, on_delete=models.CASCADE, null=True, blank=True)
-    time = models.TimeField()
-    title = models.CharField(max_length=50)
-    description = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    time = models.DateTimeField()
 
     def __str__(self):
-        return self.title
-    
+        return f"{self.title} - {self.time}"
 
 class Task(models.Model):
     title = models.CharField(max_length=200)  # Ensure this field exists
