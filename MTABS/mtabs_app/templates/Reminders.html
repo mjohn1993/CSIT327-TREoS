@@ -164,7 +164,7 @@
       }
 
       .reminder-item button:hover {
-        color: #d32f2f;
+        color: #ffffff;
       }
 
       /* Reminder Form Styles */
@@ -377,9 +377,10 @@
     /* Reminder item styling */
     .reminder-item {
       background-color: #ecf0f1;
-      padding: 10px;
-      margin: 5px 0;
+      padding: 20px;
+      margin: 10px 0;
       border-radius: 5px;
+      border-width: 10px;
       display: flex;
       justify-content: space-between;
     }
@@ -489,13 +490,13 @@
       <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
       <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
     </ul>
-    <button>Logout</button>
+    <button onclick="location.href='{% url 'logout_page' %}'">Logout</button>
   </div>
 
   <!-- Main Dashboard -->
   <div class="dashboard">
     <div class="header">
-      <h2>Hello Mark! You can manage your reminders here!</h2>
+      <h2>Hello {{ user }}! You can manage your reminders here!</h2>
     </div>
 
     <!-- Reminders Section -->

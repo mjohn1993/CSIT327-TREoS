@@ -62,7 +62,7 @@ def register_page(request):
         new_user.save()
 
         messages.success(request, 'Registration successful! You can now log in.')
-        return redirect('login_page')  # Redirect to the login page after successful registration
+        return redirect('register_page')  # Redirect to the login page after successful registration
 
     return render(request, 'register.html')
 
@@ -203,18 +203,27 @@ def update_page(request):
             user = User.objects.get(username=username)
             new_username = request.POST.get('new_username')
             new_password = request.POST.get('new_password')
+            profile_picture = request.FILES.get('profile_picture')  # Handle file upload
 
             if new_username:
                 request.session['username'] = new_username  # Update session
                 user.username = new_username
             if new_password:
                 user.password = new_password
+            if profile_picture:
+                user.profile_picture = profile_picture  # Save the uploaded picture
+                
             user.save()
-            return redirect('dashboard_page')
+            return redirect('update_page')
         else:
             return redirect('login_page')
-    
-    return render(request, 'update_page.html')
+    else:
+        username = request.session.get('username')
+        if username:
+            user = User.objects.get(username=username)
+            return render(request, 'update_page.html', {'user': user})
+        else:
+            return redirect('login_page')
 
 def delete_account(request):
     if request.method == 'POST':

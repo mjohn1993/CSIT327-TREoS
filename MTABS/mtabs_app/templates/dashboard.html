@@ -165,7 +165,7 @@
         .stats div {
             background-color: #ffffff;
             width: 100%;
-            height: 120px; /* Adjust height for better fit */
+            height: 250px; /* Adjust height for better fit */
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0px 4px 8px rgba(0, 0,  0, 0, 0.1);
@@ -186,19 +186,19 @@
 
         .calendar {
             background-color: #ffffff;
-    width: 100%;
-    height: 200px; /* Adjust height for better fit */
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    overflow-y: scroll; /* Allow vertical scrolling */
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: transparent transparent; /* Firefox */
-}
+            width: 100%;
+            height: 400px; /* Adjust height for better fit */
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            overflow-y: scroll; /* Allow vertical scrolling */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: transparent transparent; /* Firefox */
+        }
 
 
         .calendar h3 {
@@ -274,12 +274,12 @@
         }
 
         .event-item {
-    background-color: #e0f7fa; /* Light blue background */
-    padding: 10px;
-    border-radius: 5px;
-    margin: 5px 0;
-    color: #006064; /* Darker text color */
-}
+            background-color: #e0f7fa; /* Light blue background */
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            color: #006064; /* Darker text color */
+        }
     </style>
 </head>
 <body>
@@ -294,8 +294,7 @@
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
             <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
         </ul>
-        <button onclick="location.href='{% url 'update_page' %}'">Update</button>
-        <button onclick="location.href='{% url 'delete_account' %}'">Delete Account</button>
+        <button onclick="location.href='{% url 'update_page' %}'">View Account</button>
         <button onclick="location.href='{% url 'logout_page' %}'">Logout</button>
     </div>
 
@@ -432,15 +431,56 @@ function renderUpcomingEvents() {
     calendarSection.innerHTML = `<h3>Upcoming Events</h3>${eventsHTML}`;
 }
 
-// Listen for messages from the calendar page
-window.addEventListener('message', (event) => {
-    if (event.data.type === 'NEW_EVENT') {
-        upcomingEvents.push(event.data.event); 
-        console.log("New event received:", event.data.event); 
-        console.log("Upcoming Events:", upcomingEvents); 
-        renderUpcomingEvents(); 
+    // Function to fetch reminders and render them in the schedule
+    async function fetchAndRenderReminders() {
+        try {
+            const response = await fetch("{% url 'get_reminders' %}"); // Adjust the URL as needed
+            if (response.ok) {
+                const data = await response.json();
+                renderRemindersInSchedule(data.reminders);
+            } else {
+                console.error("Failed to fetch reminders");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
     }
-});
+
+    // Function to render reminders in the schedule section
+    function renderRemindersInSchedule(reminders) {
+        const scheduleList = document.getElementById("scheduleList");
+        scheduleList.innerHTML = ""; // Clear existing reminders
+
+        reminders.forEach((reminder) => {
+            const reminderItem = document.createElement("div");
+            reminderItem.className = "event-item"; // Use the same class as in the calendar
+
+            const reminderDate = new Date(reminder.time);
+            const date = reminderDate.toLocaleDateString();
+            const time = reminderDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            reminderItem.innerHTML = `
+                <h4>${reminder.title}</h4>
+                <p>${date} at ${time}</p>
+            `;
+            scheduleList.appendChild(reminderItem);
+        });
+    }
+
+    // Fetch reminders when the dashboard is loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchAndRenderReminders(); // Call the function to fetch reminders
+    });
+
+    // Listen for messages from the calendar page
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'NEW_EVENT') {
+            upcomingEvents.push(event.data.event); 
+            console.log("New event received:", event.data.event); 
+            console.log("Upcoming Events:", upcomingEvents); 
+            renderUpcomingEvents(); 
+        }
+    });
     
         // Function to create a new task with a form
         function createTaskForm() {

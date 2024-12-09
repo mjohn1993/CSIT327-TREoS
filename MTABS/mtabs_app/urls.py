@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import (
     create_reminder,
     delete_reminder,
@@ -53,4 +55,4 @@ urlpatterns = [
     path('reminders/get/', get_reminders, name='get_reminders'),
     path('reminders/edit/<int:id>/', edit_reminder, name='edit_reminder'),
     path('reminders/delete/<int:id>/', delete_reminder, name='delete_reminder'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,74 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Account</title>
     <style>
-        /* Basic Reset and Body Style */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #000136 0%, #29144e 100%);
+            padding: 1rem;
         }
 
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
             text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
-        .container h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
+        h2 {
+            color: #111827;
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
 
-        .buttons {
+        p {
+            color: #6B7280;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+        }
+
+        .button-group {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            flex-direction: column;
+            gap: 0.75rem;
         }
 
-        .buttons button {
-            background-color: #ff4d4d;
-            color: #fff;
-            padding: 10px 20px;
+        .button {
+            width: 100%;
+            padding: 0.875rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: all 0.2s ease;
         }
 
-        .buttons button:hover {
-            background-color: #ff3333;
+        .delete-button {
+            background-color: #F87171;
+            color: white;
         }
 
-        .buttons .cancel {
-            background-color: #4caf50;
+        .delete-button:hover {
+            background-color: #EF4444;
         }
 
-        .buttons .cancel:hover {
-            background-color: #45a049;
+        .cancel-button {
+            background-color: #F3F4F6;
+            color: #374151;
+        }
+
+        .cancel-button:hover {
+            background-color: #E5E7EB;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Are you sure you want to delete your account?</h2>
-        <div class="buttons">
+        <h2>Delete Your Account?</h2>
+        <p>This action cannot be undone. All your data will be permanently deleted.</p>
+        <div class="button-group">
             <form method="POST" action="{% url 'delete_account' %}">
                 {% csrf_token %}
-                <button type="submit">✔️</button>
+                <button type="submit" class="button delete-button">Delete Account</button>
             </form>
-            <a href="{% url 'dashboard_page' %}" class="cancel"><button type="button" class="cancel">❌</button></a>
+            <button onclick="window.location.href='{% url 'update_page' %}'" class="button cancel-button">Cancel</button>
         </div>
     </div>
 </body>
