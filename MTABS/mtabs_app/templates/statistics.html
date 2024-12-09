@@ -24,21 +24,23 @@
 
         /* Sidebar Styling */
         .sidebar {
-        width: 250px;
-        background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
-        color: #fff;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      .sidebar img {
-        width: 80px;
-        height: auto;
-        margin-bottom: 20px;
-        border-radius: 50%;
-      }
+      width: 250px;
+      background: linear-gradient(180deg, #120E34 68%, rgba(0, 0, 0, 0.7) 91%);
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+ 
+    .sidebar img {
+      width: 80px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
 
       .sidebar ul {
         list-style: none;
@@ -293,7 +295,7 @@
             <li><a href="{% url 'statistics_page' %}"><span>📊</span> Statistics</a></li>
             <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
-            <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
+            <li><a href="{% url 'update_page' %}"><span>⚙️</span> Account</a></li>
         </ul>
         <button id="logoutButton">Logout</button>
     </div>
@@ -469,198 +471,157 @@
                 .catch(error => console.error('Error fetching tasks:', error));
         });
 
-        // Initialize variables for tracking working hours
-        let workingHoursData = {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // Days of the week
-            datasets: [{
-                label: 'Working Hours',
-                data: JSON.parse(localStorage.getItem('workingHoursData')) || [0, 0, 0, 0, 0, 0, 0], // Retrieve from localStorage or initialize with zeros
-                backgroundColor: '#4caf50', // Bar color
-            }]
-        };
+       // Initialize variables for tracking working hours
+// Initialize variables for tracking working hours
+let workingHoursData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], // Days of the week
+    datasets: [{
+        label: 'Working Hours',
+        data: JSON.parse(localStorage.getItem('workingHoursData')) || [0, 0, 0, 0, 0, 0, 0], // Retrieve from localStorage or initialize with zeros
+        backgroundColor: '#4caf50', // Bar color
+    }]
+};
 
-        const workingHoursCtx = document.getElementById('workingHoursChart').getContext('2d');
-        const workingHoursChart = new Chart(workingHoursCtx, {
-            type: 'line', // Change to line chart
-            data: workingHoursData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Days'
-                        },
-                        grid: {
-                            display: false // Optional: Hide grid lines for x-axis
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Hours Worked'
-                        },
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1, // Set the y-axis to have a step size of 1 hour
-                            max: 24 // Optional: Set maximum to 24 hours
-                        }
-                    }
+const workingHoursCtx = document.getElementById('workingHoursChart').getContext('2d');
+const workingHoursChart = new Chart(workingHoursCtx, {
+    type: 'line', // Change to line chart
+    data: workingHoursData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Days'
                 },
-                elements: {
-                    line: {
-                        borderWidth: 2, // Optional: Set the width of the line
-                        tension: 0.3 // Optional: Add slight curve to the line
-                    },
-                    point: {
-                        radius: 5, // Optional: Set the size of the data points
-                        backgroundColor: '#4caf50' // Optional: Set the color of the points
-                    }
+                grid: {
+                    display: false // Optional: Hide grid lines for x-axis
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Hours Worked'
+                },
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1, // Set the y-axis to have a step size of 1 hour
+                    max: 24 // Optional: Set maximum to 24 hours
                 }
             }
-        });
-
-        let startTime = null; // Initialize startTime as null
-        let trackingInterval = null; // Interval for updating working hours
-        let isTracking = false; // Flag to indicate if tracking is active
-
-        // Function to update working hours for the current day
-        function updateWorkingHoursForToday() {
-            if (isTracking && startTime) { // Only update if tracking is active
-                const now = new Date();
-                const dayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1; // Sunday = 6, Monday = 0, ..., Saturday = 5
-
-                // Calculate elapsed time in minutes since start time
-                const elapsedMinutes = Math.floor((now - startTime) / (1000 * 60)); // Convert milliseconds to minutes
-
-                // Update the working hours for the current day
-                const currentDayHours = workingHoursData.datasets[0].data[dayIndex];
-                const newHours = Math.min(currentDayHours + (elapsedMinutes / 60), 24); // Limit to 24 hours
-                workingHoursData.datasets[0].data[dayIndex] = newHours;
-
-                // Save updated working hours to localStorage
-                localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
-
-                workingHoursChart.update(); // Update the chart
-
-                // Update display for working hours
-                updateDisplay();
+        },
+        elements: {
+            line: {
+                borderWidth: 2, // Optional: Set the width of the line
+                tension: 0.3 // Optional: Add slight curve to the line
+            },
+            point: {
+                radius: 5, // Optional: Set the size of the data points
+                backgroundColor: '#4caf50' // Optional: Set the color of the points
             }
         }
+    }
+});
 
-        function updateDisplay() {
-            const totalHours = workingHoursData.datasets[0].data.reduce((acc, hours) => acc + hours, 0);
-            const totalMinutes = Math.round(totalHours * 60);
-            const dayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
-            const todayHours = workingHoursData.datasets[0].data[dayIndex];
-            const todayMinutes = Math.round(todayHours * 60);
-            document.getElementById('working-hours-display').textContent =
-                `Working Hours: ${totalMinutes} minutes total, ${todayMinutes} minutes today`;
-        }
+let startTime = null; // Initialize startTime as null
+let trackingInterval = null; // Interval for updating working hours
+let isTracking = false; // Flag to indicate if tracking is active
 
-        function startTracking() {
-            if (!isTracking) {
-                startTime = new Date();
-                localStorage.setItem('startTime', startTime.toISOString());
-                isTracking = true;
-                localStorage.setItem('isTracking', 'true');
-                updateTrackingStatus('Tracking');
-                trackingInterval = setInterval(() => {
-                    updateWorkingHoursForToday();
-                    updateDisplay();
-                }, 60000);
-            }
-        }
+// Function to update working hours for the current day
+function updateWorkingHoursForToday() {
+    if (isTracking && startTime) { // Only update if tracking is active
+        const now = new Date();
+        const dayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1; // Sunday = 6, Monday = 0, ..., Saturday = 5
 
-        function stopTracking() {
-            if (isTracking) {
-                clearInterval(trackingInterval);
-                isTracking = false;
-                startTime = null;
-                localStorage.removeItem('startTime');
-                localStorage.setItem('isTracking', 'false');
-                updateTrackingStatus('Not tracking');
-            }
-        }
+        // Calculate elapsed time in minutes since start time
+        const elapsedMinutes = Math.floor((now - startTime) / (1000 * 60)); // Convert milliseconds to minutes
 
-        // Function to update the tracking status
-        function updateTrackingStatus(status) {
-            document.getElementById('tracking-status').textContent = `Tracking status: ${status}`;
-        }
+        // Update the working hours for the current day
+        const currentDayHours = workingHoursData.datasets[0].data[dayIndex];
+        const newHours = Math.min(currentDayHours + (elapsedMinutes / 60), 24); // Limit to 24 hours
+        workingHoursData.datasets[0].data[dayIndex] = newHours;
 
-        // Function to reset working hours at midnight
-        function resetDailyHours() {
-            const now = new Date();
-            const lastResetDate = localStorage.getItem('lastResetDate');
+        // Save updated working hours to localStorage
+        localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
 
-            if (!lastResetDate || new Date(lastResetDate).getDate() !== now.getDate()) {
-                workingHoursData.datasets[0].data.fill(0); // Reset all hours to 0
-                localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
-                localStorage.setItem('lastResetDate', now); // Update last reset date
-                workingHoursChart.update(); // Update the chart
-            }
-        }
+        // Update the chart with new data
+        workingHoursChart.data.datasets[0].data = workingHoursData.datasets[0].data;
+        workingHoursChart.update(); // Update the chart
 
-        // Check for midnight reset every minute
-        setInterval(() => {
-            const now = new Date();
-            if (now.getHours() === 0 && now.getMinutes() === 0) {
-                resetDailyHours(); // Reset working hours at midnight
-            }
-        }, 60000); // Check every minute
-
-        // Event listeners for start and stop buttons
-        document.getElementById('start-button').addEventListener('click', startTracking);
-        document.getElementById('stop-button').addEventListener('click', stopTracking);
-
-        // Event listener for logout button
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            stopTracking(); // Stop tracking when logging out
-
-            // Save the current working hours to localStorage
-            localStorage.setItem('workingHoursData', JSON.stringify(workingHoursData.datasets[0].data));
-
-            // Send a POST request to the logout endpoint
-            fetch('/logout/', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'), // Include CSRF token if needed
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Clear start time from local storage
-                    localStorage.removeItem('startTime');
-                    // Redirect to the login page after successful logout
-                    window.location.href = "{% url 'login_page' %}"; // Replace with the actual URL for the login page
-                } else {
-                    alert('Logout failed. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('Error during logout:', error);
-                alert('An error occurred while logging out.');
-            });
-        });
-
-        // Call resetDailyHours function at the start of the application
-        resetDailyHours();
-
-        // Initial display update
+        // Update display for working hours
         updateDisplay();
+    }
+}
 
-        // If there is a valid start time, start tracking
-        const trackingState = localStorage.getItem('isTracking');
-        const savedStartTime = localStorage.getItem('startTime');
-        if (trackingState === 'true' && savedStartTime) {
-            startTime = new Date(savedStartTime); // Restore start time
-            isTracking = true;
+function updateDisplay() {
+    const totalHours = workingHoursData.datasets[0].data.reduce((acc, hours) => acc + hours, 0);
+    const totalMinutes = Math.round(totalHours * 60);
+    const dayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+    const todayHours = workingHoursData.datasets[0].data[dayIndex];
+    const todayMinutes = Math.round(todayHours * 60);
+    document.getElementById('working-hours-display').textContent =
+        `Working Hours: ${totalMinutes} minutes total, ${todayMinutes} minutes today`;
+}
 
-            updateTrackingStatus('Tracking');
-            updateWorkingHoursForToday(); // Update working hours with elapsed time
-        }
+function startTracking() {
+    if (!isTracking) {
+        startTime = new Date();
+        isTracking = true;
+        updateTrackingStatus('Tracking');
+        trackingInterval = setInterval(() => {
+            updateWorkingHoursForToday();
+            updateDisplay();
+        }, 60000); // Update every minute
+    }
+}
+
+function stopTracking() {
+    if (isTracking) {
+        clearInterval(trackingInterval);
+        isTracking = false;
+        startTime = null;
+        localStorage.removeItem('startTime');
+        updateTrackingStatus('Not tracking');
+    }
+}
+
+// Function to update the tracking status
+function updateTrackingStatus(status) {
+    document.getElementById('tracking-status').textContent = `Tracking status: ${status}`;
+}
+
+// Event listeners for start and stop buttons
+document.getElementById('start-button').addEventListener('click', startTracking);
+document.getElementById('stop-button').addEventListener('click', stopTracking);
+
+// Check if the user is on the page and start tracking if they are
+window.addEventListener('focus', () => {
+    const trackingState = localStorage.getItem('isTracking');
+    if (trackingState === 'true') {
+        startTracking();
+    }
+});
+
+// Stop tracking when the user leaves the page
+window.addEventListener('blur', stopTracking);
+
+// Call resetDailyHours function at the start of the application
+resetDailyHours();
+
+// Initial display update
+updateDisplay();
+
+// If there is a valid start time, start tracking
+const trackingState = localStorage.getItem('isTracking');
+const savedStartTime = localStorage.getItem('startTime');
+if (trackingState === 'true' && savedStartTime) {
+    startTime = new Date(savedStartTime); // Restore start time
+    isTracking = true;
+
+    updateTrackingStatus('Tracking');
+    updateWorkingHoursForToday(); // Update working hours with elapsed time
+}
 
         // Function to get CSRF token
         function getCookie(name) {
@@ -681,35 +642,35 @@
         // Dragging functionality for progress bars
         const handles = document.querySelectorAll('.handle');
         const progressBars = document.querySelectorAll('.progress-bar .progress');
-
+ 
         handles.forEach((handle, index) => {
             let isDragging = false;
-
+ 
             handle.addEventListener('mousedown', (e) => {
                 isDragging = true;
                 document.body.style.userSelect = 'none'; // Prevent text selection
             });
-
+ 
             document.addEventListener('mousemove', (e) => {
                 if (isDragging) {
                     const bar = handle.parentElement;
                     const barHeight = bar.offsetHeight;
                     const maxHeight = barHeight - handle.offsetHeight; // Maximum position for the handle
-
+ 
                     // Calculate new Y position based on mouse position
                     let newY = Math.max(0, Math.min(maxHeight, barHeight - e.clientY + bar.getBoundingClientRect().top));
-
+ 
                     handle.style.bottom = `${newY}px`; // Move the handle
-
+ 
                     // Calculate the progress percentage based on handle position
                     const progressPercentage = (newY / maxHeight) * 100;
                     progressBars[index].style.height = `${progressPercentage}%`; // Update progress bar height
-
+ 
                     // Update the data for the daily goal
                     workingHoursData.datasets[0].data[index] = (progressPercentage / 100) * 24; // Assuming max goal is 24 hours
                 }
             });
-
+ 
             document.addEventListener('mouseup', () => {
                 if (isDragging) {
                     isDragging = false;

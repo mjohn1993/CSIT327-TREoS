@@ -31,13 +31,15 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      align-items: center;
     }
-
+ 
     .sidebar img {
       width: 80px;
       height: auto;
       margin-bottom: 20px;
       border-radius: 50%;
+      margin-right: 20px;
     }
 
     .sidebar ul {
@@ -309,7 +311,7 @@
             <li><a href="{% url 'statistics_page' %}"><span>📊</span> Statistics</a></li>
             <li><a href="{% url 'calendar_page' %}"><span>📅</span> Schedule Maker</a></li>
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
-            <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
+            <li><a href="{% url 'update_page' %}"><span>⚙️</span> Account</a></li>
         </ul>
         <button onclick="location.href='{% url 'logout_page' %}'">Logout</button>
     </div>
