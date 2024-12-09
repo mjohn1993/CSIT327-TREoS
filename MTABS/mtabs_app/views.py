@@ -2,22 +2,17 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from .models import Reminder, Task
-import json
-from .forms import TaskForm
-from django.views.decorators.http import require_POST
-from .models import Event
-from .models import User
+from .models import Reminder, Task, Event, User
 from django.contrib.auth import logout
 from django.contrib import messages
+import json
 
 def landing_page(request):
     return render(request, 'landing.html')
 
 def login_page(request):
-    # Check if user is already logged in
     if 'username' in request.session:
-        return redirect('dashboard_page')  # Redirect if user is already logged in
+        return redirect('dashboard_page')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -27,42 +22,38 @@ def login_page(request):
             user = User.objects.get(username=username)
             if user.password == password:
                 request.session['username'] = user.username
-                return redirect('dashboard_page')  # Redirect to dashboard
+                return redirect('dashboard_page')
             else:
                 messages.error(request, 'Incorrect password')
-                return render(request, 'login.html')  # Show error
+                return render(request, 'login.html')
         except User.DoesNotExist:
             messages.error(request, 'Username does not exist')
-            return render(request, 'login.html')  # Show error
+            return render(request, 'login.html')
 
-    return render(request, 'login.html')  # For GET request, render login page
+    return render(request, 'login.html')
 
 def logout_view(request):
-    logout(request)  # Logs out the user and clears the session
-    return redirect('login_page')  # Redirects to the login page
-
+    logout(request)
+    return redirect('login_page')
 
 def register_page(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Basic validation
         if not username or not password:
             messages.error(request, 'Please fill in all fields.')
             return render(request, 'register.html')
 
-        # Check if the username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists. Please choose a different one.')
             return render(request, 'register.html')
 
-        # Create a new user
         new_user = User(username=username, password=password)
         new_user.save()
 
         messages.success(request, 'Registration successful! You can now log in.')
-        return redirect('register_page')  # Redirect to the login page after successful registration
+        return redirect('register_page')
 
     return render(request, 'register.html')
 
@@ -72,7 +63,7 @@ def dashboard_page(request):
 
     username = request.session.get('username')
     user = User.objects.get(username=username)
-    
+
     return render(request, 'dashboard.html', {'user': user})
 
 def calendar_page(request):
@@ -86,18 +77,18 @@ def statistics_page(request):
 
 def get_tasks(request):
     if request.method == 'GET':
-        tasks = list(Task.objects.values('id', 'title', 'completed'))  # Fetch all tasks
+        tasks = list(Task.objects.filter(user__username=request.session.get('username')).values('id', 'title', 'completed'))  # Fetch tasks for the logged-in user
         return JsonResponse({'tasks': tasks})
 
-@csrf_exempt  # Remove this if you're using CSRF protection properly
+@csrf_exempt
 def create_task(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             title = data.get('title')
+            user = User.objects.get(username=request.session.get('username'))  # Get the logged-in user
 
-            # Create a new task
-            task = Task.objects.create(title=title)
+            task = Task.objects.create(title=title, user=user)  # Associate task with user
             return JsonResponse({'success': True, 'task': {'id': task.id, 'title': task.title, 'completed': task.completed}})
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)}, status=400)
@@ -129,20 +120,18 @@ def delete_task(request, task_id):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
-@require_POST
 def complete_task(request, task_id):
     try:
         task = Task.objects.get(id=task_id)
-        task.completed = not task.completed  # Toggle completion status
+        task.completed = not task.completed
         task.save()
         return JsonResponse({'success': True, 'completed': task.completed})
     except Task.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Task not found.'})
-    
-def event_list(request):
-    events = Event.objects.all()  # Fetch all events
-    return render(request, 'event_list.html', {'events': events})
 
+def event_list(request):
+    events = Event.objects.filter(user__username=request.session.get('username'))  # Fetch events for the logged-in user
+    return render(request, 'event_list.html', {'events': events})
 
 @csrf_exempt
 def create_event(request):
@@ -151,13 +140,14 @@ def create_event(request):
             data = json.loads(request.body)
             event_name = data.get('title')
             event_location = data.get('location')
-            event_date = data.get('date')  # Expecting 'YYYY-MM-DD'
+            event_date = data.get('date')
+            user = User.objects.get(username=request.session.get('username'))  # Get the logged-in user
 
-            # Create and save the event without specifying event_id
             event = Event.objects.create(
                 event_name=event_name,
                 location=event_location,
-                date=event_date
+                date=event_date,
+                user=user  # Associate event with user
             )
             return JsonResponse({'success': True, 'event_id': event.event_id})
         except Exception as e:
@@ -167,8 +157,8 @@ def create_event(request):
 @csrf_exempt
 def get_events(request):
     if request.method == 'GET':
-        events = Event.objects.all().values('event_id', 'event_name', 'location', 'date')
-        event_list = list(events)  # Convert QuerySet to list
+        events = Event.objects.filter(user__username=request.session.get('username')).values('event_id', 'event_name', 'location', 'date')  # Fetch user's events
+        event_list = list(events)
         return JsonResponse({'events': event_list})
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
@@ -180,7 +170,7 @@ def update_event(request, event_id):
             event = Event.objects.get(event_id=event_id)
             event.event_name = data.get('title', event.event_name)
             event.location = data.get('location', event.location)
-            event.date = data.get('date', event.date)  # Assuming date is also updated
+            event.date = data.get('date', event.date)
             event.save()
             return JsonResponse({'success': True})
         except Event.DoesNotExist:
@@ -206,12 +196,12 @@ def update_page(request):
             profile_picture = request.FILES.get('profile_picture')  # Handle file upload
 
             if new_username:
-                request.session['username'] = new_username  # Update session
+                request.session['username'] = new_username
                 user.username = new_username
             if new_password:
                 user.password = new_password
             if profile_picture:
-                user.profile_picture = profile_picture  # Save the uploaded picture
+                user.profile_picture = profile_picture
                 
             user.save()
             return redirect('update_page')
@@ -237,30 +227,55 @@ def delete_account(request):
     
     return render(request, 'delete_page.html')
 
-# Reminder page view
 def reminder_page(request):
     return render(request, 'reminders.html')
 
-# Create reminder
 @csrf_exempt
 def create_reminder(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        title = data.get('title')
-        time = data.get('time')
-        if title and time:
-            new_reminder = Reminder.objects.create(title=title, time=time)
+        try:
+            data = json.loads(request.body)
+            title = data.get('title')
+            time = data.get('time')
+
+            # Ensure the username exists in the session
+            username = request.session.get('username')
+            if not username:
+                return JsonResponse({"error": "User not logged in"}, status=400)
+
+            # Get the user object
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                return JsonResponse({"error": "User not found"}, status=404)
+
+            # Validate title and time
+            if not title or not time:
+                return JsonResponse({"error": "Invalid data: Title and time are required"}, status=400)
+
+            # Create and save the reminder
+            new_reminder = Reminder.objects.create(title=title, time=time, user=user)
             return JsonResponse({"id": new_reminder.id, "status": "success"})
-        return JsonResponse({"error": "Invalid data"}, status=400)
-    return JsonResponse({"error": "Invalid request"}, status=405)
 
-# Fetch reminders
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+@csrf_exempt
 def get_reminders(request):
-    reminders = Reminder.objects.all().order_by('time')
-    data = {"reminders": list(reminders.values('id', 'title', 'time'))}
-    return JsonResponse(data)
+    if request.method == 'GET':
+        username = request.session.get('username')
+        if not username:
+            return JsonResponse({'error': 'User not logged in'}, status=401)
 
-# Edit reminder
+        # Fetch reminders for the logged-in user
+        reminders = list(Reminder.objects.filter(user__username=username).values('id', 'title', 'time'))
+        return JsonResponse({'reminders': reminders})
+
 @csrf_exempt
 def edit_reminder(request, id):
     if request.method == "PUT":
@@ -279,7 +294,6 @@ def edit_reminder(request, id):
             return JsonResponse({"error": "Reminder not found"}, status=404)
     return JsonResponse({"error": "Invalid request"}, status=405)
 
-# Delete reminder
 @csrf_exempt
 def delete_reminder(request, id):
     if request.method == "DELETE":
@@ -290,3 +304,10 @@ def delete_reminder(request, id):
         except Reminder.DoesNotExist:
             return JsonResponse({"error": "Reminder not found"}, status=404)
     return JsonResponse({"error": "Invalid request"}, status=405)
+
+
+def about_page(request):
+    return render(request, 'about_page.html')
+ 
+def FAQS_page(request):
+    return render(request,'FAQS_page.html')

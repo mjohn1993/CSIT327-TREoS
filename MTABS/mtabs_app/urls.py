@@ -2,6 +2,8 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import (
+    FAQS_page,
+    about_page,
     create_reminder,
     delete_reminder,
     edit_reminder,
@@ -39,7 +41,7 @@ urlpatterns = [
     path('Settings/', settings_page, name='settings_page'),
     path('Statistics/', statistics_page, name='statistics_page'),
     path('get-tasks/', get_tasks, name='get_tasks'),
-    path('create-task/', create_task, name='create_task'),  # Ensure this line is correct
+    path('create-task/', create_task, name='create_task'),
     path('edit-task/<int:task_id>/', edit_task, name='edit_task'),
     path('delete-task/<int:task_id>/', delete_task, name='delete_task'),
     path('complete-task/<int:task_id>/', complete_task, name='complete_task'),
@@ -47,7 +49,7 @@ urlpatterns = [
     path('create-event/', create_event, name='create_event'),
     path('update-event/<str:event_id>/', update_event, name='update_event'),
     path('delete-event/<str:event_id>/', delete_event, name='delete_event'),
-    path('get-events/', get_events, name='get_events'),  # Add this line
+    path('get-events/', get_events, name='get_events'),
     path('update/', update_page, name='update_page'),
     path('delete/', delete_account, name='delete_account'),
     path('logout/', logout_view, name='logout_page'),
@@ -55,4 +57,7 @@ urlpatterns = [
     path('reminders/get/', get_reminders, name='get_reminders'),
     path('reminders/edit/<int:id>/', edit_reminder, name='edit_reminder'),
     path('reminders/delete/<int:id>/', delete_reminder, name='delete_reminder'),
+    path('get-reminders/', get_reminders, name='get_reminders'),
+    path('about/', about_page, name='about_page'),
+    path('FAQS/', FAQS_page, name='FAQS_page'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

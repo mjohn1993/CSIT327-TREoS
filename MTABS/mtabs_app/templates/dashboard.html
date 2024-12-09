@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTabs Dashboard</title>
     <style>
+        /* Add any required styles here */
         /* Basic Reset and Body Style */
         * {
             margin: 0;
@@ -278,7 +279,23 @@
             padding: 10px;
             border-radius: 5px;
             margin: 5px 0;
-            color: #006064; /* Darker text color */
+            color: #000000; /* Darker text color */
+        }
+
+        .reminders-container, .events-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center align the content */
+            gap: 10px; /* Gap between items */
+            margin-top: 20px; /* Margin on top for spacing */
+        }
+        .reminder-item, .event-item {
+            background-color: #ffffff; /* Background for each item */
+            border: 2px solid #989898; /* Border for each item */
+            border-radius: 8px; /* Rounded corners */
+            padding: 10px; /* Padding for inner spacing */
+            width: 80%; /* Width of the item */
+            text-align: center; /* Center the text */
         }
     </style>
 </head>
@@ -294,7 +311,6 @@
             <li><a href="{% url 'reminder_page' %}"><span>🔔</span> Reminders</a></li>
             <li><a href="{% url 'settings_page' %}"><span>⚙️</span> Settings</a></li>
         </ul>
-        <button onclick="location.href='{% url 'update_page' %}'">View Account</button>
         <button onclick="location.href='{% url 'logout_page' %}'">Logout</button>
     </div>
 
@@ -302,7 +318,7 @@
     <div class="dashboard">
         <!-- Header Section -->
         <div class="header">
-            <h2>Hello {{ user }}! It's good to see you again.</h2>
+            <h2>Hello {{ user.username }}! It's good to see you again.</h2>
             <button class="task-btn" id="createTaskBtn">Create Task</button>
         </div>
 
@@ -313,8 +329,8 @@
                 <span>Tasks</span>
             </div>
             <div>
-                <p id="completedCount">0 </p>
-                <span> Completed</span>
+                <p id="completedCount">0</p>
+                <span>Completed</span>
             </div>
             <div>
                 <p id="pendingCount">0</p>
@@ -325,12 +341,14 @@
         <!-- Calendar Section -->
         <div class="calendar">
             <h3>Upcoming Events</h3>
-            <p>No events scheduled.</p>
+            <div class="events-container" id="upcomingEvents">
+                <p>No events scheduled.</p>
+            </div>
         </div>
 
         <!-- Main Task Section -->
         <div class="main-task">
-            <h3>Main Task</h3>
+            <h3>Things To Do!</h3>
             <div id="taskList">
                 <input type="text" id="newTaskInput" placeholder="Enter task title here..." />
             </div>
@@ -338,288 +356,58 @@
 
         <!-- Schedule Section -->
         <div class="schedule">
-            <h3>Task Schedule</h3>
-            <div id="scheduleList"></div>
+            <h3>Reminders</h3>
+            <div class="reminders-container" id="scheduleList">
+                <p>No reminders scheduled.</p>
+            </div>
         </div>
     </div>
 
-    <!-- JavaScript for Task Management -->
+    <!-- JavaScript for Task and Event Management -->
     <script>
-        // Initialize an empty array to hold tasks
         let tasks = [];
-    
-       
-// Function to render tasks
-function renderTasks() {
-    const taskList = document.getElementById('taskList');
-    const completedCountElement = document.getElementById('completedCount');
-    const taskCountElement = document.getElementById('taskCount');
-    const pendingCountElement = document.getElementById('pendingCount');
+        let events = []; // Store upcoming events
+        let reminders = []; // Store reminders
 
-    taskList.innerHTML = ''; // Clear the current list
+        // Function to render tasks
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            const completedCountElement = document.getElementById('completedCount');
+            const taskCountElement = document.getElementById('taskCount');
+            const pendingCountElement = document.getElementById('pendingCount');
 
-    let completedCount = 0; // Initialize completed count
+            taskList.innerHTML = ''; // Clear the current list
+            let completedCount = 0; // Initialize completed count
 
-    tasks.forEach((task) => {
-        const taskItem = document.createElement('div');
-        taskItem.classList.add('task-item');
-        taskItem.innerHTML = `
-            <div class="task-container">
-                <input type="checkbox" id="completeCheckbox-${task.id}" ${task.completed ? 'checked' : ''} onclick="toggleComplete(${task.id})">
-                <span style="text-decoration: ${task.completed ? 'line-through' : 'none'};">${task.title}</span>
-            </div>
-            <div>
-                <button onclick="editTask(${task.id})" style="background-color: #f0c14b; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Edit</button>
-                <button onclick="deleteTask(${task.id})" style="background-color: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Delete</button>
-            </div>
-        `;
+            tasks.forEach((task) => {
+                const taskItem = document.createElement('div');
+                taskItem.classList.add('task-item');
+                taskItem.innerHTML = `
+                    <div class="task-container">
+                        <input type="checkbox" id="completeCheckbox-${task.id}" ${task.completed ? 'checked' : ''} onclick="toggleComplete(${task.id})">
+                        <span style="text-decoration: ${task.completed ? 'line-through' : 'none'};">${task.title}</span>
+                    </div>
+                    <div>
+                        <button onclick="editTask(${task.id})" style="background-color: #008000; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Edit</button>
+                        <button onclick="deleteTask(${task.id})" style="background-color: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Delete</button>
+                    </div>
+                `;
+                taskList.appendChild(taskItem); // Add all tasks to the main task list
 
-        // Append the task to the list
-        taskList.appendChild(taskItem); // Add all tasks to the main task list
+                // Count completed tasks
+                if (task.completed) {
+                    completedCount++; 
+                }
+            });
 
-        // Count completed tasks
-        if (task.completed) {
-            completedCount++; 
+            // Update the counts
+            completedCountElement.textContent = completedCount; 
+            taskCountElement.textContent = tasks.length; 
+            pendingCountElement.textContent = tasks.length - completedCount; 
         }
-    });
 
-    // Update the counts
-    completedCountElement.textContent = completedCount; 
-    taskCountElement.textContent = tasks.length; 
-    pendingCountElement.textContent = tasks.length - completedCount; 
-}
-
-// Function to toggle task completion (using the checkbox)
-function toggleComplete(taskId) {
-    fetch(`/complete-task/${taskId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'), 
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const task = tasks.find(t => t.id === taskId);
-            if (task) {
-                task.completed = !task.completed; 
-                renderTasks(); 
-            }
-        } else {
-            alert("Failed to complete task.");
-        }
-    });
-}
-
-// Initialize an empty array to hold upcoming events
-let upcomingEvents = [];
-
-// Function to render upcoming events
-function renderUpcomingEvents() {
-    const calendarSection = document.querySelector('.calendar');
-    const eventsHTML = upcomingEvents.length > 0
-        ? upcomingEvents.map(event => `
-            <div class="event-item">
-                <h4>${event.event_name}</h4>
-                <p>${event.date}</p>
-                <p>${event.location}</p>
-            </div>
-        `).join('')
-        : '<p>No events scheduled.</p>';
-    
-    calendarSection.innerHTML = `<h3>Upcoming Events</h3>${eventsHTML}`;
-}
-
-    // Function to fetch reminders and render them in the schedule
-    async function fetchAndRenderReminders() {
-        try {
-            const response = await fetch("{% url 'get_reminders' %}"); // Adjust the URL as needed
-            if (response.ok) {
-                const data = await response.json();
-                renderRemindersInSchedule(data.reminders);
-            } else {
-                console.error("Failed to fetch reminders");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
-
-    // Function to render reminders in the schedule section
-    function renderRemindersInSchedule(reminders) {
-        const scheduleList = document.getElementById("scheduleList");
-        scheduleList.innerHTML = ""; // Clear existing reminders
-
-        reminders.forEach((reminder) => {
-            const reminderItem = document.createElement("div");
-            reminderItem.className = "event-item"; // Use the same class as in the calendar
-
-            const reminderDate = new Date(reminder.time);
-            const date = reminderDate.toLocaleDateString();
-            const time = reminderDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            reminderItem.innerHTML = `
-                <h4>${reminder.title}</h4>
-                <p>${date} at ${time}</p>
-            `;
-            scheduleList.appendChild(reminderItem);
-        });
-    }
-
-    // Fetch reminders when the dashboard is loaded
-    document.addEventListener("DOMContentLoaded", function() {
-        fetchAndRenderReminders(); // Call the function to fetch reminders
-    });
-
-    // Listen for messages from the calendar page
-    window.addEventListener('message', (event) => {
-        if (event.data.type === 'NEW_EVENT') {
-            upcomingEvents.push(event.data.event); 
-            console.log("New event received:", event.data.event); 
-            console.log("Upcoming Events:", upcomingEvents); 
-            renderUpcomingEvents(); 
-        }
-    });
-    
-        // Function to create a new task with a form
-        function createTaskForm() {
-    const taskList = document.getElementById('taskList');
-
-    // Check if a form already exists to avoid multiple forms
-    if (document.getElementById('taskForm')) {
-        return;
-    }
-
-    // Create a form element
-    const form = document.createElement('form');
-    form.id = 'taskForm';
-    form.style.marginTop = '20px';
-    form.style.display = 'flex';
-    form.style.justifyContent = 'space-between';
-    form.style.alignItems = 'center';
-    form.style.padding = '15px';
-    form.style.borderRadius = '12px';
-    form.style.backgroundColor = '#f9f9f9';
-    form.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.1)';
-
-    // Add an input for the task title
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.placeholder = 'What needs to be done?';
-    input.required = true;
-    input.style.flex = '1';
-    input.style.padding = '12px';
-    input.style.borderRadius = '8px';
-    input.style.border = '1px solid #ddd';
-    input.style.fontSize = '16px';
-    input.style.transition = 'border-color 0.3s, box-shadow 0.3s';
-
-    input.addEventListener('focus', () => {
-        input.style.borderColor = '#6c5ce7';
-        input.style.boxShadow = '0px 0px 6px rgba(108, 92, 231, 0.4)';
-    });
-
-    input.addEventListener('blur', () => {
-        input.style.borderColor = '#ddd';
-        input.style.boxShadow = 'none';
-    });
-
-    // Add a submit button
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.textContent = 'Add Task';
-    submitButton.style.marginLeft = '10px';
-    submitButton.style.padding = '12px 20px';
-    submitButton.style.border = 'none';
-    submitButton.style.borderRadius = '8px';
-    submitButton.style.background = '#0984e3';
-    submitButton.style.color = '#fff';
-    submitButton.style.fontWeight = 'bold';
-    submitButton.style.cursor = 'pointer';
-    submitButton.style.boxShadow = '0px 4px 6px rgba(108, 92, 231, 0.3)';
-    submitButton.style.transition = 'all 0.3s ease';
-
-    submitButton.addEventListener('mouseover', () => {
-        submitButton.style.transform = 'translateY(-2px)';
-        submitButton.style.boxShadow = '0px 6px 10px rgba(108, 92, 231, 0.5)';
-    });
-
-    submitButton.addEventListener('mouseout', () => {
-        submitButton.style.transform = 'translateY(0)';
-        submitButton.style.boxShadow = '0px 4px 6px rgba(108, 92, 231, 0.3)';
-    });
-
-    // Append input and button to the form
-    form.appendChild(input);
-    form.appendChild(submitButton);
-
-    // Handle form submission
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const taskTitle = input.value.trim();
-        if (taskTitle) {
-            fetch('/create-task/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
-                },
-                body: JSON.stringify({ title: taskTitle }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        tasks.push({ id: data.task.id, title: taskTitle, completed: false });
-                        renderTasks(); 
-                        form.remove(); 
-                    } else {
-                        alert("Failed to create task: " + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error creating task:', error);
-                    alert("An error occurred while creating the task.");
-                });
-        }
-    });
-
-    // Append the form to the task list
-    taskList.appendChild(form);
-
-    // Autofocus the input field
-    input.focus();
-}
-
-// Update event listener to use createTaskForm
-document.getElementById('createTaskBtn').addEventListener('click', createTaskForm);
-
-    
-        // Fetch tasks when the DOM is loaded
-       // Function to fetch events when the DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Fetch tasks
-    fetch('/get-tasks/')
-        .then(response => response.json())
-        .then(data => {
-            tasks = data.tasks; 
-            renderTasks(); 
-        })
-        .catch(error => console.error('Error fetching tasks:', error));
-
-    // Fetch events
-    fetch('/get-events/')  
-        .then(response => response.json())
-        .then(data => {
-            upcomingEvents = data.events; 
-            renderUpcomingEvents(); 
-        })
-        .catch(error => console.error('Error fetching events:', error));
-});
-    
-        // Function to mark a task as completed
-        function completeTask(taskId) {
+        // Function to toggle task completion
+        function toggleComplete(taskId) {
             fetch(`/complete-task/${taskId}/`, {
                 method: 'POST',
                 headers: {
@@ -630,7 +418,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                   
                     const task = tasks.find(t => t.id === taskId);
                     if (task) {
                         task.completed = !task.completed; 
@@ -641,7 +428,183 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
-    
+
+        // Function to create a new task with a form
+        function createTaskForm() {
+            const taskList = document.getElementById('taskList');
+
+            // Check if a form already exists to avoid multiple forms
+            if (document.getElementById('taskForm')) {
+                return;
+            }
+
+            // Create a form element
+            const form = document.createElement('form');
+            form.id = 'taskForm';
+            form.style.marginTop = '20px';
+            form.style.display = 'flex';
+            form.style.justifyContent = 'space-between';
+            form.style.alignItems = 'center';
+            form.style.padding = '15px';
+            form.style.borderRadius = '12px';
+            form.style.backgroundColor = '#f9f9f9';
+            form.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.1)';
+
+            // Add an input for the task title
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'What needs to be done?';
+            input.required = true;
+            input.style.flex = '1';
+            input.style.padding = '12px';
+            input.style.borderRadius = '8px';
+            input.style.border = '1px solid #ddd';
+            input.style.fontSize = '16px';
+            input.style.transition = 'border-color 0.3s, box-shadow 0.3s';
+
+            // Add a submit button
+            const submitButton = document.createElement('button');
+            submitButton.type = 'submit';
+            submitButton.textContent = 'Add Task';
+            submitButton.style.marginLeft = '10px';
+            submitButton.style.padding = '12px 20px';
+            submitButton.style.border = 'none';
+            submitButton.style.borderRadius = '8px';
+            submitButton.style.background = '#0984e3';
+            submitButton.style.color = '#fff';
+            submitButton.style.fontWeight = 'bold';
+            submitButton.style.cursor = 'pointer';
+            submitButton.style.boxShadow = '0px 4px 6px rgba(108, 92, 231, 0.3)';
+            submitButton.style.transition = 'all 0.3s ease';
+
+            // Handle form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const taskTitle = input.value.trim();
+                if (taskTitle) {
+                    fetch('/create-task/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'), // Get CSRF token
+                        },
+                        body: JSON.stringify({ title: taskTitle }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            tasks.push({ id: data.task.id, title: taskTitle, completed: false });
+                            renderTasks(); 
+                            form.remove(); 
+                        } else {
+                            alert("Failed to create task: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error creating task:', error);
+                        alert("An error occurred while creating the task.");
+                    });
+                }
+            });
+
+            // Append input and button to the form
+            form.appendChild(input);
+            form.appendChild(submitButton);
+
+            // Append the form to the task list
+            taskList.appendChild(form);
+
+            // Autofocus the input field
+            input.focus();
+        }
+
+        // Update event listener to use createTaskForm
+        document.getElementById('createTaskBtn').addEventListener('click', createTaskForm);
+
+        // Fetch tasks and reminders when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/get-tasks/')
+                .then(response => response.json())
+                .then(data => {
+                    tasks = data.tasks; 
+                    renderTasks(); 
+                })
+                .catch(error => console.error('Error fetching tasks:', error));
+
+            fetchReminders(); // Fetch reminders on page load
+            fetchEvents(); // Fetch events on page load
+        });
+
+        // Function to fetch reminders and render them in the schedule section
+        function fetchReminders() {
+            fetch('/get-reminders/')
+                .then(response => response.json())
+                .then(data => {
+                    reminders = data.reminders; // Store reminders
+                    renderReminders(); // Render reminders
+                })
+                .catch(error => {
+                    console.error("Error fetching reminders:", error);
+                });
+        }
+
+        // Function to render reminders in the schedule section
+        function renderReminders() {
+            const scheduleList = document.getElementById('scheduleList');
+            scheduleList.innerHTML = ''; // Clear existing reminders
+
+            if (reminders.length === 0) {
+                scheduleList.innerHTML = '<p>No reminders scheduled.</p>';
+                return;
+            }
+
+            reminders.forEach(reminder => {
+                const reminderItem = document.createElement('div');
+                reminderItem.classList.add('reminder-item');
+                reminderItem.innerHTML = `
+                    <strong>${reminder.title}</strong><br>
+                    <span>${new Date(reminder.time).toLocaleString()}</span>
+                `;
+                scheduleList.appendChild(reminderItem);
+            });
+        }
+
+        // Function to fetch events and render them in the calendar section
+        function fetchEvents() {
+            fetch('/get-events/')
+                .then(response => response.json())
+                .then(data => {
+                    events = data.events;
+                    renderUpcomingEvents(); // Call the function to render events
+                })
+                .catch(error => {
+                    console.error("Error fetching events:", error);
+                });
+        }
+
+        // Function to render upcoming events
+        function renderUpcomingEvents() {
+            const upcomingEventsContainer = document.getElementById('upcomingEvents');
+            upcomingEventsContainer.innerHTML = ''; // Clear existing events
+
+            if (events.length === 0) {
+                upcomingEventsContainer.innerHTML = '<p>No events scheduled.</p>';
+                return;
+            }
+
+            events.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.classList.add('event-item');
+                eventItem.innerHTML = `
+                    <strong>${event.event_name}</strong><br>
+                    <span>${event.location}</span><br>
+                    <span>${event.date}</span>
+                `;
+                upcomingEventsContainer.appendChild(eventItem);
+            });
+        }
+
         // Function to edit a task
         function editTask(taskId) {
             const newTitle = prompt("Edit task title:", tasks.find(t => t.id === taskId).title);
@@ -668,7 +631,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
-    
+
         // Function to delete a task
         function deleteTask(taskId) {
             fetch(`/delete-task/${taskId}/`, {
@@ -678,17 +641,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     'X-CSRFToken': getCookie('csrftoken'), 
                 },
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     tasks = tasks.filter(t => t.id !== taskId);
                     renderTasks(); 
-                    alert("Failed to delete task: " + data.message); 
+                } else {
+                    alert("Failed to delete task.");
                 }
             })
             .catch(error => {
@@ -696,7 +655,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert("An error occurred while deleting the task.");
             });
         }
-    
+
         // Function to get CSRF token
         function getCookie(name) {
             let cookieValue = null;

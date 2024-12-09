@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - MTabs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <style>
+        :root {
+            --primary-color: #090446;
+            --secondary-color: #4a90e2;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+        }
+ 
+        body {
+            font-family: 'Urbanist', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+ 
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            background: rgba(9, 4, 70, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+ 
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin-left: 30px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #4a90e2;
+        }
+ 
+        .logo img {
+            width: 60px;
+            transition: transform 0.3s ease;
+        }
+ 
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+ 
+        .hero {
+            background: linear-gradient(135deg, #30006a, #3f3f3f);
+            text-align: center;
+            padding: 120px 20px 80px;
+            color: #fff;
+        }
+ 
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+ 
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease;
+        }
+ 
+        .section {
+            background: linear-gradient(135deg, var(--primary-color), #000000);
+            padding: 80px 20px;
+            text-align: center;
+        }
+ 
+        h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+ 
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+ 
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+ 
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+ 
+        .card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+ 
+        .card-content {
+            padding: 20px;
+        }
+ 
+        .card h3 {
+            margin: 0 0 15px;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+ 
+        .card ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+ 
+        .card li {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+ 
+        .card li::before {
+            content: '•';
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+ 
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+ 
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+ 
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+ 
+            .hero p {
+                font-size: 1rem;
+            }
+ 
+            .card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+            margin-right: 15px;
+            width: 6rem;
+            text-align: center;
+        }
+ 
+        .cta-button:hover {
+            background-color: #3a7bd5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="MTabs Logo">
+            </a>
+            <ul>
+                <li><a href="/" class="cta-button">Home</a></li>
+                <li><a href="{% url 'about_page' %}" class="cta-button">About Us</a></li>
+                <li><a href="{% url 'FAQS_page' %}" class="cta-button">FAQs</a></li>
+                <li><a href="{% url 'login_page' %}" class="cta-button">Get Started</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="hero">
+        <h1>About Us</h1>
+        <p>At MTabs, we're dedicated to helping people stay organized and manage their time effectively.</p>
+    </div>
+    <div class="section">
+        <h2>Our Team</h2>
+        <div class="team-container">
+            <div class="card">
+                <img src="{% static 'images/mart.png' %}" alt="Martin John Tabasa" class="team-image">
+                <div class="card-content">
+                    <h3>Martin John Tabasa</h3>
+                    <ul>
+                        <li>BSIT Student</li>
+                        <li>21 years old</li>
+                        <li>Family-oriented</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <img src="{% static 'images/shua.png' %}" alt="Joshua Daniel Pusing" class="team-image">
+                <div class="card-content">
+                    <h3>Joshua Daniel Pusing</h3>
+                    <ul>
+                        <li>BSIT Student</li>
+                        <li>21 years old</li>
+                        <li>Inlove</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <img src="{% static 'images/pol.png' %}" alt="Paul Dave Binoya" class="team-image">
+                <div class="card-content">
+                    <h3>Paul Dave Binoya</h3>
+                    <ul>
+                        <li>BSIT Student</li>
+                        <li>20 years old</li>
+                        <li>Hardworking</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

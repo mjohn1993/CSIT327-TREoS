@@ -12,7 +12,7 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+ 
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -21,7 +21,7 @@ body {
   color: #333;
   overflow: hidden; /* Prevent body scroll */
 }
-
+ 
 /* Sidebar Styling */
 .sidebar {
         width: 250px;
@@ -32,20 +32,20 @@ body {
         flex-direction: column;
         justify-content: space-between;
       }
-
+ 
       .sidebar img {
         width: 80px;
         height: auto;
         margin-bottom: 20px;
         border-radius: 50%;
       }
-
+ 
       .sidebar ul {
         list-style: none;
         width: 100%;
         margin-bottom: auto;
       }
-
+ 
       .sidebar li {
         padding: 10px 0;
         display: flex;
@@ -60,7 +60,7 @@ body {
               border-radius: 8px;
               padding-left: 10px;
           }
-
+ 
           .sidebar a {
               text-decoration: none;
               color: inherit;
@@ -77,11 +77,11 @@ body {
         transition: background-color 0.3s;
         margin-bottom: 10px;
       }
-
+ 
       .sidebar a:hover {
               color: inherit; /* Ensure hover color stays the same */
           }
-
+ 
 /* Main Dashboard Layout */
 .dashboard {
   flex-grow: 1;
@@ -91,18 +91,18 @@ body {
   gap: 10px; /* Reduce gap for compactness */
   overflow: hidden; /* Prevent scrolling */
 }
-
+ 
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
+ 
     .header h2 {
       font-size: 24px;
       color: #333;
     }
-
+ 
     /* Calendar Section */
     .calendar {
       background-color: #fff;
@@ -110,7 +110,7 @@ body {
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-
+ 
     .calendar h3 {
       margin-bottom: 15px;
       color: #333;
@@ -118,14 +118,14 @@ body {
       font-size: 28px;
       text-align: center;
     }
-
+ 
     .months-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
-      
+     
     }
-
+ 
     .month {
       background-color: #120E34;
       height: 160px;
@@ -138,11 +138,11 @@ body {
       color: #ffffff;
       transition: background-color 0.3s, color 0.3s;
     }
-
+ 
     .month:hover {
       background-color: #686868;
     }
-
+ 
     .back-button {
       background-color: #120E34;
       padding: 12px; /* Increased padding */
@@ -155,11 +155,11 @@ body {
       transition: background-color 0.3s;
       font-weight: bold;
     }
-
+ 
     .back-button:hover {
       background-color: #727272;
     }
-
+ 
     .year-label {
       margin-bottom: 15px;
       padding: 10px;
@@ -169,13 +169,13 @@ body {
       text-align: center;
       border-radius: 5px;
     }
-
+ 
     /* Table Styling for Days */
     .days-table {
       width: 100%; /* Full width */
       border-collapse: collapse;
     }
-
+ 
     .days-table th,
     .days-table td {
       width: 14.28%;
@@ -185,12 +185,12 @@ body {
       font-size: 20px;
       font-weight: bold;
     }
-
+ 
     .days-table th {
       background-color: #120E34;
       color: #ffffff;
     }
-
+ 
     .days-table td {
       height: 70px; /* Increased height for day cells */
       vertical-align: top;
@@ -198,7 +198,7 @@ body {
       color: #333;
       transition: background-color 0.3s;
     }
-
+ 
     /* Highlight Today */
     .today {
       background-color: red; /* Red background */
@@ -206,12 +206,12 @@ body {
       font-weight: bold;
       border-radius: 50%;
     }
-
+ 
     .today-text {
       color: red; /* Red font color */
       font-weight: bolder; /* Bold font */
     }
-
+ 
     /* Event Container Styles */
     .event-container {
       background-color: #e0f7fa; /* Light blue background */
@@ -224,12 +224,12 @@ body {
       position: relative; /* Needed for the delete button positioning */
       cursor: pointer; /* Show pointer on hover */
     }
-
+ 
     .event-buttons {
       display: none; /* Hidden by default */
       margin-top: 10px;
     }
-
+ 
     .delete-button, .edit-button {
       background-color: transparent;
       border: none;
@@ -238,7 +238,7 @@ body {
       font-size: 12px;
       margin: 0 5px;
     }
-
+ 
     /* Event Form Styles */
     .event-form {
       display: none; /* Hidden by default */
@@ -253,7 +253,7 @@ body {
       z-index: 10;
       width: 300px;
     }
-
+ 
     .event-form input, .event-form textarea {
       width: 100%;
       margin-bottom: 10px;
@@ -261,18 +261,18 @@ body {
       border: 1px solid #120E34;
       border-radius: 4px;
     }
-
+ 
     .sidebar a {
     text-decoration: none; /* Remove underline */
     color: inherit; /* Use the inherited color of the parent (sidebar text color) */
     cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
 }
-
+ 
     .sidebar a:hover {
         color: inherit; /* Ensure hover color stays the same */
     }
-
-
+ 
+ 
     .event-form button {
       width: 100%;
       padding: 12px; /* Increased padding */
@@ -284,17 +284,17 @@ body {
       margin-top: 10px; /* Added margin-top */
       font-weight: bold;
     }
-
+ 
     .event-form button:hover {
       background-color: #9c9c9c;
     }
-
+ 
     .event-form h3 {
        text-align: center;
-       margin-bottom: 10px; 
+       margin-bottom: 10px;
     }
-    
-
+   
+ 
     .overlay {
       display: none; /* Hidden by default */
       position: fixed;
@@ -308,7 +308,7 @@ body {
   </style>
 </head>
 <body>
-
+ 
   <!-- Sidebar -->
   <div class="sidebar">
     <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="MTabs Logo">
@@ -321,14 +321,14 @@ body {
     </ul>
     <button onclick="location.href='{% url 'logout_page' %}'">Logout</button>
   </div>
-
+ 
   <!-- Main Dashboard -->
   <div class="dashboard">
     <!-- Header Section -->
     <div class="header">
-      <h2>Hello {{ user }}! You can plot important events here!</h2>
+      <h2>You can plot important events here!</h2>
     </div>
-
+ 
     <!-- Calendar Section -->
     <div class="calendar">
       <h3 id="calendar-title">Yearly Calendar</h3>
@@ -341,7 +341,7 @@ body {
       <button id="backButton" class="back-button" onclick="showMonths()" style="display: none;">Back to Months</button>
     </div>
   </div>
-
+ 
   <!-- Event Form -->
   <div class="overlay" id="overlay"></div>
   <div class="event-form" id="eventForm">
@@ -353,7 +353,7 @@ body {
     <button onclick="submitEvent()">Add Event</button>
     <button onclick="closeForm()">Close</button>
   </div>
-
+ 
   <!-- Edit Event Form -->
   <div class="overlay" id="editOverlay"></div>
   <div class="event-form" id="editForm">
@@ -365,7 +365,7 @@ body {
     <button onclick="updateEvent()">Update Event</button>
     <button onclick="closeEditForm()">Close</button>
   </div>
-
+ 
   <script>
     const calendarTitle = document.getElementById("calendar-title");
     const yearSelector = document.getElementById("yearSelector");
@@ -375,18 +375,18 @@ body {
     const eventForm = document.getElementById("eventForm");
     const editOverlay = document.getElementById("editOverlay");
     const editForm = document.getElementById("editForm");
-
+ 
     const months = [
       "January", "February", "March", "April",
       "May", "June", "July", "August", "September", "October", "November", "December"
     ];
-
+ 
     const currentYear = new Date().getFullYear();
     const currentDate = new Date();
-
+ 
     // Store events
     const events = {};
-
+ 
     // Populate year selector with the last 50 years
     for (let i = currentYear - 50; i <= currentYear + 50; i++) {
       const option = document.createElement("option");
@@ -395,7 +395,7 @@ body {
       if (i === currentYear) option.selected = true;
       yearSelector.appendChild(option);
     }
-
+ 
     function showMonths() {
   const selectedYear = parseInt(yearSelector.value, 10);
   calendarTitle.textContent = `Yearly Calendar - ${selectedYear}`;
@@ -405,15 +405,15 @@ body {
     <div class="month" onclick="showDays(${index}, ${selectedYear})">${month}</div>
   `).join("");
 }
-
+ 
 function showDays(monthIndex, year) {
   const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
   const firstDay = new Date(year, monthIndex, 1).getDay();
-
+ 
   calendarTitle.textContent = `${months[monthIndex]} ${year}`;
   backButton.style.display = "block";
   yearSelector.style.display = "none";
-
+ 
   let daysHTML = `
     <table class="days-table">
       <thead>
@@ -422,19 +422,19 @@ function showDays(monthIndex, year) {
         </tr>
       </thead>
       <tbody><tr>`;
-
+ 
   for (let i = 0; i < firstDay; i++) {
     daysHTML += "<td></td>";
   }
-
+ 
   for (let day = 1; day <= daysInMonth; day++) {
     const isToday = currentDate.getFullYear() === year &&
                     currentDate.getMonth() === monthIndex &&
                     currentDate.getDate() === day;
     const dayClass = isToday ? "today" : "";
-
+ 
     const dayEvents = events[`${year}-${monthIndex + 1}-${day}`] || [];
-
+ 
     if ((day + firstDay - 1) % 7 === 0 && day !== 1) daysHTML += "</tr><tr>";
     daysHTML += `
       <td class="${dayClass}" onclick="openForm(${day}, ${monthIndex + 1}, ${year})">
@@ -450,7 +450,7 @@ function showDays(monthIndex, year) {
         `).join('')}
       </td>`;
   }
-
+ 
   daysHTML += "</tr></tbody></table>";
   calendarContent.className = "";
   calendarContent.innerHTML = daysHTML;
@@ -460,13 +460,13 @@ function toggleEventOptions(eventId, eventElement) {
   buttons.style.display = buttons.style.display === "block" ? "none" : "block"; // Toggle button visibility
   eventElement.stopPropagation(); // Prevent event propagation
 }
-
+ 
 function openForm(day, month, year) {
   overlay.style.display = "block";
   eventForm.style.display = "block";
   eventForm.dataset.date = `${year}-${month}-${day}`;
 }
-
+ 
 function closeForm() {
   overlay.style.display = "none";
   eventForm.style.display = "none";
@@ -475,20 +475,20 @@ function closeForm() {
   document.getElementById("eventDetails").value = '';
   document.getElementById("eventLocation").value = '';
 }
-
+ 
 function submitEvent() {
   const eventTitle = document.getElementById("eventTitle").value;
   const eventTime = document.getElementById("eventTime").value;
   const eventDetails = document.getElementById("eventDetails").value;
   const eventLocation = document.getElementById("eventLocation").value;
   const eventDate = eventForm.dataset.date;
-
+ 
   const data = {
     title: eventTitle,
     location: eventLocation,
     date: eventDate // Send the date in 'YYYY-MM-DD' format
   };
-
+ 
   fetch('/create-event/', {
     method: 'POST',
     headers: {
@@ -511,7 +511,7 @@ function submitEvent() {
     console.error("Error:", error);
   });
 }
-
+ 
 function fetchEvents() {
   fetch('/get-events/')
     .then(response => response.json())
@@ -526,22 +526,22 @@ function fetchEvents() {
       console.error("Error fetching events:", error);
     });
 }
-
+ 
 function renderEvents(events) {
   events.forEach(event => {
     // Assuming you have a function to display events in your calendar
     // You can customize this part based on how your calendar is implemented
     const eventElement = document.createElement('div');
     eventElement.innerText = `${event.event_name} at ${event.location} on ${event.date}`;
-    
+   
     // Append the event to your calendar (assuming you have a calendar element)
     document.getElementById('calendar').appendChild(eventElement);
   });
 }
-
+ 
 // Call fetchEvents when the page loads or when you want to refresh the calendar
 window.onload = fetchEvents;
-
+ 
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -557,29 +557,29 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-
+ 
     function deleteEvent(eventId, eventElement) {
       const eventDate = eventForm.dataset.date;
       events[eventDate] = events[eventDate].filter(event => event.id !== eventId);
-
+ 
       console.log("Event Deleted:", eventId);
       showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
     }
-
+ 
     function openEditForm(eventId) {
       const eventDate = eventForm.dataset.date;
       const eventToEdit = events[eventDate].find(event => event.id === eventId);
-
+ 
       document.getElementById("editEventTitle").value = eventToEdit.title;
       document.getElementById("editEventTime").value = eventToEdit.time;
       document.getElementById("editEventDetails").value = eventToEdit.details;
       document.getElementById("editEventLocation").value = eventToEdit.location;
-
+ 
       editOverlay.style.display = "block";
       editForm.style.display = "block";
       editForm.dataset.eventId = eventId; // Store the event ID to update
     }
-
+ 
     function closeEditForm() {
   editOverlay.style.display = "none";
   editForm.style.display = "none";
@@ -588,32 +588,32 @@ function getCookie(name) {
   document.getElementById("editEventDetails").value = '';
   document.getElementById("editEventLocation").value = '';
 }
-
+ 
     function updateEvent() {
       const eventId = editForm.dataset.eventId;
       const eventDate = eventForm.dataset.date;
-
+ 
       const updatedEvent = {
         title: document.getElementById("editEventTitle").value,
         time: document.getElementById("editEventTime").value,
         details: document.getElementById("editEventDetails").value,
         location: document.getElementById("editEventLocation").value,
       };
-
+ 
       events[eventDate] = events[eventDate].map(event => {
         if (event.id === eventId) {
           return { ...event, ...updatedEvent };
         }
         return event;
       });
-
+ 
       console.log("Event Updated:", updatedEvent);
       closeEditForm();
       showDays(new Date(eventDate).getMonth(), new Date(eventDate).getFullYear()); // Refresh the calendar
     }
-
+ 
     showMonths();
   </script>
-
+ 
 </body>
 </html>

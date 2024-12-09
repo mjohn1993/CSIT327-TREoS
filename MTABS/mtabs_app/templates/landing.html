@@ -4,272 +4,392 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTabs Schedule Maker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap" rel="stylesheet"> <!-- Link to Urbanist font -->
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* General Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Urbanist', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
             color: #333;
+            overflow-x: hidden;
         }
-
+ 
         header {
-    background-color: transparent; /* Make the header transparent */
-    position: absolute; /* Position the header at the top of the page */
-    top: 0;
-    width: 100%; /* Adjusted to 100% for full-width header */
-    padding-top: 20px;
-    padding-left: 180px; /* Adjust padding if needed */
-    z-index: 10; /* Ensure the header stays on top */
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 150%; /* Ensure nav takes full width */
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    margin: 0 auto; /* Center the navigation */
-    padding: 0;
-    width: 85%; /* Adjust this value to create space in the middle */
-}
-
-nav ul li {
-    margin-left: 100px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    transition: color 0.3s;
-}
-
-nav ul li a:hover {
-    color: #e0e0e0;
-}
-
-
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            background: rgba(9, 4, 70, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+ 
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin-left: 30px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #4a90e2;
+        }
+ 
         .logo img {
             width: 60px;
+            transition: transform 0.3s ease;
         }
-
+ 
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+ 
         .hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 120px 80px 180px 180px; /* Increase top padding to account for header */
-    background: linear-gradient(135deg, #090446, #000000);
-    color: white;
-}
-
-
-
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 180px 80px 100px;
+            background: linear-gradient(135deg, #090446, #000000);
+            color: white;
+        }
+ 
         .hero-text {
             max-width: 600px;
         }
-
+ 
         .hero-text h1 {
-            font-size: 60px;
+            font-size: 48px;
             margin-bottom: 20px;
-            color: #ffff;
-            font-family: 'Urbanist';
-            font-weight: 400; 
+            color: #fff;
+            font-weight: 700;
+            line-height: 1.2;
         }
         .hero-text h5 {
-            font-size: 10px;
-            margin-bottom: 20px;
-            color: #ffff;
-            font-family: sans-serif;
-            font-weight: 400; 
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+            font-weight: 400;
+            line-height: 1.5;
         }
-
+ 
         .cta-button {
-    display: inline-block;
-    padding: 10px 24px;
-    background-color: #000000;
-    color: white;
-    text-decoration: none;
-    border-radius: 12px; /* Rounded edges */
-    transition: background-color 0.3s;
-    border: none; /* Remove border if any */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: add shadow for effect */
-    margin-right: 25px;
-}
-
-.cta-button:hover {
-    background-color: #0056b3;
-}
-
-.contact-button{
-    display: inline-block;
-    padding: 10px 24px;
-    color: white;
-    text-decoration: none;
-    transition: background-color 0.3s;
-    border: none; /* Remove border if any */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: add shadow for effect */
-}
-
-
-        .hero-image img {
-            max-width: 400px;
-            width: 100%;
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+            margin-right: 15px;
+            width: 6rem;
+            text-align: center;
         }
-
+ 
+        .cta-button:hover {
+            background-color: #3a7bd5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+        }
+ 
+        .contact-button {
+            display: inline-block;
+            padding: 12px 24px;
+            color: white;
+            text-decoration: none;
+            border: 2px solid white;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+ 
+        .contact-button:hover {
+            background-color: white;
+            color: #090446;
+        }
+ 
+        .hero-image img {
+            max-width: 500px;
+            width: 100%;
+            animation: float 6s ease-in-out infinite;
+        }
+ 
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+ 
         /* Section: What We Do */
         .what-we-do {
-            padding: 1px;
+            padding: 80px 20px;
             text-align: center;
             background-color: #ffffff;
         }
-        .services{
-            padding: 10px;
+        .services {
+            padding: 40px 20px;
             text-align: center;
-            color: #170A5F;
-            stroke: 1100E4;
-            background-color: #ffffff;
+            color: #090446;
+            background-color: #f8f9fa;
         }
-
-        .what-we-do h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
+ 
+        .what-we-do h2, .services h2 {
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #090446;
         }
-
+ 
         .features {
             display: flex;
             justify-content: space-around;
-            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 50px;
         }
-
+ 
         .feature {
-            max-width: 250px;
+            max-width: 300px;
             text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
-
+ 
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+ 
+        .feature h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #090446;
+        }
+ 
         /* Section: Content Blocks */
         .content-section {
             display: flex;
             justify-content: space-between;
-            padding: 50px;
-            background-color: #f4f4f4;
+            align-items: center;
+            padding: 100px 50px;
+            background-color: #ffffff;
         }
-
+ 
         .content-section:nth-child(even) {
-            background-color: #e9f0f7;
+            background-color: #f8f9fa;
         }
-
-        .content-section img {
-            max-width: 400px;
-            width: 100%;
-            
-            
-        }
-
+ 
         .content-text {
             max-width: 500px;
         }
-
+ 
         .content-text h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #090446;
         }
-
-        /* Footer */
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            text-align: center;
+ 
+        .content-text p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
         }
-
-        footer ul {
-            list-style: none;
+ 
+        .large-image {
+            max-width: 500px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+ 
+        .large-image:hover {
+            transform: scale(1.05);
+        }
+ 
+        /* Features Section */
+        .features-section {
+            padding: 100px 50px;
+            background-color: #f8f9fa;
+        }
+ 
+        .feature-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 100px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+ 
+        .feature-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+ 
+        .feature-card .content-text {
+            padding: 50px;
+        }
+ 
+        .feature-card .content-text h3 {
+            font-size: 30px;
+            margin-bottom: 20px;
+            color: #090446;
+        }
+ 
+        .feature-card .content-text ul {
+            list-style-type: none;
             padding: 0;
         }
-
-        footer ul li {
-            display: inline;
-            margin: 0 10px;
+ 
+        .feature-card .content-text ul li {
+            margin-bottom: 10px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
         }
-
-        footer ul li a {
-            color: white;
-            text-decoration: none;
+ 
+        .feature-card .content-text ul li:before {
+            content: '✓';
+            color: #4a90e2;
+            font-weight: bold;
+            margin-right: 10px;
         }
-
-         /* Optimize Your Time Section */
-         .optimize-section {
+ 
+        /* Optimize Your Time Section */
+        .optimize-section {
             text-align: center;
-            padding: 150px;
+            padding: 100px 50px;
             background-color: #ffffff;
         }
-
+ 
         .optimize-section h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
+            font-size: 36px;
+            margin-bottom: 50px;
+            color: #090446;
         }
-
+ 
         .optimize-cards {
             display: flex;
             justify-content: space-around;
             gap: 30px;
-            margin-top: 30px;
+            margin-top: 50px;
         }
-
+ 
         .optimize-card {
             max-width: 300px;
             text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
-
+ 
+        .optimize-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+ 
         .optimize-card img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 10px;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
         }
-
+ 
         .optimize-card h3 {
-            font-size: 20px;
-            color: #333;
-            margin: 10px 0;
+            font-size: 24px;
+            color: #090446;
+            margin: 20px 0;
         }
-
-        /* Consistent Image Sizing */
-
-.features-section {
-    display: flex;
-    flex-direction: column; /* Stack the cards vertically */
-    padding: 50px;
-    background-color: #f4f4f4; /* Match background color */
-}
-
-.feature-card {
-    display: flex; /* Use flexbox for alignment */
-    justify-content: space-between; /* Space between the image and text */
-    margin-bottom: 100px; /* Space between cards */
-    align-items: center; /* Center align items */
-}
-
-.content-text {
-    max-width: 500px; /* Match max width of the content section */
-    margin: 0 20px; /* Add margin for spacing */
-}
-
-.large-image {
-    width: 100%; /* Full width to fill container */
-    max-width: 400px; /* Maintain max width to match your design */
-    height: auto; /* Maintain aspect ratio */
-}
-
-
-
-
+ 
+        .optimize-card p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+ 
+        /* Footer */
+        footer {
+            background-color: #090446;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+ 
+        footer ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+ 
+        footer ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+ 
+        footer ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+ 
+        footer ul li a:hover {
+            color: #4a90e2;
+        }
+ 
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero, .content-section, .feature-card {
+                flex-direction: column;
+                text-align: center;
+            }
+ 
+            .hero-text, .content-text {
+                max-width: 100%;
+                margin-bottom: 30px;
+            }
+ 
+            .feature-card:nth-child(even) {
+                flex-direction: column;
+            }
+ 
+            .feature-card .content-text {
+                padding: 30px;
+            }
+ 
+            .optimize-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+ 
+            nav ul {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -279,10 +399,9 @@ nav ul li a:hover {
                 <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="MTabs Logo">
             </a>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="{% url 'login_page' %}">Login</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">FAQs</a></li>
+                <li><a href="/" class="cta-button">Home</a></li>
+                <li><a href="{% url 'about_page' %}" class="cta-button">About Us</a></li>
+                <li><a href="{% url 'FAQS_page' %}" class="cta-button">FAQs</a></li>
                 <li><a href="{% url 'login_page' %}" class="cta-button">Get Started</a></li>
             </ul>
         </nav>
@@ -291,8 +410,7 @@ nav ul li a:hover {
         <section class="hero">
             <div class="hero-text">
                 <h1>Organize your schedule effortlessly and stay on top of your tasks.</h1>
-                <h5>Powered by MTabs, delivering innovative scheduling solutions for seamless 
-                    productivity.</h5>
+                <h5>Powered by MTabs, delivering innovative scheduling solutions for seamless productivity.</h5>
                 <a href="{% url 'login_page' %}" class="cta-button">Learn More</a>
                 <a href="{% url 'login_page' %}" class="contact-button">Contact Us</a>
             </div>
@@ -300,12 +418,11 @@ nav ul li a:hover {
                 <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="Schedule Image">
             </div>
         </section>
-
-        <!-- What We Do Section -->
-            <section class="services">
-                <h2>Services</h2>
-            </section>
-            <section class="what-we-do">
+ 
+        <section class="services">
+            <h2>Our Services</h2>
+        </section>
+        <section class="what-we-do">
             <h2>What We Do</h2>
             <div class="features">
                 <div class="feature">
@@ -322,86 +439,75 @@ nav ul li a:hover {
                 </div>
             </div>
         </section>
-
-        <!-- Content Block Section 1 -->
-        <!-- Content Block Section 1 -->
-<section class="content-section">
-    <div class="content-text">
-        <h3>Elevate Your Productivity</h3>
-        <p>With MTabs, managing your schedule becomes intuitive and efficient, allowing you to focus on what matters most.</p>
-        <a href="#" class="cta-button">Learn More</a>
-    </div>
-    <div>
-        <img class="large-image" src="https://images.pexels.com/photos/925786/pexels-photo-925786.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Productivity Image">
-    </div>
-</section>
-
-<!-- Features Section -->
-<section class="features-section">
-    <div class="feature-card">
-        <div>
-            <img class="large-image" src="https://images.pexels.com/photos/4064840/pexels-photo-4064840.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feature Image 1">
-        </div>
-        <div class="content-text">
-            <h3>Designed for Individuals</h3>
-            <p>Tailored scheduling tools to help you manage your time effectively, whether you’re handling personal projects or staying on top of your daily tasks.</p>
-            <p>
-                <ul>
-
-                <li>Personalized Task Management: Organize tasks with custom labels.</li>
-                <li> Daily & Weekly Views: Toggle between daily agendas and weekly overviews.</li>
-                    <li> Reminders & Notifications: Receive alerts for tasks and deadlines.</li>
-                        <li> Goal Tracking: Monitor personal goals and habits for productivity.</li></ul></p>
-
-        </div>
-    </div>
-    <div class="feature-card">
-        <div class="content-text">
-            <h3>Designed for Event Organizers</h3>
-            <p>Tailored event planning tools to help you coordinate every detail, ensuring your gatherings are flawlessly executed and memorable.</p>
-            <ul>
-                <li>Timeline: Organize tasks.</li>
-                <li>Budget: Track expenses.</li>
-                <li>Vendors: Manage contracts.</li>
-                <li>Guest List: Track RSVPs.</li>
-                <li>Reminders: Get alerts.</li>
-                <li>Collaboration: Share updates.</li>
-                <li>Follow-Up: Manage thank-yous.</li>
-            </ul>
-        
-        </div>
-        <div>
-            <img class="large-image" src="https://images.pexels.com/photos/8761304/pexels-photo-8761304.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feature Image 2">
-        </div>
-    </div>
-</section>
-
-
-
-
-        <!-- Optimize Your Time Section -->
+ 
+        <section class="content-section">
+            <div class="content-text">
+                <h3>Elevate Your Productivity</h3>
+                <p>With MTabs, managing your schedule becomes intuitive and efficient, allowing you to focus on what matters most.</p>
+                <a href="#" class="cta-button">Learn More</a>
+            </div>
+            <div>
+                <img class="large-image" src="https://images.pexels.com/photos/925786/pexels-photo-925786.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Productivity Image">
+            </div>
+        </section>
+ 
+        <section class="features-section">
+            <div class="feature-card">
+                <div>
+                    <img class="large-image" src="https://images.pexels.com/photos/4064840/pexels-photo-4064840.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feature Image 1">
+                </div>
+                <div class="content-text">
+                    <h3>Designed for Individuals</h3>
+                    <p>Tailored scheduling tools to help you manage your time effectively, whether you're handling personal projects or staying on top of your daily tasks.</p>
+                    <ul>
+                        <li>Personalized Task Management: Organize tasks with custom labels.</li>
+                        <li>Daily & Weekly Views: Toggle between daily agendas and weekly overviews.</li>
+                        <li>Reminders & Notifications: Receive alerts for tasks and deadlines.</li>
+                        <li>Goal Tracking: Monitor personal goals and habits for productivity.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="content-text">
+                    <h3>Designed for Event Organizers</h3>
+                    <p>Tailored event planning tools to help you coordinate every detail, ensuring your gatherings are flawlessly executed and memorable.</p>
+                    <ul>
+                        <li>Timeline: Organize tasks.</li>
+                        <li>Budget: Track expenses.</li>
+                        <li>Vendors: Manage contracts.</li>
+                        <li>Guest List: Track RSVPs.</li>
+                        <li>Reminders: Get alerts.</li>
+                        <li>Collaboration: Share updates.</li>
+                        <li>Follow-Up: Manage thank-yous.</li>
+                    </ul>
+                </div>
+                <div>
+                    <img class="large-image" src="https://images.pexels.com/photos/8761304/pexels-photo-8761304.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Feature Image 2">
+                </div>
+            </div>
+        </section>
+ 
         <section class="optimize-section">
             <h2>Optimize Your Time</h2>
             <div class="optimize-cards">
                 <div class="optimize-card">
-                    <img src="https://via.placeholder.com/50" alt="Icon 1">
+                    <img src="https://via.placeholder.com/80" alt="Icon 1">
                     <h3>Maximize Productivity</h3>
                     <p>Unlock your full potential with our schedule manager, prioritize tasks, and achieve your goals.</p>
                 </div>
                 <div class="optimize-card">
-                    <img src="https://via.placeholder.com/50" alt="Icon 2">
+                    <img src="https://via.placeholder.com/80" alt="Icon 2">
                     <h3>Boost Your Productivity</h3>
                     <p>Take control of your day with our efficient time management tools.</p>
                 </div>
                 <div class="optimize-card">
-                    <img src="https://via.placeholder.com/50" alt="Icon 3">
+                    <img src="https://via.placeholder.com/80" alt="Icon 3">
                     <h3>Enhance Your Efficiency</h3>
                     <p>Collaborate with your team and streamline your workflow with ease.</p>
                 </div>
             </div>
         </section>
-
-        <!-- Footer -->
+ 
         <footer>
             <ul>
                 <li><a href="#">Privacy Policy</a></li>

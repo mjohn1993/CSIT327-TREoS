@@ -496,7 +496,7 @@
   <!-- Main Dashboard -->
   <div class="dashboard">
     <div class="header">
-      <h2>Hello {{ user }}! You can manage your reminders here!</h2>
+      <h2>You can manage your reminders here!</h2>
     </div>
 
     <!-- Reminders Section -->
@@ -505,8 +505,8 @@
       <div id="remindersList">
         <!-- Reminder items will go here -->
       </div>
-      
-      <!-- Add Reminder Button (inside Reminders container) -->
+
+      <!-- Add Reminder Button -->
       <button class="add-reminder-btn" onclick="showReminderForm()">Add Reminder</button>
     </div>
   </div>
@@ -581,7 +581,7 @@
             "Content-Type": "application/json",
             "X-CSRFToken": "{{ csrf_token }}"
           },
-          body: JSON.stringify({ title, time, isDone: false })
+          body: JSON.stringify({ title, time, user: "{{ user.username }}" }) // Associate with user
         });
 
         if (response.ok) {

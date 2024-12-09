@@ -197,6 +197,19 @@ body.dark-mode .dark-mode-toggle span {
 .dark-mode-toggle:hover {
     color: #cccccc; /* Slightly lighter on hover */
 }
+
+button {
+      width: 20%;
+      padding: 12px;
+      margin-top: 30px;
+      border: none;
+      background-color: #4caf50;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-bottom: 10px;
+    }
     </style>
 </head>
 <body>
@@ -222,7 +235,8 @@ body.dark-mode .dark-mode-toggle span {
         <div class="settings-card">
             <h3>Account Settings</h3>
             <ul>
-                <li>View Account</li>
+                <li>To manage your account, visit the "View Account" section to update your details or delete your account, which will permanently remove all associated data.</li>
+                <button onclick="location.href='{% url 'update_page' %}'">View Account</button>
             </ul>
         </div>
     </div>

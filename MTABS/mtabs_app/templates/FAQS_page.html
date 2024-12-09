@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs - MTabs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #090446;
+            --secondary-color: #4a90e2;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --white: #ffffff;
+        }
+ 
+        body {
+            font-family: 'Urbanist', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+ 
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            background: rgba(9, 4, 70, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+ 
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            margin-left: 30px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #4a90e2;
+        }
+ 
+        .logo img {
+            width: 60px;
+            transition: transform 0.3s ease;
+        }
+ 
+        .logo img:hover {
+            transform: scale(1.1);
+        }
+ 
+        .hero {
+            background: linear-gradient(135deg, #30006a, #3f3f3f);
+            text-align: center;
+            padding: 120px 20px 80px;
+            color: var(--white);
+        }
+ 
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+ 
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease;
+        }
+ 
+        .section {
+            background: linear-gradient(135deg, var(--primary-color), #000000);
+            padding: 80px 20px;
+        }
+ 
+        .faq {
+            background-color: var(--white);
+            padding: 2em;
+            margin: 1em auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+        }
+ 
+        .faq h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5em;
+            text-align: center;
+            font-size: 2rem;
+        }
+ 
+        .faq-item {
+            margin-bottom: 1em;
+            border-bottom: 1px solid #e0e0e0;
+        }
+ 
+        .faq-question {
+            font-weight: 600;
+            cursor: pointer;
+            padding: 1em 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+ 
+        .faq-question:hover {
+            color: var(--secondary-color);
+        }
+ 
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+ 
+        .faq-question.active::after {
+            transform: rotate(45deg);
+        }
+ 
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+        }
+ 
+        .faq-answer.show {
+            max-height: 500px;
+            padding-bottom: 1em;
+        }
+ 
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+ 
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+ 
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+ 
+            .hero p {
+                font-size: 1rem;
+            }
+ 
+            .faq {
+                padding: 1.5em;
+            }
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+            margin-right: 15px;
+            width: 6rem;
+            text-align: center;
+        }
+ 
+        .cta-button:hover {
+            background-color: #3a7bd5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <img src="https://ideogram.ai/assets/image/lossless/response/Y0tq6NbfShW2cnOL8ELafg" alt="MTabs Logo">
+            </a>
+            <ul>
+                <li><a href="/" class="cta-button">Home</a></li>
+                <li><a href="{% url 'about_page' %}" class="cta-button">About Us</a></li>
+                <li><a href="{% url 'FAQS_page' %}" class="cta-button">FAQs</a></li>
+                <li><a href="{% url 'login_page' %}" class="cta-button">Get Started</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="hero">
+        <h1>Frequently Asked Questions</h1>
+        <p>Find answers to common questions about the MTabs Schedule Manager and Event Plotting App.</p>
+    </div>
+    <div class="section">
+        <div class="faq">
+            <h2>FAQs</h2>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    What is the Schedule Manager and Event Plotting App?
+                </div>
+                <div class="faq-answer">
+                    <p>The Schedule Manager and Event Plotting App is a tool designed to streamline scheduling, task management, and collaboration for individuals and teams. It helps in organizing events, setting reminders, and managing resources efficiently.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    How do I create an account?
+                </div>
+                <div class="faq-answer">
+                    <p>To create an account, simply click on the "Sign Up" button on the home page, fill in the required details, and follow the instructions to complete the registration process.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    Is my data secure?
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, we prioritize data security and employ strong encryption methods along with regular security audits to protect your information.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    How can I plot an event?
+                </div>
+                <div class="faq-answer">
+                    <p>To plot an event, log in to your account, navigate to the calendar view, and use the event plotting feature to add, organize, and customize your tasks and events.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    What types of views are available in the calendar?
+                </div>
+                <div class="faq-answer">
+                    <p>The calendar offers multiple views, including daily, weekly, and monthly overviews, allowing you to visualize your tasks and events in various formats.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    How do reminders and alerts work?
+                </div>
+                <div class="faq-answer">
+                    <p>You can set reminders and alerts for your tasks and events to ensure you stay on top of important deadlines. Notifications will be sent to you based on your specified settings.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    Can I customize the app interface?
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, the app features a customizable user interface that allows you to adjust the layout and appearance to suit your preferences.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    What should I do if I encounter a technical issue?
+                </div>
+                <div class="faq-answer">
+                    <p>If you experience any technical issues, please contact our customer support team through the "Help" section in the app or via email at support@example.com.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" tabindex="0" role="button" aria-expanded="false">
+                    How can I provide feedback on the app?
+                </div>
+                <div class="faq-answer">
+                    <p>We value user feedback! You can provide your suggestions and feedback through the "Feedback" option in the app or by sending an email to feedback@example.com.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isOpen = answer.classList.contains('show');
+               
+                // Close all other answers
+                document.querySelectorAll('.faq-answer').forEach(item => {
+                    item.classList.remove('show');
+                    item.previousElementSibling.classList.remove('active');
+                    item.previousElementSibling.setAttribute('aria-expanded', 'false');
+                });
+ 
+                // Toggle the clicked answer
+                if (!isOpen) {
+                    answer.classList.add('show');
+                    question.classList.add('active');
+                    question.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
